@@ -1,0 +1,1198 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>용어집 | Sociology-whole</title>
+<meta name="description" content="사회학 전공생이 개념을 찾고, 이해하고, 서로 채워나가는 살아있는 개념 사전.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+/* ============================================================
+   토큰 — index.html 랜딩페이지와 동일
+   ============================================================ */
+:root {
+  --primary: #0D3B2E;
+  --primary-mid: #145C47;
+  --primary-light: #1E7A5F;
+  --accent: #4ADE80;
+  --accent-soft: rgba(74, 222, 128, 0.15);
+  /* 용어집 자체의 초록 포인트 — 랜딩의 형광 민트(#4ADE80)는 너무 튀어서
+     톤을 낮춘 연두 계열을 따로 둔다. */
+  --leaf: #6B9A4A;
+  --leaf-deep: #3F6B2E;
+  --leaf-soft: rgba(107, 154, 74, 0.13);
+  --white: #FFFFFF;
+  --gray-50: #F9FAFB;
+  --gray-100: #F3F4F6;
+  --gray-200: #E5E7EB;
+  --gray-300: #D1D5DB;
+  --gray-400: #9CA3AF;
+  --gray-500: #6B7280;
+  --gray-600: #4B5563;
+  --gray-700: #374151;
+  --gray-800: #1F2937;
+  --gray-900: #111827;
+  --radius: 16px;
+  --radius-sm: 12px;
+
+  --header-h: 60px;
+  --shell: 1200px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans KR', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--white);
+  color: var(--gray-900);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button, input, textarea { font: inherit; color: inherit; }
+button { background: none; border: none; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+svg { display: block; flex-shrink: 0; }
+
+:focus-visible { outline: 2px solid var(--primary-light); outline-offset: 2px; border-radius: 4px; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* ============================================================
+   헤더 — 랜딩의 .header.scrolled 상태를 기본값으로 사용한다.
+   랜딩은 어두운 히어로 위에 얹혀 투명으로 시작하지만,
+   용어집은 밝은 페이지라 투명 헤더는 글자가 보이지 않는다.
+   ============================================================ */
+.header {
+  position: sticky; top: 0; z-index: 100;
+  height: var(--header-h);
+  padding: 0 24px;
+  background: rgba(13, 59, 46, 0.95);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.header-inner {
+  max-width: var(--shell); height: 100%; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+}
+.logo {
+  font-weight: 700; font-size: 18px; letter-spacing: -0.03em; white-space: nowrap;
+  background: linear-gradient(135deg, #4ADE80, #FFFFFF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.nav-links { display: none; align-items: center; gap: 32px; }
+.nav-links a {
+  font-size: 14px; font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--white); }
+.nav-links a.active { color: var(--white); font-weight: 600; }
+.nav-cta {
+  padding: 8px 20px; background: var(--accent); color: var(--primary);
+  border-radius: 8px; font-size: 13px; font-weight: 600;
+  transition: opacity 0.2s; white-space: nowrap;
+}
+.nav-cta:hover { opacity: 0.9; }
+
+/* ============================================================
+   레이아웃 — 모바일 기본은 단일 컬럼(목록 to 상세 전환)
+   ============================================================ */
+.glossary-inner { max-width: var(--shell); margin: 0 auto; }
+
+body[data-view="list"]   .panel-detail { display: none; }
+body[data-view="detail"] .panel-list   { display: none; }
+
+.panel-list { padding-bottom: 96px; }
+
+/* 모바일에서는 페이지 전체가 스크롤되므로 헤더 높이만큼 내려서 고정한다.
+   768px 이상에서는 .panel-list 자체가 스크롤 컨테이너라 top:0 이어야 하며,
+   그렇지 않으면 패널 위쪽에 헤더 높이만큼 틈이 생겨 리스트 내용이 비쳐 보인다. */
+.list-sticky {
+  position: sticky; top: var(--header-h); z-index: 40;
+  background: var(--white);
+  padding: 12px 20px 14px;
+}
+/* 구분선 — border 에는 그라데이션을 못 넣어 가상 요소로 그린다.
+   가운데가 가장 진하고 양옆으로 갈수록 흐려져 끝에서 사라진다.
+   transparent 키워드는 브라우저에 따라 회색이 섞여 보이므로
+   같은 초록의 알파값을 0으로 두어 흐리게 만든다. */
+.list-sticky::after {
+  content: ''; position: absolute; left: 0; right: 0; bottom: 0;
+  height: 3px;
+  background: linear-gradient(90deg,
+    rgba(107, 154, 74, 0) 0%,
+    rgba(107, 154, 74, 0.45) 22%,
+    var(--leaf) 38%,
+    var(--leaf-deep) 50%,
+    var(--leaf) 62%,
+    rgba(107, 154, 74, 0.45) 78%,
+    rgba(107, 154, 74, 0) 100%);
+}
+.page-title {
+  font-size: 22px; font-weight: 700; letter-spacing: -0.02em;
+  color: var(--gray-900); margin-bottom: 10px;
+}
+
+/* 검색바 */
+.search-bar {
+  display: flex; align-items: center; gap: 10px;
+  padding: 0 14px; height: 46px;
+  background: var(--gray-50);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.search-bar:focus-within {
+  background: var(--white);
+  border-color: var(--primary-light);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.search-bar > svg { color: var(--primary-mid); }
+.search-bar input {
+  flex: 1; min-width: 0; height: 100%;
+  border: none; outline: none; background: none; font-size: 15px;
+}
+.search-bar input::placeholder { color: var(--gray-400); }
+.search-clear { display: none; color: var(--gray-400); padding: 4px; border-radius: 50%; }
+.search-bar.has-value .search-clear { display: block; }
+.search-clear:hover { background: var(--gray-200); color: var(--gray-700); }
+
+/* 카테고리 필터 칩 — 모바일은 가로 스크롤 */
+/* 카테고리 접기/펼치기 토글 — 연한 초록 바로 처리해 카테고리 영역임을
+   한눈에 알아볼 수 있게 한다. 펼쳐지면 화살표가 ^ 방향으로 뒤집힌다. */
+.filter-toggle {
+  display: flex; align-items: center; gap: 8px;
+  width: 100%; margin-top: 10px; padding: 9px 12px;
+  background: var(--leaf-soft);
+  border: 1px solid rgba(107, 154, 74, 0.38);
+  border-radius: 8px;
+  font-size: 13px; font-weight: 600; color: var(--leaf-deep);
+  transition: background 0.2s, border-color 0.2s;
+}
+.filter-toggle:hover {
+  background: rgba(107, 154, 74, 0.2);
+  border-color: rgba(107, 154, 74, 0.55);
+}
+.filter-toggle svg { color: var(--leaf-deep); transition: transform 0.2s; }
+.filter-toggle[aria-expanded="true"] svg { transform: rotate(180deg); }
+.filter-toggle-current {
+  margin-right: auto; padding: 3px 9px;
+  background: var(--white); border-radius: 6px;
+  font-size: 11.5px; font-weight: 600; color: var(--leaf-deep);
+  max-width: 60%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+.filter-chips {
+  display: flex; gap: 8px; margin-top: 8px;
+  overflow-x: auto; scrollbar-width: none;
+  padding-bottom: 2px;
+  -webkit-overflow-scrolling: touch;
+}
+.filter-chips[hidden] { display: none; }
+.filter-chips::-webkit-scrollbar { display: none; }
+.chip {
+  flex: 0 0 auto;
+  padding: 7px 14px; border-radius: 8px;
+  font-size: 13px; font-weight: 500; white-space: nowrap;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  color: var(--gray-500);
+  transition: all 0.2s;
+}
+.chip:hover { border-color: var(--primary-light); color: var(--primary-mid); }
+.chip[aria-pressed="true"] {
+  background: var(--primary); border-color: var(--primary);
+  color: var(--white); font-weight: 600;
+}
+
+.list-meta { padding: 12px 20px 0; font-size: 12.5px; color: var(--gray-500); }
+.list-meta:empty { display: none; }
+
+/* 용어 리스트 아이템 */
+/* 그룹 헤더는 일부러 sticky 로 두지 않는다.
+   검색 블록도 sticky 라 두 겹이 되는데, 그 경계를 JS로 잰 높이(정수로 반올림)에
+   맞추다 보면 1px 안팎으로 어긋나고 그 틈으로 스크롤 중인 글자가 실처럼 비쳤다.
+   static 으로 두면 행들이 불투명한 검색 블록 아래로 그냥 지나가 틈이 생기지 않는다. */
+.group-head {
+  padding: 18px 20px 8px;
+  font-size: 12px; font-weight: 700; letter-spacing: 0.02em;
+  color: var(--gray-400); background: var(--white);
+}
+.term-row {
+  display: flex; align-items: baseline; gap: 12px;
+  width: 100%; text-align: left;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--gray-200);
+  transition: background 0.2s;
+}
+.term-row:hover { background: var(--gray-50); }
+.term-row[aria-selected="true"] {
+  background: var(--gray-50);
+  box-shadow: inset 3px 0 0 var(--leaf-deep);
+}
+.term-row-main { flex: 1; min-width: 0; }
+.term-row-title { display: flex; align-items: baseline; gap: 7px; flex-wrap: wrap; }
+.term-row-ko { font-size: 15px; font-weight: 600; color: var(--gray-900); letter-spacing: -0.01em; }
+.term-row-en { font-size: 12px; color: var(--gray-400); }
+.term-row-preview {
+  margin-top: 3px; font-size: 13px; color: var(--gray-500);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.term-row-cat {
+  flex: 0 0 auto; font-size: 11.5px; color: var(--gray-400);
+  max-width: 34%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.term-row-mark { flex: 0 0 auto; color: var(--primary-light); align-self: center; }
+
+.list-foot { padding: 20px; }
+
+/* 빈 상태 */
+.empty { padding: 56px 28px; text-align: center; color: var(--gray-500); }
+.empty p { font-size: 14px; margin-bottom: 18px; line-height: 1.7; word-break: keep-all; }
+.empty svg { margin: 0 auto 14px; color: var(--gray-300); }
+
+/* ============================================================
+   버튼 — 랜딩의 .btn-primary 를 그대로 사용.
+   .btn-secondary 는 랜딩에서 어두운 배경용 글래스라 밝은 화면에
+   쓸 수 없어, 같은 형태를 밝은 배경용으로 옮겼다.
+   ============================================================ */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  padding: 12px 26px; border-radius: var(--radius-sm);
+  font-size: 15px; font-weight: 600;
+  transition: transform 0.2s, box-shadow 0.2s, background 0.2s, border-color 0.2s;
+}
+.btn-primary {
+  background: var(--accent); color: var(--primary);
+  box-shadow: 0 4px 16px rgba(74, 222, 128, 0.3);
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(74, 222, 128, 0.4); }
+.btn-secondary {
+  background: var(--white); border: 1px solid var(--gray-200);
+  color: var(--gray-700); font-weight: 500;
+}
+.btn-secondary:hover {
+  border-color: var(--primary-light); color: var(--primary-mid);
+  transform: translateY(-2px); box-shadow: 0 8px 24px rgba(13, 59, 46, 0.08);
+}
+.btn-ghost { color: var(--gray-400); }
+.btn-ghost:hover { color: var(--gray-700); }
+.btn-block { width: 100%; }
+.btn:disabled { opacity: .45; cursor: not-allowed; transform: none; box-shadow: none; }
+
+/* ============================================================
+   상세 패널
+   ============================================================ */
+.panel-detail { padding: 0 20px 96px; }
+.detail-back {
+  display: flex; align-items: center; gap: 6px;
+  padding: 16px 0; font-size: 14px; font-weight: 500; color: var(--gray-500);
+  transition: color 0.2s;
+}
+.detail-back:hover { color: var(--primary-mid); }
+
+/* 정의 카드 — 랜딩의 .article-card 스타일 */
+.def-card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  padding: 24px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.def-card:hover { border-color: var(--primary-light); box-shadow: 0 8px 32px rgba(13, 59, 46, 0.06); }
+.def-head { display: flex; align-items: flex-start; gap: 12px; }
+.def-head-text { flex: 1; min-width: 0; }
+.def-title {
+  font-size: 22px; font-weight: 700; letter-spacing: -0.02em;
+  line-height: 1.4; color: var(--gray-900);
+}
+.def-title-en {
+  display: block; margin-top: 3px;
+  font-size: 13px; font-weight: 400; letter-spacing: 0; color: var(--gray-400);
+}
+.bookmark-btn {
+  flex: 0 0 auto; padding: 8px; border-radius: 10px;
+  color: var(--gray-400); transition: color 0.2s, background 0.2s;
+}
+.bookmark-btn:hover { background: var(--gray-100); color: var(--primary-mid); }
+.bookmark-btn[aria-pressed="true"] { color: var(--primary-light); }
+
+/* 카테고리 배지 — 랜딩의 .article-tag */
+.def-cats { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.cat-badge {
+  display: inline-flex; padding: 4px 10px;
+  background: var(--leaf-soft); border-radius: 6px;
+  font-size: 12px; font-weight: 600; color: var(--leaf-deep);
+}
+
+.def-curator {
+  margin-top: 18px;
+  font-size: 16px; font-weight: 500; line-height: 1.8; color: var(--gray-800);
+  word-break: keep-all;
+}
+.def-divider { height: 1px; background: var(--gray-200); margin: 22px 0 16px; }
+.def-label {
+  font-size: 12px; font-weight: 600; color: var(--gray-400);
+  letter-spacing: .02em; margin-bottom: 8px;
+}
+.def-original { font-size: 13.5px; line-height: 1.8; color: var(--gray-500); word-break: keep-all; }
+.def-source { display: block; margin-top: 8px; font-size: 12px; color: var(--gray-400); }
+
+/* 카드 밖 섹션 — 여기부터는 심화 내용 */
+.deep-section { margin-top: 32px; }
+.deep-title {
+  font-size: 17px; font-weight: 700; letter-spacing: -0.01em;
+  color: var(--gray-900); margin-bottom: 14px;
+}
+
+/* 관점별 정의 아코디언 */
+.accordion {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.acc-item + .acc-item { border-top: 1px solid var(--gray-200); }
+.acc-head {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  width: 100%; text-align: left; padding: 16px 20px;
+  transition: background 0.2s;
+}
+.acc-head:hover { background: var(--gray-50); }
+.acc-school { font-size: 14.5px; font-weight: 600; color: var(--primary-mid); }
+.acc-head svg { color: var(--gray-400); transition: transform 0.2s; }
+.acc-head[aria-expanded="true"] svg { transform: rotate(180deg); }
+.acc-panel { padding: 0 20px 18px; }
+.acc-panel[hidden] { display: none; }
+.acc-body { font-size: 14.5px; line-height: 1.8; color: var(--gray-700); word-break: keep-all; }
+.acc-source { margin-top: 10px; font-size: 12px; color: var(--gray-400); }
+
+/* 관련 이론가 */
+.theorist-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.theorist-chip {
+  padding: 8px 16px; border-radius: 8px;
+  background: var(--white); border: 1px solid var(--gray-200);
+  color: var(--gray-700); font-size: 13px; font-weight: 500;
+  transition: all 0.2s;
+}
+.theorist-chip:hover, .theorist-chip[aria-expanded="true"] {
+  border-color: var(--primary-light); color: var(--primary-mid);
+  box-shadow: 0 4px 16px rgba(13, 59, 46, 0.06);
+}
+
+.popover {
+  position: absolute; z-index: 110; width: 280px;
+  background: var(--white); border: 1px solid var(--gray-200);
+  border-radius: var(--radius); box-shadow: 0 8px 32px rgba(13, 59, 46, 0.12);
+  padding: 18px;
+}
+.popover[hidden] { display: none; }
+.pop-name { font-size: 16px; font-weight: 700; letter-spacing: -0.01em; color: var(--gray-900); }
+.pop-meta { font-size: 12px; color: var(--gray-400); margin-top: 2px; }
+.pop-bio { font-size: 13px; line-height: 1.7; color: var(--gray-600); margin: 12px 0 14px; word-break: keep-all; }
+.pop-cta {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  width: 100%; padding: 9px 12px;
+  background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 8px;
+  font-size: 12.5px; font-weight: 500; color: var(--gray-400);
+}
+.pop-cta-tag {
+  padding: 2px 8px; background: var(--gray-200); border-radius: 6px;
+  font-size: 10.5px; font-weight: 600; color: var(--gray-600);
+}
+
+/* ============================================================
+   하단 탭바 (모바일 전용) — 랜딩과 동일
+   ============================================================ */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--gray-200);
+  padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
+}
+.bottom-nav-inner {
+  display: flex; justify-content: space-around; align-items: center;
+  max-width: 480px; margin: 0 auto;
+}
+.bottom-nav a {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  font-size: 10px; font-weight: 500; color: var(--gray-400);
+  transition: color 0.2s; padding: 4px 12px;
+}
+.bottom-nav a.active { color: var(--primary); }
+
+/* ============================================================
+   모달 · 토스트
+   ============================================================ */
+.modal-backdrop {
+  position: fixed; inset: 0; z-index: 120;
+  display: flex; align-items: flex-end; justify-content: center;
+  background: rgba(13, 59, 46, 0.45);
+  backdrop-filter: blur(4px);
+}
+.modal-backdrop[hidden] { display: none; }
+.modal {
+  width: 100%; max-width: 460px;
+  background: var(--white);
+  border-radius: var(--radius) var(--radius) 0 0;
+  padding: 26px 22px calc(26px + env(safe-area-inset-bottom));
+  max-height: 90vh; overflow-y: auto;
+}
+.modal-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; }
+.modal-title { font-size: 20px; font-weight: 700; letter-spacing: -0.02em; color: var(--gray-900); }
+.modal-desc { font-size: 13px; color: var(--gray-500); margin-top: 8px; line-height: 1.7; word-break: keep-all; }
+.field { margin-top: 18px; }
+.field label { display: block; font-size: 13px; font-weight: 600; color: var(--gray-700); margin-bottom: 8px; }
+.field input, .field textarea {
+  width: 100%; padding: 12px 14px;
+  background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius-sm);
+  font-size: 14.5px; outline: none; resize: vertical;
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.field textarea { min-height: 116px; line-height: 1.7; }
+.field input:focus, .field textarea:focus {
+  background: var(--white);
+  border-color: var(--primary-light); box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.field-hint { font-size: 12px; color: var(--gray-400); margin-top: 8px; }
+.modal-actions { display: flex; gap: 10px; margin-top: 24px; }
+.modal-actions .btn { flex: 1; }
+
+.toast {
+  position: fixed; left: 50%; bottom: 86px; z-index: 130;
+  transform: translate(-50%, 12px);
+  max-width: calc(100vw - 40px);
+  padding: 13px 22px; border-radius: var(--radius-sm);
+  background: var(--primary); color: var(--white);
+  font-size: 13.5px; font-weight: 500;
+  box-shadow: 0 8px 24px rgba(13, 59, 46, 0.25);
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.25s, transform 0.25s;
+}
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+/* ============================================================
+   반응형 — 랜딩과 동일하게 768 / 1440,
+   2단 레이아웃 전환점으로 1024 를 추가로 사용
+   ============================================================ */
+@media (min-width: 768px) {
+  .nav-links { display: flex; }
+  .bottom-nav { display: none; }
+
+  /* 이 지점부터는 2단 유지 — 목록/상세 전환을 무력화한다 */
+  body[data-view="list"]   .panel-detail,
+  body[data-view="detail"] .panel-list { display: block; }
+
+  .glossary-inner {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    align-items: start;
+  }
+  .panel-list {
+    position: sticky; top: var(--header-h);
+    height: calc(100vh - var(--header-h));
+    overflow-y: auto; overscroll-behavior: contain;
+    border-right: 1px solid var(--gray-200);
+    padding-bottom: 0;
+  }
+  /* 스크롤 컨테이너 안이므로 기준점이 패널 상단(0)으로 바뀐다 */
+  .list-sticky { top: 0; }
+  .panel-detail {
+    background: var(--gray-50);
+    min-height: calc(100vh - var(--header-h));
+    padding: 32px 28px 64px;
+  }
+  .detail-back { display: none; }
+
+  .def-card { padding: 32px; }
+  .def-title { font-size: 24px; }
+  .detail-wrap { max-width: 720px; }
+}
+
+@media (min-width: 1024px) {
+  .glossary-inner { grid-template-columns: 340px 1fr; }
+  .panel-detail { padding: 40px 40px 80px; }
+  .list-sticky { padding: 14px 22px 14px; }
+  .term-row { padding: 15px 22px; }
+  .group-head { padding: 22px 22px 8px; }
+  .list-meta { padding: 14px 22px 0; }
+  .list-foot { padding: 22px; }
+
+  /* PC 에서는 필터 칩을 가로 스크롤 대신 wrap */
+  .filter-chips { flex-wrap: wrap; overflow-x: visible; }
+
+  .modal-backdrop { align-items: center; padding: 24px; }
+  .modal { border-radius: var(--radius); }
+  .toast { bottom: 32px; }
+}
+
+@media (min-width: 1440px) {
+  :root { --shell: 1320px; }
+  .glossary-inner { grid-template-columns: 360px 1fr; }
+  .panel-detail { padding: 48px 56px 96px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+  html { scroll-behavior: auto; }
+  .btn:hover, .theorist-chip:hover { transform: none; }
+}
+</style>
+</head>
+
+<body data-view="list">
+
+<header class="header">
+  <div class="header-inner">
+    <a href="index.html" class="logo">Sociology-whole</a>
+    <nav class="nav-links">
+      <a href="index.html#courses">전공수업</a>
+      <a href="glossary.html" class="active" aria-current="page">용어집</a>
+      <a href="index.html#theorists">이론가</a>
+      <a href="index.html#articles">시사연결</a>
+      <a href="index.html#quiz">퀴즈</a>
+      <a href="index.html#community">커뮤니티</a>
+      <a href="index.html#resources">자료실</a>
+    </nav>
+    <a href="index.html" class="nav-cta">시작하기</a>
+  </div>
+</header>
+
+<main class="glossary-inner">
+
+  <!-- ── 좌측: 목록 패널 ─────────────────────────────────── -->
+  <section class="panel-list" id="panelList" aria-label="용어 목록">
+    <div class="list-sticky" id="listSticky">
+      <h1 class="page-title">용어집</h1>
+
+      <div class="search-bar" id="searchBar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path>
+        </svg>
+        <label for="searchInput" class="sr-only">용어 검색</label>
+        <input type="search" id="searchInput" placeholder="용어 또는 정의로 검색" autocomplete="off">
+        <button type="button" class="search-clear" id="searchClear" aria-label="검색어 지우기">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+            <path d="M18 6 6 18M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+
+      <button type="button" class="filter-toggle" id="filterToggle" aria-expanded="true" aria-controls="filterChips">
+        <span>카테고리</span>
+        <span class="filter-toggle-current" id="filterCurrent">전체</span>
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="m6 9 6 6 6-6"></path>
+        </svg>
+      </button>
+      <div class="filter-chips" id="filterChips" role="group" aria-label="카테고리 필터"></div>
+    </div>
+
+    <p class="list-meta" id="listMeta" role="status" aria-live="polite"></p>
+    <div id="termList" role="listbox" aria-label="용어"></div>
+
+    <div class="list-foot">
+      <button type="button" class="btn btn-secondary btn-block" data-action="suggest">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M12 5v14M5 12h14"></path>
+        </svg>
+        용어 제안하기
+      </button>
+    </div>
+  </section>
+
+  <!-- ── 우측: 상세 패널 ─────────────────────────────────── -->
+  <section class="panel-detail" id="panelDetail" aria-label="용어 상세" aria-live="polite">
+    <button type="button" class="detail-back" id="detailBack">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="m15 18-6-6 6-6"></path>
+      </svg>
+      목록
+    </button>
+    <div class="detail-wrap" id="detailBody"></div>
+  </section>
+
+</main>
+
+<!-- ── 하단 탭바 (모바일) ───────────────────────────────── -->
+<nav class="bottom-nav" aria-label="주요 메뉴">
+  <div class="bottom-nav-inner">
+    <a href="index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/>
+      </svg><span>홈</span>
+    </a>
+    <a href="glossary.html" class="active" aria-current="page">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+      </svg><span>용어집</span>
+    </a>
+    <a href="index.html#quiz">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true">
+        <path d="M12 2a8 8 0 0 0-8 8c0 3.4 2.1 6.3 5 7.4V20a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-2.6c2.9-1.1 5-4 5-7.4a8 8 0 0 0-8-8Z"/><path d="M9 22h6"/>
+      </svg><span>퀴즈</span>
+    </a>
+    <a href="index.html#community">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+      </svg><span>커뮤니티</span>
+    </a>
+    <a href="index.html#resources">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true">
+        <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>
+      </svg><span>자료실</span>
+    </a>
+  </div>
+</nav>
+
+<!-- ── 이론가 미니 팝오버 ───────────────────────────────── -->
+<div class="popover" id="popover" role="dialog" aria-label="이론가 소개" hidden></div>
+
+<!-- ── 용어 제안 모달 ───────────────────────────────────── -->
+<div class="modal-backdrop" id="suggestModal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="suggestTitle">
+    <div class="modal-head">
+      <div>
+        <h2 class="modal-title" id="suggestTitle">용어 제안하기</h2>
+        <p class="modal-desc">찾는 용어가 없었나요? 용어명과 정의만 남겨주시면 운영자가 카테고리·이론가·영문 원어를 채워 게시합니다.</p>
+      </div>
+      <button type="button" class="btn btn-ghost" id="suggestClose" aria-label="닫기" style="padding:4px">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+          <path d="M18 6 6 18M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+    <form id="suggestForm" novalidate>
+      <div class="field">
+        <label for="suggestTerm">용어명</label>
+        <input type="text" id="suggestTerm" name="term" required placeholder="예: 사회자본">
+      </div>
+      <div class="field">
+        <label for="suggestDef">정의</label>
+        <textarea id="suggestDef" name="definition" required placeholder="알고 있는 만큼만 적어주셔도 됩니다."></textarea>
+        <p class="field-hint">제출된 내용은 원문 정의의 초안으로 검토됩니다.</p>
+      </div>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-secondary" id="suggestCancel">취소</button>
+        <button type="submit" class="btn btn-primary">제출하기</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="glossary-data.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  var DATA = window.GLOSSARY_DATA;
+  var TERMS = DATA.terms;
+  var THEORISTS = DATA.theorists;
+  var CATEGORIES = DATA.categories;
+  var ALL = '전체';
+  var BOOKMARK_KEY = 'sw:glossary:bookmarks';
+  var FILTER_KEY = 'sw:glossary:filterOpen';
+  var TABLET_MQ = window.matchMedia('(min-width: 768px)');
+
+  var state = {
+    query: '',
+    category: ALL,
+    selectedId: null,
+    expandedSearch: false,   // 정의 본문까지 확장 검색이 걸렸는지
+    filterOpen: loadFilterOpen(),
+    bookmarks: loadBookmarks()
+  };
+
+  var el = {
+    searchBar: document.getElementById('searchBar'),
+    searchInput: document.getElementById('searchInput'),
+    searchClear: document.getElementById('searchClear'),
+    chips: document.getElementById('filterChips'),
+    listSticky: document.getElementById('listSticky'),
+    filterToggle: document.getElementById('filterToggle'),
+    filterCurrent: document.getElementById('filterCurrent'),
+    listMeta: document.getElementById('listMeta'),
+    list: document.getElementById('termList'),
+    panelList: document.getElementById('panelList'),
+    detailBody: document.getElementById('detailBody'),
+    detailBack: document.getElementById('detailBack'),
+    popover: document.getElementById('popover'),
+    modal: document.getElementById('suggestModal'),
+    form: document.getElementById('suggestForm'),
+    toast: document.getElementById('toast')
+  };
+
+  /* ---------------------------------------------------------
+     유틸
+     --------------------------------------------------------- */
+  function esc(s) {
+    return String(s).replace(/[&<>"']/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+    });
+  }
+
+  function loadBookmarks() {
+    try {
+      var raw = localStorage.getItem(BOOKMARK_KEY);
+      return raw ? new Set(JSON.parse(raw)) : new Set();
+    } catch (e) {
+      // 사파리 프라이빗 모드 등 localStorage 접근 불가 — 세션 한정으로 동작시킨다
+      return new Set();
+    }
+  }
+
+  // 접힘 여부는 새로고침 후에도 유지한다 (기본값은 펼침)
+  function loadFilterOpen() {
+    try { return localStorage.getItem(FILTER_KEY) !== '0'; } catch (e) { return true; }
+  }
+
+  function saveBookmarks() {
+    try {
+      localStorage.setItem(BOOKMARK_KEY, JSON.stringify(Array.from(state.bookmarks)));
+    } catch (e) { /* 저장 실패는 무시 */ }
+  }
+
+  var toastTimer;
+  function toast(msg) {
+    el.toast.textContent = msg;
+    el.toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { el.toast.classList.remove('show'); }, 2600);
+  }
+
+  var ICON = {
+    chevron: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg>',
+    search:  '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"></circle><path d="m21 21-4.3-4.3"></path></svg>',
+    book:    '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>'
+  };
+
+  // 북마크 아이콘 — 색상만이 아니라 채움(fill) 여부로도 상태를 구분한다
+  function bookmarkIcon(active, size) {
+    var s = size || 20;
+    return '<svg width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="' +
+      (active ? 'currentColor' : 'none') +
+      '" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      '<path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>';
+  }
+
+  /* ---------------------------------------------------------
+     검색 · 필터
+     용어명 우선 매칭 → 0건일 때만 정의 본문까지 확장
+     --------------------------------------------------------- */
+  function byCategory(list) {
+    if (state.category === ALL) return list;
+    return list.filter(function (t) { return t.categories.indexOf(state.category) >= 0; });
+  }
+
+  function getResults() {
+    var pool = byCategory(TERMS);
+    var q = state.query.trim().toLowerCase();
+    state.expandedSearch = false;
+    if (!q) return pool;
+
+    var byName = pool.filter(function (t) {
+      return t.term_ko.toLowerCase().indexOf(q) >= 0 ||
+             (t.term_en || '').toLowerCase().indexOf(q) >= 0;
+    });
+    if (byName.length) return byName;
+
+    var byBody = pool.filter(function (t) {
+      return t.curator_definition.toLowerCase().indexOf(q) >= 0 ||
+             t.original_definition.toLowerCase().indexOf(q) >= 0;
+    });
+    state.expandedSearch = byBody.length > 0;
+    return byBody;
+  }
+
+  function sortKo(a, b) { return a.term_ko.localeCompare(b.term_ko, 'ko'); }
+
+  /* ---------------------------------------------------------
+     렌더 — 목록
+     --------------------------------------------------------- */
+  function renderChips() {
+    var all = [ALL].concat(CATEGORIES);
+    el.chips.innerHTML = all.map(function (c) {
+      var on = state.category === c;
+      return '<button type="button" class="chip" data-cat="' + esc(c) + '" aria-pressed="' + on + '">' +
+             esc(c) + '</button>';
+    }).join('');
+    // 접힌 상태에서도 어떤 카테고리가 걸려 있는지 보이도록 토글에 현재 값을 표시
+    el.filterCurrent.textContent = state.category;
+  }
+
+  function setFilterOpen(open) {
+    state.filterOpen = open;
+    el.filterToggle.setAttribute('aria-expanded', String(open));
+    el.chips.hidden = !open;
+    try { localStorage.setItem(FILTER_KEY, open ? '1' : '0'); } catch (e) { /* 무시 */ }
+  }
+
+  function rowHTML(t) {
+    var on = state.selectedId === t.id;
+    var marked = state.bookmarks.has(t.id);
+    return '<button type="button" class="term-row" role="option" data-id="' + t.id + '" aria-selected="' + on + '">' +
+      '<span class="term-row-main">' +
+        '<span class="term-row-title">' +
+          '<span class="term-row-ko">' + esc(t.term_ko) + '</span>' +
+          (t.term_en ? '<span class="term-row-en">' + esc(t.term_en) + '</span>' : '') +
+        '</span>' +
+        '<span class="term-row-preview">' + esc(t.curator_definition) + '</span>' +
+      '</span>' +
+      (marked ? '<span class="term-row-mark">' + bookmarkIcon(true, 13) + '</span>' : '') +
+      '<span class="term-row-cat">' + esc(t.categories[0]) + '</span>' +
+    '</button>';
+  }
+
+  function renderList() {
+    var results = getResults();
+
+    // 안내 캡션
+    if (state.expandedSearch) {
+      el.listMeta.textContent = '용어명에는 없어 정의 본문에서 찾은 결과 ' + results.length + '건';
+    } else if (state.query.trim() || state.category !== ALL) {
+      el.listMeta.textContent = results.length + '개의 용어';
+    } else {
+      el.listMeta.textContent = '';
+    }
+
+    if (!results.length) {
+      el.list.innerHTML =
+        '<div class="empty">' + ICON.search +
+        '<p>찾으시는 용어가 없어요.<br>새로운 용어를 제안해보세요.</p>' +
+        '<button type="button" class="btn btn-secondary" data-action="suggest">용어 제안하기</button></div>';
+      return;
+    }
+
+    // 필터가 걸려 있으면 그룹 헤더 없이 단일 리스트
+    if (state.category !== ALL || state.query.trim()) {
+      el.list.innerHTML = results.slice().sort(sortKo).map(rowHTML).join('');
+      return;
+    }
+
+    // 기본 정렬: 대표 카테고리로 그룹핑, 그룹 내부는 자모순
+    var html = '';
+    CATEGORIES.forEach(function (cat) {
+      var group = results.filter(function (t) { return t.categories[0] === cat; }).sort(sortKo);
+      if (!group.length) return;
+      html += '<h2 class="group-head">' + esc(cat) + '</h2>' + group.map(rowHTML).join('');
+    });
+    el.list.innerHTML = html;
+  }
+
+  /* ---------------------------------------------------------
+     렌더 — 상세
+     --------------------------------------------------------- */
+  function renderDetail() {
+    var t = TERMS.filter(function (x) { return x.id === state.selectedId; })[0];
+
+    if (!t) {
+      el.detailBody.innerHTML =
+        '<div class="empty">' + ICON.book +
+        '<p>' + (TABLET_MQ.matches ? '왼쪽에서 용어를 선택해주세요.' : '용어를 선택해주세요.') + '</p></div>';
+      return;
+    }
+
+    var marked = state.bookmarks.has(t.id);
+
+    // 정의 카드 — 화면에서 유일한 카드
+    var html =
+      '<article class="def-card">' +
+        '<div class="def-head">' +
+          '<div class="def-head-text">' +
+            '<h1 class="def-title">' + esc(t.term_ko) +
+              (t.term_en ? '<span class="def-title-en">' + esc(t.term_en) + '</span>' : '') +
+            '</h1>' +
+          '</div>' +
+          '<button type="button" class="bookmark-btn" data-action="bookmark" aria-pressed="' + marked + '" ' +
+            'aria-label="' + (marked ? '북마크 해제' : '북마크에 추가') + '">' + bookmarkIcon(marked) + '</button>' +
+        '</div>' +
+        '<div class="def-cats">' +
+          t.categories.map(function (c) { return '<span class="cat-badge">' + esc(c) + '</span>'; }).join('') +
+        '</div>' +
+        '<p class="def-curator">' + esc(t.curator_definition) + '</p>' +
+        '<div class="def-divider"></div>' +
+        '<p class="def-label">원문 정의</p>' +
+        '<p class="def-original">' + esc(t.original_definition) +
+          (t.original_definition_source
+            ? '<span class="def-source">— ' + esc(t.original_definition_source) + '</span>' : '') +
+        '</p>' +
+      '</article>';
+
+    // 관점별 정의 — 카드 밖, 있는 용어에만
+    if (t.perspectives && t.perspectives.length) {
+      html += '<section class="deep-section"><h2 class="deep-title">관점별 정의</h2><div class="accordion">' +
+        t.perspectives.map(function (p, i) {
+          var pid = t.id + '-persp-' + i;
+          return '<div class="acc-item">' +
+            '<button type="button" class="acc-head" data-action="acc" aria-expanded="false" aria-controls="' + pid + '">' +
+              '<span class="acc-school">' + esc(p.school) + '</span>' + ICON.chevron +
+            '</button>' +
+            '<div class="acc-panel" id="' + pid + '" role="region" hidden>' +
+              '<p class="acc-body">' + esc(p.definition) + '</p>' +
+              (p.source ? '<p class="acc-source">' + esc(p.source) + '</p>' : '') +
+            '</div>' +
+          '</div>';
+        }).join('') + '</div></section>';
+    }
+
+    // 관련 이론가 — 카드 밖, 있는 용어에만
+    if (t.related_theorists && t.related_theorists.length) {
+      html += '<section class="deep-section"><h2 class="deep-title">관련 이론가</h2><div class="theorist-chips">' +
+        t.related_theorists.map(function (key) {
+          var th = THEORISTS[key];
+          if (!th) return '';
+          return '<button type="button" class="theorist-chip" data-action="theorist" data-key="' + esc(key) +
+                 '" aria-expanded="false" aria-haspopup="dialog">' + esc(th.name) + '</button>';
+        }).join('') + '</div></section>';
+    }
+
+    el.detailBody.innerHTML = html;
+  }
+
+  function render() {
+    renderChips();
+    renderList();
+    renderDetail();
+  }
+
+  /* ---------------------------------------------------------
+     선택 · 라우팅 (해시로 딥링크/뒤로가기 지원)
+     --------------------------------------------------------- */
+  function select(id, pushHash) {
+    state.selectedId = id;
+    closePopover();
+    if (pushHash) location.hash = id ? '#' + id : '';
+    if (id && !TABLET_MQ.matches) document.body.dataset.view = 'detail';
+    renderList();
+    renderDetail();
+    if (id && !TABLET_MQ.matches) window.scrollTo(0, 0);
+  }
+
+  function syncFromHash() {
+    var id = location.hash.replace(/^#/, '');
+    var exists = id && TERMS.some(function (t) { return t.id === id; });
+    state.selectedId = exists ? id : null;
+    document.body.dataset.view = (exists && !TABLET_MQ.matches) ? 'detail' : 'list';
+    closePopover();
+    renderList();
+    renderDetail();
+  }
+
+  window.addEventListener('hashchange', syncFromHash);
+
+  // 브레이크포인트를 넘나들 때 목록/상세 표시 상태를 정리
+  TABLET_MQ.addEventListener('change', function () {
+    document.body.dataset.view = (state.selectedId && !TABLET_MQ.matches) ? 'detail' : 'list';
+    renderDetail();
+    closePopover();
+  });
+
+  /* ---------------------------------------------------------
+     이벤트 — 검색
+     --------------------------------------------------------- */
+  var debounceTimer;
+  el.searchInput.addEventListener('input', function () {
+    el.searchBar.classList.toggle('has-value', !!this.value);
+    var v = this.value;
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function () {
+      state.query = v;
+      renderList();
+    }, 200);
+  });
+
+  el.searchClear.addEventListener('click', function () {
+    el.searchInput.value = '';
+    el.searchBar.classList.remove('has-value');
+    state.query = '';
+    renderList();
+    el.searchInput.focus();
+  });
+
+  /* ---------------------------------------------------------
+     이벤트 — 필터 칩 (단일 선택)
+     --------------------------------------------------------- */
+  el.filterToggle.addEventListener('click', function () {
+    setFilterOpen(!state.filterOpen);
+  });
+
+  el.chips.addEventListener('click', function (e) {
+    var chip = e.target.closest('.chip');
+    if (!chip) return;
+    state.category = chip.dataset.cat;
+    renderChips();
+    renderList();
+    el.panelList.scrollTop = 0;
+  });
+
+  /* ---------------------------------------------------------
+     이벤트 — 목록 선택
+     --------------------------------------------------------- */
+  el.list.addEventListener('click', function (e) {
+    if (e.target.closest('[data-action="suggest"]')) { openModal(); return; }
+    var row = e.target.closest('.term-row');
+    if (row) select(row.dataset.id, true);
+  });
+
+  el.detailBack.addEventListener('click', function () {
+    if (history.length > 1) history.back();
+    else { location.hash = ''; syncFromHash(); }
+  });
+
+  /* ---------------------------------------------------------
+     이벤트 — 상세 패널 (북마크 / 아코디언 / 이론가 팝오버)
+     --------------------------------------------------------- */
+  el.detailBody.addEventListener('click', function (e) {
+    var bookmarkBtn = e.target.closest('[data-action="bookmark"]');
+    if (bookmarkBtn) {
+      var id = state.selectedId;
+      if (state.bookmarks.has(id)) {
+        state.bookmarks.delete(id);
+        toast('북마크를 해제했습니다.');
+      } else {
+        state.bookmarks.add(id);
+        toast('마이페이지에 북마크했습니다.');
+      }
+      saveBookmarks();
+      renderDetail();
+      renderList();
+      return;
+    }
+
+    var accBtn = e.target.closest('[data-action="acc"]');
+    if (accBtn) {
+      var open = accBtn.getAttribute('aria-expanded') === 'true';
+      accBtn.setAttribute('aria-expanded', String(!open));
+      document.getElementById(accBtn.getAttribute('aria-controls')).hidden = open;
+      return;
+    }
+
+    var thBtn = e.target.closest('[data-action="theorist"]');
+    if (thBtn) {
+      if (thBtn.getAttribute('aria-expanded') === 'true') closePopover();
+      else openPopover(thBtn);
+    }
+  });
+
+  /* ---------------------------------------------------------
+     이론가 미니 팝오버
+     --------------------------------------------------------- */
+  var popoverTrigger = null;
+
+  function openPopover(btn) {
+    var th = THEORISTS[btn.dataset.key];
+    if (!th) return;
+    closePopover();
+
+    el.popover.innerHTML =
+      '<p class="pop-name">' + esc(th.name) + '</p>' +
+      '<p class="pop-meta">' + esc(th.name_en || '') + (th.years ? ' · ' + esc(th.years) : '') + '</p>' +
+      '<p class="pop-bio">' + esc(th.mini_bio) + '</p>' +
+      // 이론가 페이지가 생기면 이 버튼의 disabled만 풀고 링크를 연결하면 된다
+      '<button type="button" class="pop-cta" disabled>' +
+        '<span>전체 프로필 보기</span><span class="pop-cta-tag">준비 중</span>' +
+      '</button>';
+
+    el.popover.hidden = false;
+    btn.setAttribute('aria-expanded', 'true');
+    popoverTrigger = btn;
+
+    // 트리거 아래에 붙이되 화면 밖으로 나가지 않게 보정
+    var r = btn.getBoundingClientRect();
+    var w = el.popover.offsetWidth;
+    var left = Math.min(r.left + window.scrollX, window.scrollX + document.documentElement.clientWidth - w - 12);
+    el.popover.style.left = Math.max(window.scrollX + 12, left) + 'px';
+    el.popover.style.top = (r.bottom + window.scrollY + 8) + 'px';
+  }
+
+  function closePopover() {
+    el.popover.hidden = true;
+    if (popoverTrigger) {
+      popoverTrigger.setAttribute('aria-expanded', 'false');
+      popoverTrigger = null;
+    }
+  }
+
+  document.addEventListener('click', function (e) {
+    if (el.popover.hidden) return;
+    if (e.target.closest('#popover') || e.target.closest('[data-action="theorist"]')) return;
+    closePopover();
+  });
+  window.addEventListener('resize', closePopover);
+
+  /* ---------------------------------------------------------
+     용어 제안 모달 — 제출은 목업, 네트워크 호출 없음
+     --------------------------------------------------------- */
+  var lastFocused = null;
+
+  function openModal() {
+    lastFocused = document.activeElement;
+    el.modal.hidden = false;
+    document.getElementById('suggestTerm').focus();
+  }
+
+  function closeModal() {
+    el.modal.hidden = true;
+    el.form.reset();
+    if (lastFocused) lastFocused.focus();
+  }
+
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('[data-action="suggest"]')) openModal();
+  });
+  document.getElementById('suggestClose').addEventListener('click', closeModal);
+  document.getElementById('suggestCancel').addEventListener('click', closeModal);
+  el.modal.addEventListener('click', function (e) { if (e.target === el.modal) closeModal(); });
+
+  el.form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var term = document.getElementById('suggestTerm').value.trim();
+    var def = document.getElementById('suggestDef').value.trim();
+    if (!term || !def) { toast('용어명과 정의를 모두 입력해주세요.'); return; }
+    closeModal();
+    toast('제안해주셔서 감사합니다. 검토 중입니다.');
+  });
+
+  // 모달 안에서 Tab 이 밖으로 새지 않게 가둔다
+  el.modal.addEventListener('keydown', function (e) {
+    if (e.key !== 'Tab') return;
+    var f = el.modal.querySelectorAll('button, input, textarea');
+    if (!f.length) return;
+    var first = f[0], last = f[f.length - 1];
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+  });
+
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    if (!el.modal.hidden) closeModal();
+    else if (!el.popover.hidden) {
+      var t = popoverTrigger;
+      closePopover();
+      if (t) t.focus();
+    }
+  });
+
+  /* ---------------------------------------------------------
+     시작
+     --------------------------------------------------------- */
+  setFilterOpen(state.filterOpen);
+  renderChips();
+  syncFromHash();
+})();
+</script>
+</body>
+</html>
