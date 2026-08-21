@@ -34,23 +34,38 @@
     return slot;
   }
 
+  /* 헤더 CTA — 비로그인이면 "시작하기", 로그인하면 "마이페이지"로 바뀐다.
+     원래 라벨과 링크를 기억해 뒀다가 로그아웃 시 그대로 되돌린다. */
+  function renderCta(user) {
+    var cta = document.querySelector('.header-inner .nav-cta');
+    if (!cta) return;
+
+    if (!cta.dataset.swOriginalText) {
+      cta.dataset.swOriginalText = cta.textContent.trim();
+      cta.dataset.swOriginalHref = cta.getAttribute('href') || '#';
+    }
+
+    if (user) {
+      cta.textContent = '마이페이지';
+      cta.setAttribute('href', 'mypage.html');
+    } else {
+      cta.textContent = cta.dataset.swOriginalText;
+      cta.setAttribute('href', cta.dataset.swOriginalHref);
+    }
+  }
+
   function renderSlot(user) {
+    renderCta(user);
     if (!els.slot) return;
     els.slot.textContent = '';
 
     if (user) {
+      // 로그인 상태에서는 이름만 보여준다.
+      // 로그아웃은 헤더에 두지 않고 마이페이지(mypage.html)에서만 한다.
       var name = document.createElement('span');
       name.className = 'sw-auth-username';
       name.textContent = user.name + '님';
-
-      var out = document.createElement('button');
-      out.type = 'button';
-      out.className = 'sw-auth-btn sw-auth-btn--ghost';
-      out.textContent = '로그아웃';
-      out.addEventListener('click', handleSignOut);
-
       els.slot.appendChild(name);
-      els.slot.appendChild(out);
     } else {
       var login = document.createElement('button');
       login.type = 'button';
@@ -61,20 +76,6 @@
       });
       els.slot.appendChild(login);
     }
-  }
-
-  function handleSignOut(e) {
-    var btn = e.currentTarget;
-    btn.disabled = true;
-    btn.textContent = '처리 중…';
-    window.SW_AUTH.signOut().then(function (res) {
-      // 성공하면 subscribe 콜백이 슬롯을 다시 그린다.
-      if (!res.ok) {
-        btn.disabled = false;
-        btn.textContent = '로그아웃';
-        window.alert(res.error);
-      }
-    });
   }
 
   // ── 모달 ─────────────────────────────────────────────────────

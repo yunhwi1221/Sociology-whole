@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>이론가 | Sociology-whole</title>
+<meta name="description" content="사회학 주요 이론가의 생애와 사상, 대표 저서, 관련 용어를 학파별로 살펴봅니다.">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   이론가 프로필 — 용어집(glossary.html)과 같은 토큰·헤더를 쓴다.
+   다만 목록은 리스트가 아니라 카드 그리드다(design_6.md 0장의
+   의도적 예외: 이론가는 "인물"이라 시각적으로 훑는 편이 낫다).
+   ============================================================ */
+:root {
+  --primary: #0D3B2E;
+  --primary-mid: #145C47;
+  --primary-light: #1E7A5F;
+  --accent: #4ADE80;
+  --accent-soft: rgba(74, 222, 128, 0.15);
+  /* 용어집과 같은 연두 계열 포인트 — 레퍼런스형 콘텐츠끼리 톤을 맞춘다 */
+  --leaf: #6B9A4A;
+  --leaf-deep: #3F6B2E;
+  --leaf-soft: rgba(107, 154, 74, 0.13);
+  --white: #FFFFFF;
+  --gray-50: #F9FAFB;
+  --gray-100: #F3F4F6;
+  --gray-200: #E5E7EB;
+  --gray-300: #D1D5DB;
+  --gray-400: #9CA3AF;
+  --gray-500: #6B7280;
+  --gray-600: #4B5563;
+  --gray-700: #374151;
+  --gray-800: #1F2937;
+  --gray-900: #111827;
+  --radius: 16px;
+  --radius-sm: 12px;
+
+  --header-h: 60px;
+  --shell: 1200px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans KR', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--white);
+  color: var(--gray-900);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+button, input, textarea { font: inherit; color: inherit; }
+button { background: none; border: none; cursor: pointer; }
+a { color: inherit; text-decoration: none; }
+svg { display: block; flex-shrink: 0; }
+
+:focus-visible { outline: 2px solid var(--primary-light); outline-offset: 2px; border-radius: 4px; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* ============================================================
+   헤더 — 용어집과 동일(밝은 페이지이므로 불투명 sticky)
+   ============================================================ */
+.header {
+  position: sticky; top: 0; z-index: 100;
+  height: var(--header-h);
+  padding: 0 24px;
+  background: rgba(13, 59, 46, 0.95);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.header-inner {
+  max-width: var(--shell); height: 100%; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+}
+.logo {
+  font-weight: 700; font-size: 18px; letter-spacing: -0.03em; white-space: nowrap;
+  background: linear-gradient(135deg, #4ADE80, #FFFFFF);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.nav-links { display: none; align-items: center; gap: 32px; }
+.nav-links a {
+  font-size: 14px; font-weight: 500;
+  color: rgba(255, 255, 255, 0.7);
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--white); }
+.nav-links a.active { color: var(--white); font-weight: 600; }
+.nav-cta {
+  padding: 8px 20px; background: var(--accent); color: var(--primary);
+  border-radius: 8px; font-size: 13px; font-weight: 600;
+  transition: opacity 0.2s; white-space: nowrap;
+}
+.nav-cta:hover { opacity: 0.9; }
+
+/* ============================================================
+   레이아웃 — 목록/상세는 전 구간 페이지 전환(2단 없음)
+   design_6.md 3.1: 그리드 목록에 사이드 상세는 카드 크기가
+   애매해지고 레이아웃이 복잡해져서 쓰지 않는다.
+   ============================================================ */
+.shell { max-width: var(--shell); margin: 0 auto; padding: 0 20px 96px; }
+
+body[data-view="list"]   .panel-detail { display: none; }
+body[data-view="detail"] .panel-list   { display: none; }
+
+/* ── 목록 상단(검색·필터·정렬) ─────────────────────────── */
+.list-head { padding: 22px 0 16px; }
+.page-title {
+  font-size: 22px; font-weight: 700; letter-spacing: -0.02em;
+  color: var(--gray-900);
+}
+.page-sub { margin-top: 4px; font-size: 13.5px; color: var(--gray-500); }
+
+.search-bar {
+  display: flex; align-items: center; gap: 10px;
+  margin-top: 16px; padding: 0 14px; height: 46px;
+  background: var(--gray-50);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.search-bar:focus-within {
+  background: var(--white);
+  border-color: var(--primary-light);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+.search-bar > svg { color: var(--primary-mid); }
+.search-bar input {
+  flex: 1; min-width: 0; height: 100%;
+  border: none; outline: none; background: none; font-size: 15px;
+}
+.search-bar input::placeholder { color: var(--gray-400); }
+.search-clear { display: none; color: var(--gray-400); padding: 4px; border-radius: 50%; }
+.search-bar.has-value .search-clear { display: block; }
+.search-clear:hover { background: var(--gray-200); color: var(--gray-700); }
+
+/* 모바일에서는 칩이 가로 스크롤되므로 정렬 토글을 같은 줄에 두면
+   스크롤되는 칩이 토글 밑으로 지나가 잘려 보인다. 줄을 나눈다.
+   (design_6.md 7장이 오픈 이슈로 남긴 배치 — 붙여보고 이렇게 정했다.) */
+.controls {
+  display: flex; flex-direction: column; align-items: stretch;
+  gap: 10px; margin-top: 14px;
+}
+.controls .sort-toggle { align-self: flex-start; }
+.filter-chips {
+  display: flex; gap: 8px; flex: 1; min-width: 0;
+  overflow-x: auto; scrollbar-width: none;
+  padding-bottom: 2px;
+  -webkit-overflow-scrolling: touch;
+}
+.filter-chips::-webkit-scrollbar { display: none; }
+.chip {
+  flex: 0 0 auto;
+  padding: 7px 14px; border-radius: 8px;
+  font-size: 13px; font-weight: 500; white-space: nowrap;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  color: var(--gray-500);
+  transition: all 0.2s;
+}
+.chip:hover { border-color: var(--primary-light); color: var(--primary-mid); }
+.chip[aria-pressed="true"] {
+  background: var(--primary); border-color: var(--primary);
+  color: var(--white); font-weight: 600;
+}
+
+/* 정렬 세그먼트 컨트롤 */
+.sort-toggle {
+  display: flex; flex: 0 0 auto; gap: 2px; padding: 3px;
+  background: var(--gray-100); border-radius: 9px;
+}
+.sort-toggle button {
+  padding: 6px 12px; border-radius: 7px;
+  font-size: 12.5px; font-weight: 500; white-space: nowrap;
+  color: var(--gray-500); transition: all 0.2s;
+}
+.sort-toggle button:hover { color: var(--primary-mid); }
+.sort-toggle button[aria-pressed="true"] {
+  background: var(--white); color: var(--primary); font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+.list-meta { margin-top: 16px; font-size: 12.5px; color: var(--gray-400); }
+
+/* ── 학파 그룹 ─────────────────────────────────────────── */
+.group { margin-top: 26px; }
+.group-head {
+  display: flex; align-items: baseline; gap: 8px;
+  margin-bottom: 12px;
+  font-size: 14px; font-weight: 700; color: var(--leaf-deep);
+}
+.group-head::after {
+  content: ''; flex: 1; height: 1px; background: var(--gray-200);
+}
+.group-count { font-size: 11.5px; font-weight: 500; color: var(--gray-400); }
+
+/* ── 이론가 카드 그리드 ────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.t-card {
+  display: flex; flex-direction: column; align-items: center;
+  width: 100%; padding: 18px 14px 16px;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  text-align: center;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+.t-card:hover {
+  border-color: var(--primary-light);
+  box-shadow: 0 6px 20px rgba(13, 59, 46, 0.08);
+  transform: translateY(-2px);
+}
+
+/* 초상화 자리 — 실제 이미지가 없으므로 이니셜 플레이스홀더.
+   저작권 확인 후 이미지를 넣을 때 이 자리를 그대로 쓰면 된다. */
+.portrait {
+  display: flex; align-items: center; justify-content: center;
+  width: 68px; height: 68px; border-radius: 14px;
+  background: var(--leaf-soft);
+  border: 1px solid rgba(107, 154, 74, 0.28);
+  color: var(--leaf-deep);
+  font-size: 25px; font-weight: 700; letter-spacing: -0.02em;
+  user-select: none;
+}
+.t-card .portrait { margin-bottom: 12px; }
+
+.t-name {
+  font-size: 14.5px; font-weight: 600; color: var(--gray-900);
+  letter-spacing: -0.01em; word-break: keep-all;
+}
+.t-name-en {
+  margin-top: 2px; font-size: 11.5px; color: var(--gray-400);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  max-width: 100%;
+}
+.t-years { margin-top: 5px; font-size: 11.5px; color: var(--gray-500); }
+.t-schools {
+  display: flex; flex-wrap: wrap; gap: 4px; justify-content: center;
+  margin-top: 10px;
+}
+.school-badge {
+  padding: 3px 8px; border-radius: 6px;
+  background: var(--leaf-soft); color: var(--leaf-deep);
+  font-size: 10.5px; font-weight: 600; white-space: nowrap;
+}
+
+/* ── 빈 상태 ───────────────────────────────────────────── */
+.empty {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 12px; padding: 64px 20px; text-align: center;
+  color: var(--gray-400);
+}
+.empty svg { color: var(--gray-300); }
+.empty p { font-size: 14px; }
+
+/* ============================================================
+   상세
+   ============================================================ */
+.detail-back {
+  display: flex; align-items: center; gap: 6px;
+  padding: 16px 0; font-size: 14px; font-weight: 500; color: var(--gray-500);
+  transition: color 0.2s;
+}
+.detail-back:hover { color: var(--primary-mid); }
+
+.detail-wrap { max-width: 760px; }
+
+/* 정보 카드 — 여기까지만 봐도 "이 사람이 누구인지" 알 수 있어야 한다 */
+.info-card {
+  padding: 22px;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+}
+.info-head { display: flex; gap: 16px; align-items: flex-start; }
+.info-head .portrait { width: 76px; height: 76px; font-size: 28px; flex-shrink: 0; }
+.info-main { flex: 1; min-width: 0; }
+.info-name {
+  font-size: 21px; font-weight: 700; letter-spacing: -0.02em;
+  color: var(--gray-900); word-break: keep-all;
+}
+.info-en { margin-top: 3px; font-size: 13px; color: var(--gray-500); }
+.info-meta { margin-top: 6px; font-size: 12.5px; color: var(--gray-500); }
+.info-schools { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px; }
+.info-schools .school-badge { font-size: 11.5px; padding: 4px 10px; }
+
+/* 대표 인용구 — 없으면 이 블록 자체를 만들지 않는다 */
+.quote-block {
+  margin-top: 18px; padding: 16px 18px;
+  background: var(--gray-50);
+  border-left: 3px solid var(--leaf);
+  border-radius: 0 8px 8px 0;
+}
+.quote-text {
+  font-size: 15px; font-style: italic; line-height: 1.75;
+  color: var(--gray-800); word-break: keep-all;
+}
+.quote-src { margin-top: 8px; font-size: 12px; color: var(--gray-400); }
+
+/* 카드 밖 — 깊이 파고드는 영역 */
+.deep-section { margin-top: 30px; }
+.deep-title {
+  font-size: 15px; font-weight: 700; color: var(--gray-800);
+  padding-bottom: 9px; margin-bottom: 14px;
+  border-bottom: 1px solid var(--gray-200);
+}
+.bio p {
+  font-size: 15px; line-height: 1.85; color: var(--gray-700);
+  word-break: keep-all;
+}
+.bio p + p { margin-top: 14px; }
+
+.works { display: flex; flex-direction: column; gap: 9px; }
+.work-item {
+  display: flex; align-items: baseline; gap: 9px;
+  font-size: 14.5px; color: var(--gray-700);
+}
+.work-item::before {
+  content: ''; flex: 0 0 auto;
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--leaf); transform: translateY(-3px);
+}
+.work-year { font-size: 12.5px; color: var(--gray-400); }
+
+.term-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.term-chip {
+  padding: 8px 16px; border-radius: 8px;
+  background: var(--white); border: 1px solid var(--gray-200);
+  color: var(--gray-700); font-size: 13px; font-weight: 500;
+  transition: all 0.2s;
+}
+.term-chip:hover {
+  border-color: var(--primary-light); color: var(--primary-mid);
+  box-shadow: 0 4px 16px rgba(13, 59, 46, 0.06);
+}
+
+/* ============================================================
+   하단 탭바 (모바일 전용) — 랜딩·용어집과 동일
+   ============================================================ */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--gray-200);
+  padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
+}
+.bottom-nav-inner {
+  display: flex; justify-content: space-around; align-items: center;
+  max-width: 480px; margin: 0 auto;
+}
+.bottom-nav a {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  font-size: 10px; font-weight: 500; color: var(--gray-400);
+  transition: color 0.2s; padding: 4px 12px;
+}
+.bottom-nav a.active { color: var(--primary); }
+
+/* ============================================================
+   반응형 — 그리드 2 / 3 / 4열 (design_6.md 5장)
+   ============================================================ */
+@media (min-width: 768px) {
+  .nav-links { display: flex; }
+  .bottom-nav { display: none; }
+  .header { padding: 0 32px; }
+  .shell { padding: 0 32px 64px; }
+
+  .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+
+  /* PC에서는 칩을 줄바꿈으로 펼치고(design_6.md 4.2) 정렬 토글을 같은 줄
+     오른쪽에 둔다. 가로 스크롤로 두면 칩이 토글에 가려 잘린다. */
+  .controls {
+    flex-direction: row; align-items: flex-start; justify-content: space-between;
+    gap: 12px;
+  }
+  .filter-chips {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    row-gap: 8px;
+  }
+
+  .list-head { padding: 30px 0 18px; }
+  .page-title { font-size: 24px; }
+
+  .info-card { padding: 30px; }
+  .info-head .portrait { width: 96px; height: 96px; font-size: 34px; border-radius: 16px; }
+  .info-name { font-size: 24px; }
+  .t-card { padding: 22px 16px 18px; }
+  .portrait { width: 76px; height: 76px; font-size: 28px; }
+}
+
+@media (min-width: 1024px) {
+  .grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+}
+
+@media (min-width: 1440px) {
+  :root { --shell: 1320px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .t-card:hover { transform: none; }
+}
+</style>
+
+<!-- 로그인/회원가입 UI (auth-ui.js가 헤더 버튼과 모달을 주입한다) -->
+<link rel="stylesheet" href="auth.css">
+</head>
+
+<body data-view="list">
+
+<header class="header">
+  <div class="header-inner">
+    <a href="index.html" class="logo">Sociology-whole</a>
+    <nav class="nav-links">
+      <a href="index.html#courses">전공수업</a>
+      <a href="glossary.html">용어집</a>
+      <a href="theorists.html" class="active" aria-current="page">이론가</a>
+      <a href="index.html#articles">시사연결</a>
+      <a href="index.html#quiz">퀴즈</a>
+      <a href="index.html#community">커뮤니티</a>
+      <a href="index.html#resources">자료실</a>
+    </nav>
+    <a href="index.html" class="nav-cta">시작하기</a>
+  </div>
+</header>
+
+<main class="shell">
+
+  <!-- ── 목록 ────────────────────────────────────────────── -->
+  <section class="panel-list" id="panelList">
+    <div class="list-head">
+      <h1 class="page-title">이론가</h1>
+      <p class="page-sub">학파별로 훑어보고, 생애와 사상을 깊이 읽어보세요.</p>
+
+      <div class="search-bar" id="searchBar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" aria-hidden="true">
+          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+        </svg>
+        <label for="searchInput" class="sr-only">이론가 검색</label>
+        <input type="search" id="searchInput" placeholder="이론가 이름으로 검색" autocomplete="off">
+        <button type="button" class="search-clear" id="searchClear" aria-label="검색어 지우기">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16" aria-hidden="true">
+            <path d="M18 6 6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="controls">
+        <div class="filter-chips" id="chips" role="group" aria-label="학파 필터"></div>
+        <div class="sort-toggle" id="sortToggle" role="group" aria-label="정렬 방식">
+          <button type="button" data-sort="school" aria-pressed="true">학파순</button>
+          <button type="button" data-sort="born" aria-pressed="false">생몰년순</button>
+        </div>
+      </div>
+
+      <p class="list-meta" id="listMeta"></p>
+    </div>
+
+    <div id="listBody"></div>
+  </section>
+
+  <!-- ── 상세 ────────────────────────────────────────────── -->
+  <section class="panel-detail" id="panelDetail">
+    <button type="button" class="detail-back" id="detailBack">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16" aria-hidden="true">
+        <path d="m15 18-6-6 6-6"/>
+      </svg>
+      <span>목록으로</span>
+    </button>
+    <div class="detail-wrap" id="detailBody"></div>
+  </section>
+
+</main>
+
+<!-- ── 하단 탭바 (모바일) ───────────────────────────────── -->
+<nav class="bottom-nav" aria-label="주요 메뉴">
+  <div class="bottom-nav-inner">
+    <a href="index.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9,22 9,12 15,12 15,22"/>
+      </svg><span>홈</span>
+    </a>
+    <a href="glossary.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+      </svg><span>용어집</span>
+    </a>
+    <a href="index.html#quiz">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true">
+        <path d="M12 2a8 8 0 0 0-8 8c0 3.4 2.1 6.3 5 7.4V20a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-2.6c2.9-1.1 5-4 5-7.4a8 8 0 0 0-8-8Z"/><path d="M9 22h6"/>
+      </svg><span>퀴즈</span>
+    </a>
+    <a href="index.html#community">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+      </svg><span>커뮤니티</span>
+    </a>
+    <a href="index.html#resources">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true">
+        <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>
+      </svg><span>자료실</span>
+    </a>
+  </div>
+</nav>
+
+<script src="glossary-data.js"></script>
+<script src="theorist-data.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  /* 두 데이터 파일을 키로 병합해서 쓴다.
+     - glossary-data.js : name / name_en / years / mini_bio  (용어집과 공유하는 단일 출처)
+     - theorist-data.js : nationality / schools / bio / key_works / quote
+     같은 값을 두 곳에 적지 않으므로 어긋날 일이 없다. */
+  var BASE = window.GLOSSARY_DATA;
+  var EXT = window.THEORIST_DATA;
+  var TERMS = BASE.terms;
+  var SCHOOLS = EXT.schools;
+  var ALL = '전체';
+  var SORT_KEY = 'sw:theorists:sort';
+
+  /* 이론가 목록을 배열로 펼치면서, 관련 용어를 역인덱스로 붙인다.
+     유니가 이론가 쪽에 따로 입력하지 않아도, 용어에 이론가를 태깅하면
+     여기에 자동으로 나타난다(PRD_9.md 4.4 자동 동기화). */
+  var LIST = Object.keys(BASE.theorists).map(function (key) {
+    var base = BASE.theorists[key];
+    var ext = EXT.theorists[key] || {};
+    var relatedTerms = TERMS.filter(function (t) {
+      return (t.related_theorists || []).indexOf(key) >= 0;
+    });
+    return {
+      key: key,
+      name: base.name,
+      name_en: base.name_en || '',
+      years: base.years || '',
+      mini_bio: base.mini_bio || '',
+      page_link: base.page_link || null,
+      nationality: ext.nationality || '',
+      schools: ext.schools || [],
+      bio: ext.bio || (base.mini_bio ? [base.mini_bio] : []),
+      key_works: ext.key_works || [],
+      quote: ext.quote || '',
+      quote_source: ext.quote_source || '',
+      born: parseBorn(base.years),
+      terms: relatedTerms
+    };
+  });
+
+  var BY_KEY = {};
+  LIST.forEach(function (t) { BY_KEY[t.key] = t; });
+
+  /* '1858–1917' / '1956–' 에서 출생 연도만 뽑는다. en dash(–) 사용에 주의. */
+  function parseBorn(years) {
+    var m = String(years || '').match(/\d{3,4}/);
+    return m ? parseInt(m[0], 10) : 9999;
+  }
+
+  var state = {
+    query: '',
+    school: ALL,
+    sort: loadSort(),
+    selectedKey: null
+  };
+
+  var el = {
+    searchBar: document.getElementById('searchBar'),
+    searchInput: document.getElementById('searchInput'),
+    searchClear: document.getElementById('searchClear'),
+    chips: document.getElementById('chips'),
+    sortToggle: document.getElementById('sortToggle'),
+    listMeta: document.getElementById('listMeta'),
+    listBody: document.getElementById('listBody'),
+    detailBody: document.getElementById('detailBody'),
+    detailBack: document.getElementById('detailBack')
+  };
+
+  function loadSort() {
+    try {
+      var v = localStorage.getItem(SORT_KEY);
+      return v === 'born' ? 'born' : 'school';
+    } catch (e) { return 'school'; }
+  }
+
+  function saveSort() {
+    try { localStorage.setItem(SORT_KEY, state.sort); } catch (e) { /* Safari 사생활 모드 */ }
+  }
+
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  }
+
+  var ICON = {
+    users: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="44" height="44" aria-hidden="true">' +
+           '<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/></svg>'
+  };
+
+  /* 초상화가 없으므로 이름 첫 글자를 쓴다.
+     이미지가 생기면 이 함수만 바꾸면 된다. */
+  function portraitHTML(t, cls) {
+    return '<span class="portrait ' + (cls || '') + '" role="img" aria-label="' +
+           esc(t.name) + ' 초상화 없음">' + esc(t.name.charAt(0)) + '</span>';
+  }
+
+  function matchesQuery(t, q) {
+    if (!q) return true;
+    return t.name.toLowerCase().indexOf(q) >= 0 ||
+           t.name_en.toLowerCase().indexOf(q) >= 0;
+  }
+
+  function getResults() {
+    var q = state.query.trim().toLowerCase();
+    return LIST.filter(function (t) {
+      if (state.school !== ALL && t.schools.indexOf(state.school) < 0) return false;
+      return matchesQuery(t, q);
+    });
+  }
+
+  function sortKo(a, b) { return a.name.localeCompare(b.name, 'ko'); }
+  function sortBorn(a, b) { return a.born - b.born || sortKo(a, b); }
+
+  function renderChips() {
+    var all = [ALL].concat(SCHOOLS);
+    el.chips.innerHTML = all.map(function (s) {
+      var on = state.school === s;
+      return '<button type="button" class="chip" data-school="' + esc(s) + '" aria-pressed="' + on + '">' +
+             esc(s) + '</button>';
+    }).join('');
+  }
+
+  function renderSort() {
+    var btns = el.sortToggle.querySelectorAll('button');
+    for (var i = 0; i < btns.length; i++) {
+      btns[i].setAttribute('aria-pressed', String(btns[i].dataset.sort === state.sort));
+    }
+  }
+
+  function cardHTML(t) {
+    var badges = t.schools.slice(0, 2).map(function (s) {
+      return '<span class="school-badge">' + esc(s) + '</span>';
+    }).join('');
+    return '<a class="t-card" href="#' + esc(t.key) + '">' +
+      portraitHTML(t) +
+      '<span class="t-name">' + esc(t.name) + '</span>' +
+      (t.name_en ? '<span class="t-name-en">' + esc(t.name_en) + '</span>' : '') +
+      (t.years ? '<span class="t-years">' + esc(t.years) + '</span>' : '') +
+      (badges ? '<span class="t-schools">' + badges + '</span>' : '') +
+    '</a>';
+  }
+
+  function emptyHTML(msg) {
+    return '<div class="empty">' + ICON.users + '<p>' + esc(msg) + '</p></div>';
+  }
+
+  function renderList() {
+    var results = getResults();
+    var filtering = state.query.trim() !== '' || state.school !== ALL;
+
+    el.listMeta.textContent = filtering
+      ? results.length + '명'
+      : '전체 ' + LIST.length + '명';
+
+    if (!results.length) {
+      el.listBody.innerHTML = emptyHTML(
+        state.query.trim() ? '찾으시는 이론가가 없어요' : '해당 학파의 이론가가 아직 없어요'
+      );
+      return;
+    }
+
+    /* 생몰년순이면 그룹 없이 단일 그리드, 학파순이면 학파별 그룹 + 자모순
+       (design_6.md 4.2). 검색 중일 때도 그룹을 접어 결과를 바로 보여준다. */
+    if (state.sort === 'born' || state.query.trim()) {
+      var sorted = results.slice().sort(state.sort === 'born' ? sortBorn : sortKo);
+      el.listBody.innerHTML = '<div class="grid">' + sorted.map(cardHTML).join('') + '</div>';
+      return;
+    }
+
+    /* 학파를 둘 이상 가진 이론가는 대표 학파(schools[0]) 그룹에만 넣는다.
+       모든 학파 그룹에 넣으면 같은 사람이 여러 번 나와 카드 수와
+       "전체 N명" 표시가 어긋난다. 필터 칩은 그대로 전체 학파를 매칭하므로,
+       "비판이론"으로 걸러보면 그람시도 정상적으로 나온다. */
+    var html = '';
+    var used = {};
+    SCHOOLS.forEach(function (s) {
+      var group = results.filter(function (t) { return t.schools[0] === s; });
+      if (!group.length) return;
+      group.forEach(function (t) { used[t.key] = true; });
+      html += '<section class="group">' +
+        '<h2 class="group-head">' + esc(s) +
+          '<span class="group-count">' + group.length + '</span>' +
+        '</h2>' +
+        '<div class="grid">' + group.slice().sort(sortKo).map(cardHTML).join('') + '</div>' +
+      '</section>';
+    });
+
+    /* 학파 목록에 없는 이론가가 생겨도 사라지지 않도록 안전망을 둔다. */
+    var rest = results.filter(function (t) { return !used[t.key]; });
+    if (rest.length) {
+      html += '<section class="group">' +
+        '<h2 class="group-head">기타<span class="group-count">' + rest.length + '</span></h2>' +
+        '<div class="grid">' + rest.sort(sortKo).map(cardHTML).join('') + '</div>' +
+      '</section>';
+    }
+
+    el.listBody.innerHTML = html;
+  }
+
+  function renderDetail() {
+    var t = state.selectedKey ? BY_KEY[state.selectedKey] : null;
+    if (!t) { el.detailBody.innerHTML = ''; return; }
+
+    var meta = [];
+    if (t.years) meta.push(esc(t.years));
+    if (t.nationality) meta.push(esc(t.nationality));
+
+    var html = '<article class="info-card">' +
+      '<div class="info-head">' +
+        portraitHTML(t) +
+        '<div class="info-main">' +
+          '<h1 class="info-name">' + esc(t.name) + '</h1>' +
+          (t.name_en ? '<p class="info-en">' + esc(t.name_en) + '</p>' : '') +
+          (meta.length ? '<p class="info-meta">' + meta.join(' · ') + '</p>' : '') +
+        '</div>' +
+      '</div>';
+
+    if (t.schools.length) {
+      html += '<div class="info-schools">' + t.schools.map(function (s) {
+        return '<span class="school-badge">' + esc(s) + '</span>';
+      }).join('') + '</div>';
+    }
+
+    // 인용구가 없는 이론가는 이 영역 자체를 만들지 않는다(빈 자리 노출 금지)
+    if (t.quote) {
+      html += '<figure class="quote-block">' +
+        '<blockquote class="quote-text">' + esc(t.quote) + '</blockquote>' +
+        (t.quote_source ? '<figcaption class="quote-src">' + esc(t.quote_source) + '</figcaption>' : '') +
+      '</figure>';
+    }
+
+    html += '</article>';
+
+    // ── 카드 밖 ──
+    if (t.bio.length) {
+      html += '<section class="deep-section">' +
+        '<h2 class="deep-title">생애와 사상</h2>' +
+        '<div class="bio">' + t.bio.map(function (p) {
+          return '<p>' + esc(p) + '</p>';
+        }).join('') + '</div>' +
+      '</section>';
+    }
+
+    if (t.key_works.length) {
+      html += '<section class="deep-section">' +
+        '<h2 class="deep-title">대표 저서</h2>' +
+        '<div class="works">' + t.key_works.map(function (w) {
+          return '<p class="work-item"><span>' + esc(w.title) + '</span>' +
+                 (w.year ? '<span class="work-year">' + esc(w.year) + '</span>' : '') + '</p>';
+        }).join('') + '</div>' +
+      '</section>';
+    }
+
+    // 용어집이 이미 존재하는 기능이므로 팝업 없이 바로 이동한다(design_6.md 4.7)
+    if (t.terms.length) {
+      html += '<section class="deep-section">' +
+        '<h2 class="deep-title">관련 용어</h2>' +
+        '<div class="term-chips">' + t.terms.map(function (term) {
+          return '<a class="term-chip" href="glossary.html#' + esc(term.id) + '">' +
+                 esc(term.term_ko) + '</a>';
+        }).join('') + '</div>' +
+      '</section>';
+    }
+
+    el.detailBody.innerHTML = html;
+    document.title = t.name + ' | 이론가 | Sociology-whole';
+  }
+
+  function syncFromHash() {
+    var key = decodeURIComponent(location.hash.replace(/^#/, ''));
+    var exists = key && Object.prototype.hasOwnProperty.call(BY_KEY, key);
+    state.selectedKey = exists ? key : null;
+    document.body.dataset.view = exists ? 'detail' : 'list';
+    if (!exists) document.title = '이론가 | Sociology-whole';
+    renderDetail();
+    if (exists) window.scrollTo(0, 0);
+  }
+
+  // ── 이벤트 ──
+  el.searchInput.addEventListener('input', function () {
+    state.query = el.searchInput.value;
+    el.searchBar.classList.toggle('has-value', state.query !== '');
+    renderList();
+  });
+
+  el.searchClear.addEventListener('click', function () {
+    state.query = '';
+    el.searchInput.value = '';
+    el.searchBar.classList.remove('has-value');
+    el.searchInput.focus();
+    renderList();
+  });
+
+  el.chips.addEventListener('click', function (e) {
+    var btn = e.target.closest('.chip');
+    if (!btn) return;
+    state.school = btn.dataset.school;
+    renderChips();
+    renderList();
+  });
+
+  el.sortToggle.addEventListener('click', function (e) {
+    var btn = e.target.closest('button[data-sort]');
+    if (!btn || btn.dataset.sort === state.sort) return;
+    state.sort = btn.dataset.sort;
+    saveSort();
+    renderSort();
+    renderList();
+  });
+
+  el.detailBack.addEventListener('click', function () {
+    if (history.length > 1) history.back();
+    else { location.hash = ''; syncFromHash(); }
+  });
+
+  window.addEventListener('hashchange', syncFromHash);
+
+  // ── 시작 ──
+  renderChips();
+  renderSort();
+  renderList();
+  syncFromHash();
+})();
+</script>
+
+<!-- 인증 (Supabase Auth) — 로드 순서 고정 -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.min.js"></script>
+<script src="supabase-config.js"></script>
+<script src="auth.js"></script>
+<script src="auth-ui.js"></script>
+</body>
+</html>

@@ -25,6 +25,24 @@
   white-space: nowrap;
 }
 
+/* 높이뿐 아니라 너비도 맞춘다. 글자 수가 제각각이라(시작하기 4자 / 로그인 3자 /
+   마이페이지 5자 / 로그아웃 4자) 그냥 두면 76~100px 로 들쭉날쭉하다.
+   가장 긴 "마이페이지"에 맞춰 고정하고 가운데 정렬한다.
+   모바일은 패딩이 더 좁아(12px) 기준 폭도 그만큼 작다. */
+.header-inner .nav-cta,
+.sw-auth-btn--login {
+  min-width: 84px;
+  text-align: center;
+  justify-content: center;
+}
+
+@media (min-width: 421px) {
+  .header-inner .nav-cta,
+  .sw-auth-btn--login {
+    min-width: 100px;
+  }
+}
+
 /* 슬롯 자체는 줄어들 수 있게 두고(min-width:0), 버튼은 고정 크기를 유지한다.
    공간이 모자라면 사용자 이름만 말줄임되므로 이름이 아무리 길어도
    버튼이 화면 밖으로 밀려나지 않는다. */
@@ -78,8 +96,7 @@
    크기는 .nav-cta("시작하기")와 정확히 동일하게 맞춘다.
    .nav-cta = padding 8px 20px / font 13px 600 / line-height 1.6 / 테두리 없음.
    이쪽은 1px 테두리가 있으므로 패딩에서 1px씩 빼야 바깥 박스가 같아진다. */
-.sw-auth-btn--login,
-.sw-auth-btn--ghost {
+.sw-auth-btn--login {
   padding: 7px 19px;
   font-weight: 600;
   background: transparent;
@@ -87,8 +104,7 @@
   border-color: rgba(255, 255, 255, 0.35);
 }
 
-.sw-auth-btn--login:hover,
-.sw-auth-btn--ghost:hover {
+.sw-auth-btn--login:hover {
   background: rgba(255, 255, 255, 0.12);
   border-color: rgba(255, 255, 255, 0.6);
 }
@@ -294,20 +310,20 @@ body.sw-auth-locked {
    원래부터 과밀했다 — 로그인 UI 추가 전에도 "시작하기"가 두 줄로
    접힐 정도였다. 내비 간격을 줄여 사용자 이름이 잘리지 않게 한다. */
 @media (min-width: 768px) and (max-width: 1023px) {
+  /* glossary/theorists/mypage 는 .nav-cta 가 .header-inner 직계 자식이라
+     header-inner 의 gap(24px)이 세 번 붙는다. 그만큼 사용자 이름이 밀려
+     "김…"으로 잘리므로 이 구간에서만 간격을 줄인다.
+     (index.html 은 .nav-cta 가 .nav-links 안에 있어 원래 여유가 있었다.) */
+  .header-inner {
+    gap: 12px;
+  }
+
   .header-inner .nav-links {
     gap: 14px;
   }
 
   .sw-auth-slot {
     margin-left: 8px;
-  }
-
-  /* 이 폭에서는 로고 + 내비 7개 + 시작하기 만으로도 이미 가득 차 있다
-     (로그인 UI 추가 전에도 "시작하기"가 두 줄로 접힐 정도였다).
-     이름을 "김…"처럼 잘라 보여주느니 로그아웃 버튼만 남긴다.
-     이름은 모바일(≤420px)과 데스크톱(≥1024px)에서 온전히 보인다. */
-  .sw-auth-username {
-    display: none;
   }
 }
 
@@ -340,8 +356,7 @@ body.sw-auth-locked {
   }
 
   .header-inner .nav-cta,
-  .sw-auth-btn--login,
-  .sw-auth-btn--ghost {
+  .sw-auth-btn--login {
     padding-left: 12px;
     padding-right: 12px;
   }
