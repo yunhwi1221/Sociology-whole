@@ -549,6 +549,9 @@ body[data-view="detail"] .panel-list   { display: none; }
   .btn:hover, .theorist-chip:hover { transform: none; }
 }
 </style>
+
+<!-- 로그인/회원가입 UI (auth-ui.js가 헤더 버튼과 모달을 주입한다) -->
+<link rel="stylesheet" href="auth.css">
 </head>
 
 <body data-view="list">
@@ -1194,5 +1197,11 @@ body[data-view="detail"] .panel-list   { display: none; }
   syncFromHash();
 })();
 </script>
+
+<!-- 인증 (Supabase Auth) — 로드 순서 고정 -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.min.js"></script>
+<script src="supabase-config.js"></script>
+<script src="auth.js"></script>
+<script src="auth-ui.js"></script>
 </body>
 </html>
