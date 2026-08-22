@@ -1385,7 +1385,7 @@
         <button type="button" class="start-btn start-btn--guest" id="startGuest">그냥 시작하기</button>
       </div>
 
-      <p class="start-note">그냥 시작해도 용어집·이론가·공개 자료는 모두 볼 수 있습니다.</p>
+      <p class="start-note">로그인하지 않아도 용어집·이론가·공개 자료는 모두 볼 수 있습니다.</p>
     </div>
   </div>
 
@@ -1405,7 +1405,6 @@
     (function () {
       var modal = document.getElementById('startModal');
       var lastFocused = null;
-      var awaitingLogin = false;   // 이 팝업에서 로그인을 시작했는지
 
       function openStart() {
         lastFocused = document.activeElement;
@@ -1434,27 +1433,13 @@
       // 로그인 모달은 auth-ui.js 가 헤더에 심어둔 버튼을 눌러 연다
       document.getElementById('startLogin').addEventListener('click', function () {
         closeStart();
-        if (window.SW_AUTH && window.SW_AUTH.isLoggedIn && window.SW_AUTH.isLoggedIn()) {
-          window.location.href = 'glossary.html';
-          return;
-        }
-        awaitingLogin = true;
+        // 이미 로그인했으면 열 모달이 없다 — 그대로 랜딩에 머문다
         var loginBtn = document.querySelector('.sw-auth-btn--login');
         if (loginBtn) loginBtn.click();
       });
 
-      document.getElementById('startGuest').addEventListener('click', function () {
-        window.location.href = 'glossary.html';
-      });
-
-      /* 로그인에 성공하면 용어집으로 들여보낸다.
-         단, 세션 복원으로도 subscribe 가 불리므로 이 팝업을 거친 경우에만 이동한다.
-         (그러지 않으면 이미 로그인한 사람이 랜딩을 열기만 해도 튕겨 나간다) */
-      if (window.SW_AUTH) {
-        window.SW_AUTH.subscribe(function (user) {
-          if (user && awaitingLogin) window.location.href = 'glossary.html';
-        });
-      }
+      // 그냥 둘러보겠다는 선택이므로 팝업만 닫고 랜딩에 머문다
+      document.getElementById('startGuest').addEventListener('click', closeStart);
     })();
   </script>
 
