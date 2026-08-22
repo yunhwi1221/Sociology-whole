@@ -417,39 +417,6 @@
       color: var(--gray-600);
     }
 
-    /* Courses Grid */
-    .courses-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-    }
-
-    .course-card {
-      padding: 20px;
-      background: var(--white);
-      border: 1px solid var(--gray-200);
-      border-radius: var(--radius-sm);
-      text-decoration: none;
-      transition: all 0.2s;
-    }
-
-    .course-card:hover {
-      border-color: var(--primary-light);
-      box-shadow: 0 4px 16px rgba(13, 59, 46, 0.06);
-    }
-
-    .course-card h4 {
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--gray-900);
-      margin-bottom: 4px;
-    }
-
-    .course-card span {
-      font-size: 12px;
-      color: var(--gray-400);
-    }
-
     /* AI Section */
     .ai-section {
       background: linear-gradient(160deg, var(--primary) 0%, var(--primary-mid) 100%);
@@ -837,11 +804,6 @@
         gap: 20px;
       }
 
-      .courses-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 16px;
-      }
-
       .pricing-grid {
         grid-template-columns: repeat(2, 1fr);
         max-width: 800px;
@@ -949,23 +911,6 @@
         height: 24px;
       }
 
-      .courses-grid {
-        grid-template-columns: repeat(3, 1fr);
-        gap: 20px;
-      }
-
-      .course-card {
-        padding: 28px;
-      }
-
-      .course-card h4 {
-        font-size: 17px;
-      }
-
-      .course-card span {
-        font-size: 13px;
-      }
-
       .article-card {
         padding: 48px;
       }
@@ -1030,7 +975,6 @@
     <div class="header-inner">
       <a href="#" class="logo">Sociology-whole</a>
       <nav class="nav-links">
-        <a href="#">전공수업</a>
         <a href="glossary.html">용어집</a>
         <a href="theorists.html">이론가</a>
         <a href="#">시사연결</a>
@@ -1068,10 +1012,6 @@
         <div class="stat-item">
           <div class="stat-number">15+</div>
           <div class="stat-label">주요 이론가</div>
-        </div>
-        <div class="stat-item">
-          <div class="stat-number">6개</div>
-          <div class="stat-label">전공수업 카테고리</div>
         </div>
       </div>
     </div>
@@ -1174,42 +1114,6 @@
     </div>
   </section>
 
-  <!-- Courses Section -->
-  <section class="section">
-    <div class="section-inner">
-      <div class="section-header">
-        <h2>전공수업 카테고리</h2>
-        <p>수업별로 관련 용어와 이론가를 모아 학습하세요</p>
-      </div>
-      <div class="courses-grid">
-        <a href="#" class="course-card">
-          <h4>사회학사</h4>
-          <span>용어 25개 · 이론가 8명</span>
-        </a>
-        <a href="#" class="course-card">
-          <h4>현대사회학</h4>
-          <span>용어 20개 · 이론가 6명</span>
-        </a>
-        <a href="#" class="course-card">
-          <h4>사회조사방법론</h4>
-          <span>용어 30개 · 이론가 4명</span>
-        </a>
-        <a href="#" class="course-card">
-          <h4>사회계층론</h4>
-          <span>용어 18개 · 이론가 5명</span>
-        </a>
-        <a href="#" class="course-card">
-          <h4>가족사회학</h4>
-          <span>용어 15개 · 이론가 4명</span>
-        </a>
-        <a href="#" class="course-card">
-          <h4>문화사회학</h4>
-          <span>용어 22개 · 이론가 6명</span>
-        </a>
-      </div>
-    </div>
-  </section>
-
   <!-- Pricing Section -->
   <section class="section" style="background: var(--gray-50);">
     <div class="section-inner">
@@ -1270,7 +1174,6 @@
           <a href="#">스터디·세미나 모집</a>
           <a href="#">취업·진로 정보</a>
           <a href="resources.html">자료실</a>
-          <a href="#">전공수업</a>
         </div>
         <div class="footer-col">
           <h4>지원</h4>
