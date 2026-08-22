@@ -1420,12 +1420,9 @@
 
       document.addEventListener('click', function (e) {
         var trigger = e.target.closest('[data-action="start"]');
-        if (trigger) {
-          e.preventDefault();
-          var signedIn = window.SW_AUTH && window.SW_AUTH.isLoggedIn && window.SW_AUTH.isLoggedIn();
-          if (signedIn) { window.location.href = 'glossary.html'; return; }
-          openStart();
-        }
+        if (!trigger) return;
+        e.preventDefault();
+        openStart();
       });
 
       document.getElementById('startClose').addEventListener('click', closeStart);
@@ -1436,8 +1433,12 @@
 
       // 로그인 모달은 auth-ui.js 가 헤더에 심어둔 버튼을 눌러 연다
       document.getElementById('startLogin').addEventListener('click', function () {
-        awaitingLogin = true;
         closeStart();
+        if (window.SW_AUTH && window.SW_AUTH.isLoggedIn && window.SW_AUTH.isLoggedIn()) {
+          window.location.href = 'glossary.html';
+          return;
+        }
+        awaitingLogin = true;
         var loginBtn = document.querySelector('.sw-auth-btn--login');
         if (loginBtn) loginBtn.click();
       });
