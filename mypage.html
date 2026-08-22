@@ -134,7 +134,7 @@ svg { display: block; flex-shrink: 0; }
 }
 .signout-btn:hover { border-color: var(--gray-400); color: var(--gray-800); background: var(--gray-50); }
 
-/* 준비 중 섹션 */
+/* 학습 카드 — 마이페이지에서 각 기능 화면으로 넘어가는 자리 */
 .section-title {
   margin: 30px 0 12px;
   font-size: 15px; font-weight: 700; color: var(--gray-800);
@@ -157,14 +157,8 @@ svg { display: block; flex-shrink: 0; }
 .soon-main { display: block; flex: 1; min-width: 0; }
 .soon-name { display: block; font-size: 14px; font-weight: 600; color: var(--gray-700); }
 .soon-desc { display: block; margin-top: 2px; font-size: 12.5px; color: var(--gray-400); word-break: keep-all; }
-.soon-tag {
-  flex-shrink: 0;
-  padding: 3px 9px; border-radius: 6px;
-  background: var(--gray-200); color: var(--gray-600);
-  font-size: 10.5px; font-weight: 600; white-space: nowrap;
-}
 
-/* 바로가기 카드 — 준비 중 카드와 같은 골격에 링크 상태만 얹는다 */
+/* 링크 상태 — 눌러서 이동하는 카드임을 hover 로 알린다 */
 .soon-item--link {
   background: var(--white);
   transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
@@ -257,7 +251,6 @@ body[data-auth="loading"] #content { display: none; }
       <a href="glossary.html">용어집</a>
       <a href="theorists.html">이론가</a>
       <a href="index.html#articles">시사연결</a>
-      <a href="index.html#quiz">퀴즈</a>
       <a href="index.html#community">커뮤니티</a>
       <a href="resources.html">자료실</a>
     </nav>
@@ -293,7 +286,7 @@ body[data-auth="loading"] #content { display: none; }
       <button type="button" class="signout-btn" id="signoutBtn">로그아웃</button>
     </div>
 
-    <h2 class="section-title">학습 기록</h2>
+    <h2 class="section-title">내 학습</h2>
     <div class="soon-grid">
       <!-- 목록을 여기 펼치지 않고, 용어집의 북마크 보기로 넘긴다 -->
       <a class="soon-item soon-item--link" href="glossary.html?view=bookmarks" id="bmLink">
@@ -350,19 +343,6 @@ body[data-auth="loading"] #content { display: none; }
         </span>
       </a>
 
-      <div class="soon-item">
-        <span class="soon-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
-            <path d="M12 2a8 8 0 0 0-8 8c0 3.4 2.1 6.3 5 7.4V20a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-2.6c2.9-1.1 5-4 5-7.4a8 8 0 0 0-8-8Z"/><path d="M9 22h6"/>
-          </svg>
-        </span>
-        <div class="soon-main">
-          <p class="soon-name">퀴즈 오답노트</p>
-          <p class="soon-desc">틀린 문제를 다시 풀어봅니다</p>
-        </div>
-        <span class="soon-tag">준비 중</span>
-      </div>
-
       <a class="soon-item soon-item--link" href="resources.html?tab=mine" id="myResLink">
         <span class="soon-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
@@ -401,11 +381,6 @@ body[data-auth="loading"] #content { display: none; }
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true">
         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
       </svg><span>이론가</span>
-    </a>
-    <a href="index.html#quiz">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true">
-        <path d="M12 2a8 8 0 0 0-8 8c0 3.4 2.1 6.3 5 7.4V20a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-2.6c2.9-1.1 5-4 5-7.4a8 8 0 0 0-8-8Z"/><path d="M9 22h6"/>
-      </svg><span>퀴즈</span>
     </a>
     <a href="resources.html">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true">
