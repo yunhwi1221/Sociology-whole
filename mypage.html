@@ -333,18 +333,23 @@ body[data-auth="loading"] #content { display: none; }
         </span>
       </a>
 
-      <div class="soon-item">
+      <a class="soon-item soon-item--link" href="theorists.html?view=bookmarks" id="thBmLink">
         <span class="soon-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
             <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
           </svg>
         </span>
-        <div class="soon-main">
-          <p class="soon-name">북마크한 이론가</p>
-          <p class="soon-desc">관심 있는 이론가 프로필을 모아봅니다</p>
-        </div>
-        <span class="soon-tag">준비 중</span>
-      </div>
+        <span class="soon-main">
+          <span class="soon-name">북마크한 이론가</span>
+          <span class="soon-desc" id="thBmDesc">관심 있는 이론가 프로필을 모아봅니다</span>
+        </span>
+        <span class="soon-count" id="thBmCount" hidden></span>
+        <span class="soon-arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+            <path d="m9 18 6-6-6-6"/>
+          </svg>
+        </span>
+      </a>
 
       <div class="soon-item">
         <span class="soon-icon" aria-hidden="true">
@@ -433,6 +438,8 @@ body[data-auth="loading"] #content { display: none; }
     guardLogin: document.getElementById('guardLogin'),
     bmCount: document.getElementById('bmCount'),
     bmDesc: document.getElementById('bmDesc'),
+    thBmCount: document.getElementById('thBmCount'),
+    thBmDesc: document.getElementById('thBmDesc'),
     resBmCount: document.getElementById('resBmCount'),
     resBmDesc: document.getElementById('resBmDesc'),
     myResCount: document.getElementById('myResCount'),
@@ -474,6 +481,7 @@ body[data-auth="loading"] #content { display: none; }
 
   /* 자료실 — 자료는 샘플(resource-data.js)과 내가 올린 것(localStorage)에 나뉘어 있다.
      마이페이지에서는 개수만 필요하므로 두 출처를 합쳐 세기만 한다. */
+  var TH_BOOKMARK_KEY = 'sw:theorists:bookmarks';
   var RES_BOOKMARK_KEY = 'sw:resources:bookmarks';
   var RES_MATERIAL_KEY = 'sw:resources:materials';
 
@@ -483,6 +491,15 @@ body[data-auth="loading"] #content { display: none; }
       var v = raw ? JSON.parse(raw) : [];
       return Array.isArray(v) ? v : [];
     } catch (e) { return []; }
+  }
+
+  function renderTheoristCount() {
+    var n = readList(TH_BOOKMARK_KEY).length;
+    el.thBmCount.hidden = !n;
+    el.thBmCount.textContent = n ? n + '명' : '';
+    el.thBmDesc.textContent = n
+      ? '눌러서 북마크한 이론가만 모아 봅니다'
+      : '이론가 프로필에서 북마크하면 여기에 모입니다';
   }
 
   function renderResourceCounts() {
@@ -504,10 +521,12 @@ body[data-auth="loading"] #content { display: none; }
   // 다른 탭의 용어집·자료실에서 북마크를 바꾸면 개수도 따라간다
   window.addEventListener('storage', function (e) {
     if (e.key === BOOKMARK_KEY) renderBookmarkCount();
+    if (e.key === TH_BOOKMARK_KEY) renderTheoristCount();
     if (e.key === RES_BOOKMARK_KEY || e.key === RES_MATERIAL_KEY) renderResourceCounts();
   });
 
   renderBookmarkCount();
+  renderTheoristCount();
   renderResourceCounts();
 
   function render(user) {

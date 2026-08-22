@@ -188,6 +188,53 @@ body[data-view="detail"] .panel-list   { display: none; }
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
+/* 북마크만 보기 — 마이페이지에서 넘어오는 목적지이기도 하다 */
+.bm-filter {
+  display: flex; align-items: center; gap: 7px; align-self: stretch;
+  padding: 9px 12px;
+  background: var(--white);
+  border: 1px solid var(--gray-200); border-radius: 8px;
+  font-size: 13px; font-weight: 600; color: var(--gray-500);
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.bm-filter:hover { border-color: var(--primary-light); color: var(--primary-mid); }
+.bm-filter[aria-pressed="true"] {
+  background: var(--primary); border-color: var(--primary); color: var(--white);
+}
+.bm-filter-count {
+  margin-left: auto; padding: 3px 9px; border-radius: 6px;
+  background: var(--gray-100); color: var(--gray-600);
+  font-size: 11.5px; font-weight: 700;
+}
+.bm-filter[aria-pressed="true"] .bm-filter-count { background: rgba(255, 255, 255, 0.18); color: var(--white); }
+.bm-filter-off { font-size: 11.5px; font-weight: 500; opacity: 0.85; }
+.bm-filter[aria-pressed="false"] .bm-filter-off { display: none; }
+
+/* 카드의 북마크 표시 — 채움 여부로도 구분되도록 아이콘을 채워 그린다 */
+.t-card { position: relative; }
+.t-card-mark {
+  position: absolute; top: 8px; right: 8px;
+  color: var(--primary-light);
+}
+
+/* 상세의 북마크 버튼 — 용어집 .bookmark-btn 과 같은 모양 */
+.bookmark-btn {
+  flex: 0 0 auto; padding: 8px; border-radius: 10px;
+  color: var(--gray-400); transition: color 0.2s, background 0.2s;
+}
+.bookmark-btn:hover { background: var(--gray-100); color: var(--primary-mid); }
+.bookmark-btn[aria-pressed="true"] { color: var(--primary-light); }
+
+.toast {
+  position: fixed; left: 50%; bottom: 84px; z-index: 200;
+  transform: translate(-50%, 8px);
+  padding: 11px 18px; border-radius: 10px;
+  background: var(--gray-900); color: var(--white); font-size: 13px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.2s, transform 0.2s;
+}
+.toast.show { opacity: 0.95; transform: translate(-50%, 0); }
+
 .list-meta { margin-top: 16px; font-size: 12.5px; color: var(--gray-400); }
 
 /* ── 학파 그룹 ─────────────────────────────────────────── */
@@ -464,6 +511,7 @@ body[data-view="detail"] .panel-list   { display: none; }
   .info-head .portrait { width: 96px; height: 96px; font-size: 34px; border-radius: 16px; }
   .info-name { font-size: 24px; }
   .ideas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .toast { bottom: 28px; }
   .t-card { padding: 22px 16px 18px; }
   .portrait { width: 76px; height: 76px; font-size: 28px; }
 }
@@ -533,6 +581,15 @@ body[data-view="detail"] .panel-list   { display: none; }
         </div>
       </div>
 
+      <button type="button" class="bm-filter" id="bmFilter" aria-pressed="false">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+        </svg>
+        <span>북마크한 이론가만 보기</span>
+        <span class="bm-filter-count" id="bmFilterCount">0</span>
+        <span class="bm-filter-off" aria-hidden="true">해제</span>
+      </button>
+
       <p class="list-meta" id="listMeta"></p>
     </div>
 
@@ -551,6 +608,8 @@ body[data-view="detail"] .panel-list   { display: none; }
   </section>
 
 </main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <!-- ── 하단 탭바 (모바일) ───────────────────────────────── -->
 <nav class="bottom-nav" aria-label="주요 메뉴">
@@ -599,6 +658,7 @@ body[data-view="detail"] .panel-list   { display: none; }
   var SCHOOLS = EXT.schools;
   var ALL = '전체';
   var SORT_KEY = 'sw:theorists:sort';
+  var BOOKMARK_KEY = 'sw:theorists:bookmarks';
 
   /* 이론가 목록을 배열로 펼치면서, 관련 용어를 역인덱스로 붙인다.
      유니가 이론가 쪽에 따로 입력하지 않아도, 용어에 이론가를 태깅하면
@@ -645,7 +705,9 @@ body[data-view="detail"] .panel-list   { display: none; }
     query: '',
     school: ALL,
     sort: loadSort(),
-    selectedKey: null
+    selectedKey: null,
+    bookmarksOnly: /(^|[?&])view=bookmarks($|&)/.test(location.search),
+    bookmarks: loadBookmarks()
   };
 
   var el = {
@@ -657,7 +719,10 @@ body[data-view="detail"] .panel-list   { display: none; }
     listMeta: document.getElementById('listMeta'),
     listBody: document.getElementById('listBody'),
     detailBody: document.getElementById('detailBody'),
-    detailBack: document.getElementById('detailBack')
+    detailBack: document.getElementById('detailBack'),
+    bmFilter: document.getElementById('bmFilter'),
+    bmFilterCount: document.getElementById('bmFilterCount'),
+    toast: document.getElementById('toast')
   };
 
   function loadSort() {
@@ -669,6 +734,36 @@ body[data-view="detail"] .panel-list   { display: none; }
 
   function saveSort() {
     try { localStorage.setItem(SORT_KEY, state.sort); } catch (e) { /* Safari 사생활 모드 */ }
+  }
+
+  function loadBookmarks() {
+    try {
+      var raw = localStorage.getItem(BOOKMARK_KEY);
+      return raw ? new Set(JSON.parse(raw)) : new Set();
+    } catch (e) {
+      // localStorage 를 못 쓰는 환경 — 세션 한정으로 동작시킨다
+      return new Set();
+    }
+  }
+
+  function saveBookmarks() {
+    try { localStorage.setItem(BOOKMARK_KEY, JSON.stringify(Array.from(state.bookmarks))); } catch (e) { /* 무시 */ }
+  }
+
+  var toastTimer;
+  function toast(msg) {
+    el.toast.textContent = msg;
+    el.toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { el.toast.classList.remove('show'); }, 2600);
+  }
+
+  // 색만이 아니라 채움(fill) 여부로도 상태를 구분한다
+  function bookmarkIcon(active, size) {
+    var s = size || 20;
+    return '<svg width="' + s + '" height="' + s + '" viewBox="0 0 24 24" fill="' + (active ? 'currentColor' : 'none') +
+      '" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      '<path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path></svg>';
   }
 
   function esc(s) {
@@ -698,6 +793,7 @@ body[data-view="detail"] .panel-list   { display: none; }
   function getResults() {
     var q = state.query.trim().toLowerCase();
     return LIST.filter(function (t) {
+      if (state.bookmarksOnly && !state.bookmarks.has(t.key)) return false;
       if (state.school !== ALL && t.schools.indexOf(state.school) < 0) return false;
       return matchesQuery(t, q);
     });
@@ -715,6 +811,27 @@ body[data-view="detail"] .panel-list   { display: none; }
     }).join('');
   }
 
+  function renderBmFilter() {
+    el.bmFilterCount.textContent = state.bookmarks.size;
+    el.bmFilter.setAttribute('aria-pressed', String(state.bookmarksOnly));
+  }
+
+  /* 새로고침하거나 링크를 공유해도 같은 화면이 열리도록 주소를 맞춘다.
+     마이페이지가 theorists.html?view=bookmarks 로 보내는 그 주소다. */
+  function syncViewParam() {
+    if (!window.history || !history.replaceState) return;
+    history.replaceState(null, '',
+      location.pathname + (state.bookmarksOnly ? '?view=bookmarks' : '') + location.hash);
+  }
+
+  function setBookmarksOnly(on) {
+    state.bookmarksOnly = on;
+    syncViewParam();
+    renderBmFilter();
+    renderList();
+    window.scrollTo(0, 0);
+  }
+
   function renderSort() {
     var btns = el.sortToggle.querySelectorAll('button');
     for (var i = 0; i < btns.length; i++) {
@@ -726,7 +843,9 @@ body[data-view="detail"] .panel-list   { display: none; }
     var badges = t.schools.slice(0, 2).map(function (s) {
       return '<span class="school-badge">' + esc(s) + '</span>';
     }).join('');
+    var marked = state.bookmarks.has(t.key);
     return '<a class="t-card" href="#' + esc(t.key) + '">' +
+      (marked ? '<span class="t-card-mark">' + bookmarkIcon(true, 13) + '</span>' : '') +
       portraitHTML(t) +
       '<span class="t-name">' + esc(t.name) + '</span>' +
       (t.name_en ? '<span class="t-name-en">' + esc(t.name_en) + '</span>' : '') +
@@ -744,20 +863,29 @@ body[data-view="detail"] .panel-list   { display: none; }
     var results = getResults();
     var filtering = state.query.trim() !== '' || state.school !== ALL;
 
-    el.listMeta.textContent = filtering
-      ? results.length + '명'
-      : '전체 ' + LIST.length + '명';
+    el.listMeta.textContent = state.bookmarksOnly
+      ? '북마크한 이론가 ' + results.length + '명'
+      : (filtering ? results.length + '명' : '전체 ' + LIST.length + '명');
 
     if (!results.length) {
-      el.listBody.innerHTML = emptyHTML(
-        state.query.trim() ? '찾으시는 이론가가 없어요' : '해당 학파의 이론가가 아직 없어요'
-      );
+      if (state.bookmarksOnly) {
+        // 북마크 보기에서는 "검색을 바꿔보라"가 아니라 담는 법을 알려준다
+        el.listBody.innerHTML = '<div class="empty">' + bookmarkIcon(false, 40) +
+          '<p>' + (filtering
+            ? '조건에 맞는 북마크가 없어요.<br>검색어나 학파를 지워보세요.'
+            : '아직 북마크한 이론가가 없어요.<br>이론가를 열고 북마크 아이콘을 누르면 여기에 모입니다.') + '</p>' +
+          '<button type="button" class="chip" data-action="bookmarks-off">전체 이론가 보기</button></div>';
+      } else {
+        el.listBody.innerHTML = emptyHTML(
+          state.query.trim() ? '찾으시는 이론가가 없어요' : '해당 학파의 이론가가 아직 없어요'
+        );
+      }
       return;
     }
 
     /* 생몰년순이면 그룹 없이 단일 그리드, 학파순이면 학파별 그룹 + 자모순
        (design_6.md 4.2). 검색 중일 때도 그룹을 접어 결과를 바로 보여준다. */
-    if (state.sort === 'born' || state.query.trim()) {
+    if (state.bookmarksOnly || state.sort === 'born' || state.query.trim()) {
       var sorted = results.slice().sort(state.sort === 'born' ? sortBorn : sortKo);
       el.listBody.innerHTML = '<div class="grid">' + sorted.map(cardHTML).join('') + '</div>';
       return;
@@ -797,6 +925,7 @@ body[data-view="detail"] .panel-list   { display: none; }
     var t = state.selectedKey ? BY_KEY[state.selectedKey] : null;
     if (!t) { el.detailBody.innerHTML = ''; return; }
 
+    var marked = state.bookmarks.has(t.key);
     var meta = [];
     if (t.years) meta.push(esc(t.years));
     if (t.nationality) meta.push(esc(t.nationality));
@@ -810,6 +939,8 @@ body[data-view="detail"] .panel-list   { display: none; }
           (meta.length ? '<p class="info-meta">' + meta.join(' · ') + '</p>' : '') +
           (t.summary ? '<p class="info-summary">' + esc(t.summary) + '</p>' : '') +
         '</div>' +
+        '<button type="button" class="bookmark-btn" data-action="bookmark" aria-pressed="' + marked + '" ' +
+          'aria-label="' + (marked ? '북마크 해제' : '북마크에 추가') + '">' + bookmarkIcon(marked) + '</button>' +
       '</div>';
 
     if (t.schools.length) {
@@ -921,6 +1052,41 @@ body[data-view="detail"] .panel-list   { display: none; }
     renderList();
   });
 
+  el.bmFilter.addEventListener('click', function () {
+    setBookmarksOnly(!state.bookmarksOnly);
+  });
+
+  el.listBody.addEventListener('click', function (e) {
+    if (e.target.closest('[data-action="bookmarks-off"]')) setBookmarksOnly(false);
+  });
+
+  el.detailBody.addEventListener('click', function (e) {
+    if (!e.target.closest('[data-action="bookmark"]')) return;
+    var key = state.selectedKey;
+    if (!key) return;
+    if (state.bookmarks.has(key)) {
+      state.bookmarks['delete'](key);
+      toast('북마크를 해제했습니다.');
+    } else {
+      state.bookmarks.add(key);
+      toast('마이페이지에 북마크했습니다.');
+    }
+    saveBookmarks();
+    renderBmFilter();
+    renderDetail();
+    renderList();
+  });
+
+  /* 다른 탭(마이페이지 등)에서 북마크가 바뀌면 이 탭도 따라간다.
+     따라가지 않으면 이 탭의 옛 목록이 다음 저장 때 되살아난다. */
+  window.addEventListener('storage', function (e) {
+    if (e.key !== BOOKMARK_KEY) return;
+    state.bookmarks = loadBookmarks();
+    renderBmFilter();
+    renderList();
+    renderDetail();
+  });
+
   el.sortToggle.addEventListener('click', function (e) {
     var btn = e.target.closest('button[data-sort]');
     if (!btn || btn.dataset.sort === state.sort) return;
@@ -940,6 +1106,7 @@ body[data-view="detail"] .panel-list   { display: none; }
   // ── 시작 ──
   renderChips();
   renderSort();
+  renderBmFilter();
   renderList();
   syncFromHash();
 })();
