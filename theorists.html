@@ -247,6 +247,13 @@ body[data-view="detail"] .panel-list   { display: none; }
   max-width: 100%;
 }
 .t-years { margin-top: 5px; font-size: 11.5px; color: var(--gray-500); }
+/* 카드에서 "무엇을 한 사람인지"를 두 줄 안에 알려준다 */
+.t-summary {
+  margin-top: 8px; font-size: 12px; line-height: 1.6; color: var(--gray-600);
+  word-break: keep-all;
+  display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+  overflow: hidden;
+}
 .t-schools {
   display: flex; flex-wrap: wrap; gap: 4px; justify-content: center;
   margin-top: 10px;
@@ -318,11 +325,69 @@ body[data-view="detail"] .panel-list   { display: none; }
   padding-bottom: 9px; margin-bottom: 14px;
   border-bottom: 1px solid var(--gray-200);
 }
-.bio p {
-  font-size: 15px; line-height: 1.85; color: var(--gray-700);
-  word-break: keep-all;
+/* 상세 상단 한 줄 요약 */
+.info-summary {
+  margin-top: 10px; font-size: 14px; line-height: 1.7;
+  color: var(--primary-mid); font-weight: 600; word-break: keep-all;
 }
-.bio p + p { margin-top: 14px; }
+
+/* 생애 — 읽는 글이 아니라 훑는 연표 */
+.timeline { list-style: none; position: relative; padding-left: 4px; }
+.timeline::before {
+  content: ''; position: absolute; left: 62px; top: 6px; bottom: 6px;
+  width: 1px; background: var(--gray-200);
+}
+.tl-item { display: flex; gap: 16px; position: relative; padding: 7px 0; }
+.tl-year {
+  flex: 0 0 58px; padding-top: 1px;
+  font-size: 12.5px; font-weight: 700; color: var(--leaf-deep);
+  font-variant-numeric: tabular-nums; text-align: right;
+}
+.tl-text {
+  flex: 1; min-width: 0; padding-left: 14px;
+  font-size: 14px; line-height: 1.7; color: var(--gray-700); word-break: keep-all;
+}
+/* 연도와 본문 사이 선 위의 점 */
+.tl-text::before {
+  content: ''; position: absolute; left: 59px; top: 15px;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--leaf); border: 2px solid var(--white);
+}
+
+/* 사상 — 개념 하나당 카드 하나 */
+.ideas { display: grid; gap: 12px; }
+.idea {
+  position: relative;
+  padding: 18px 18px 16px;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.idea:hover { border-color: var(--primary-light); box-shadow: 0 6px 20px rgba(13, 59, 46, 0.06); }
+.idea-no {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 20px; height: 20px; border-radius: 6px; margin-bottom: 8px;
+  background: var(--leaf-soft); color: var(--leaf-deep);
+  font-size: 11.5px; font-weight: 700;
+}
+.idea-name {
+  font-size: 16px; font-weight: 700; letter-spacing: -0.01em;
+  color: var(--gray-900); word-break: keep-all;
+}
+.idea-line {
+  margin-top: 5px; font-size: 13.5px; font-weight: 600;
+  color: var(--primary-light); word-break: keep-all;
+}
+.idea-body {
+  margin-top: 10px; font-size: 14.5px; line-height: 1.8;
+  color: var(--gray-700); word-break: keep-all;
+}
+.idea-term {
+  display: inline-flex; align-items: center; gap: 3px; margin-top: 12px;
+  font-size: 12.5px; font-weight: 600; color: var(--primary-mid);
+}
+.idea-term:hover { color: var(--primary); text-decoration: underline; }
 
 .works { display: flex; flex-direction: column; gap: 9px; }
 .work-item {
@@ -398,6 +463,7 @@ body[data-view="detail"] .panel-list   { display: none; }
   .info-card { padding: 30px; }
   .info-head .portrait { width: 96px; height: 96px; font-size: 34px; border-radius: 16px; }
   .info-name { font-size: 24px; }
+  .ideas { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .t-card { padding: 22px 16px 18px; }
   .portrait { width: 76px; height: 76px; font-size: 28px; }
 }
@@ -432,7 +498,7 @@ body[data-view="detail"] .panel-list   { display: none; }
       <a href="index.html#articles">시사연결</a>
       <a href="index.html#quiz">퀴즈</a>
       <a href="index.html#community">커뮤니티</a>
-      <a href="index.html#resources">자료실</a>
+      <a href="resources.html">자료실</a>
     </nav>
     <a href="index.html" class="nav-cta">시작하기</a>
   </div>
@@ -444,7 +510,7 @@ body[data-view="detail"] .panel-list   { display: none; }
   <section class="panel-list" id="panelList">
     <div class="list-head">
       <h1 class="page-title">이론가</h1>
-      <p class="page-sub">학파별로 훑어보고, 생애와 사상을 깊이 읽어보세요.</p>
+      <p class="page-sub">학파별로 훑어보고, 생애는 연표로 사상은 개념별로 확인하세요.</p>
 
       <div class="search-bar" id="searchBar">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18" aria-hidden="true">
@@ -509,7 +575,7 @@ body[data-view="detail"] .panel-list   { display: none; }
         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
       </svg><span>커뮤니티</span>
     </a>
-    <a href="index.html#resources">
+    <a href="resources.html">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true">
         <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>
       </svg><span>자료실</span>
@@ -525,7 +591,7 @@ body[data-view="detail"] .panel-list   { display: none; }
 
   /* 두 데이터 파일을 키로 병합해서 쓴다.
      - glossary-data.js : name / name_en / years / mini_bio  (용어집과 공유하는 단일 출처)
-     - theorist-data.js : nationality / schools / bio / key_works / quote
+     - theorist-data.js : nationality / schools / summary / life / ideas / key_works / quote
      같은 값을 두 곳에 적지 않으므로 어긋날 일이 없다. */
   var BASE = window.GLOSSARY_DATA;
   var EXT = window.THEORIST_DATA;
@@ -552,7 +618,9 @@ body[data-view="detail"] .panel-list   { display: none; }
       page_link: base.page_link || null,
       nationality: ext.nationality || '',
       schools: ext.schools || [],
-      bio: ext.bio || (base.mini_bio ? [base.mini_bio] : []),
+      summary: ext.summary || base.mini_bio || '',
+      life: ext.life || [],
+      ideas: ext.ideas || [],
       key_works: ext.key_works || [],
       quote: ext.quote || '',
       quote_source: ext.quote_source || '',
@@ -563,6 +631,9 @@ body[data-view="detail"] .panel-list   { display: none; }
 
   var BY_KEY = {};
   LIST.forEach(function (t) { BY_KEY[t.key] = t; });
+
+  var TERM_BY_ID = {};
+  TERMS.forEach(function (t) { TERM_BY_ID[t.id] = t; });
 
   /* '1858–1917' / '1956–' 에서 출생 연도만 뽑는다. en dash(–) 사용에 주의. */
   function parseBorn(years) {
@@ -660,6 +731,7 @@ body[data-view="detail"] .panel-list   { display: none; }
       '<span class="t-name">' + esc(t.name) + '</span>' +
       (t.name_en ? '<span class="t-name-en">' + esc(t.name_en) + '</span>' : '') +
       (t.years ? '<span class="t-years">' + esc(t.years) + '</span>' : '') +
+      (t.summary ? '<span class="t-summary">' + esc(t.summary) + '</span>' : '') +
       (badges ? '<span class="t-schools">' + badges + '</span>' : '') +
     '</a>';
   }
@@ -736,6 +808,7 @@ body[data-view="detail"] .panel-list   { display: none; }
           '<h1 class="info-name">' + esc(t.name) + '</h1>' +
           (t.name_en ? '<p class="info-en">' + esc(t.name_en) + '</p>' : '') +
           (meta.length ? '<p class="info-meta">' + meta.join(' · ') + '</p>' : '') +
+          (t.summary ? '<p class="info-summary">' + esc(t.summary) + '</p>' : '') +
         '</div>' +
       '</div>';
 
@@ -755,12 +828,37 @@ body[data-view="detail"] .panel-list   { display: none; }
 
     html += '</article>';
 
-    // ── 카드 밖 ──
-    if (t.bio.length) {
+    /* ── 카드 밖 ──
+       "생애와 사상"을 한 덩어리로 읽히게 하면 글이 길고 어렵다는 인상을 준다.
+       연표(생애)와 개념 카드(사상)로 나눠, 훑는 읽기와 파고드는 읽기를 분리한다. */
+    if (t.life.length) {
       html += '<section class="deep-section">' +
-        '<h2 class="deep-title">생애와 사상</h2>' +
-        '<div class="bio">' + t.bio.map(function (p) {
-          return '<p>' + esc(p) + '</p>';
+        '<h2 class="deep-title">생애</h2>' +
+        '<ol class="timeline">' + t.life.map(function (e) {
+          return '<li class="tl-item">' +
+            '<span class="tl-year">' + esc(e.year) + '</span>' +
+            '<span class="tl-text">' + esc(e.text) + '</span>' +
+          '</li>';
+        }).join('') + '</ol>' +
+      '</section>';
+    }
+
+    if (t.ideas.length) {
+      html += '<section class="deep-section">' +
+        '<h2 class="deep-title">핵심 사상</h2>' +
+        '<div class="ideas">' + t.ideas.map(function (idea, i) {
+          var linked = idea.term && TERM_BY_ID[idea.term];
+          return '<article class="idea">' +
+            '<span class="idea-no" aria-hidden="true">' + (i + 1) + '</span>' +
+            '<h3 class="idea-name">' + esc(idea.name) + '</h3>' +
+            '<p class="idea-line">' + esc(idea.line) + '</p>' +
+            '<p class="idea-body">' + esc(idea.body) + '</p>' +
+            (linked
+              ? '<a class="idea-term" href="glossary.html#' + esc(idea.term) + '">' +
+                '용어집에서 &lsquo;' + esc(TERM_BY_ID[idea.term].term_ko) + '&rsquo; 보기' +
+                '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg></a>'
+              : '') +
+          '</article>';
         }).join('') + '</div>' +
       '</section>';
     }

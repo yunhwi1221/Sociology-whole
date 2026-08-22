@@ -154,15 +154,37 @@ svg { display: block; flex-shrink: 0; }
   background: var(--white); border: 1px solid var(--gray-200);
   color: var(--gray-400);
 }
-.soon-main { flex: 1; min-width: 0; }
-.soon-name { font-size: 14px; font-weight: 600; color: var(--gray-700); }
-.soon-desc { margin-top: 2px; font-size: 12.5px; color: var(--gray-400); word-break: keep-all; }
+.soon-main { display: block; flex: 1; min-width: 0; }
+.soon-name { display: block; font-size: 14px; font-weight: 600; color: var(--gray-700); }
+.soon-desc { display: block; margin-top: 2px; font-size: 12.5px; color: var(--gray-400); word-break: keep-all; }
 .soon-tag {
   flex-shrink: 0;
   padding: 3px 9px; border-radius: 6px;
   background: var(--gray-200); color: var(--gray-600);
   font-size: 10.5px; font-weight: 600; white-space: nowrap;
 }
+
+/* 바로가기 카드 — 준비 중 카드와 같은 골격에 링크 상태만 얹는다 */
+.soon-item--link {
+  background: var(--white);
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+.soon-item--link:hover {
+  border-color: var(--primary-light);
+  box-shadow: 0 6px 20px rgba(13, 59, 46, 0.06);
+  transform: translateY(-1px);
+}
+.soon-item--link .soon-icon { background: var(--leaf-soft); border-color: rgba(107, 154, 74, 0.28); color: var(--leaf-deep); }
+.soon-item--link .soon-name { color: var(--gray-900); }
+.soon-item--link .soon-desc { color: var(--gray-500); }
+.soon-count {
+  flex-shrink: 0;
+  padding: 3px 9px; border-radius: 6px;
+  background: var(--leaf-soft); color: var(--leaf-deep);
+  font-size: 11px; font-weight: 700; white-space: nowrap;
+}
+.soon-arrow { flex-shrink: 0; color: var(--gray-300); }
+.soon-item--link:hover .soon-arrow { color: var(--primary-light); }
 
 /* 비로그인 안내 */
 .guard {
@@ -238,7 +260,7 @@ body[data-auth="loading"] #content { display: none; }
       <a href="index.html#articles">시사연결</a>
       <a href="index.html#quiz">퀴즈</a>
       <a href="index.html#community">커뮤니티</a>
-      <a href="index.html#resources">자료실</a>
+      <a href="resources.html">자료실</a>
     </nav>
     <a href="index.html" class="nav-cta">시작하기</a>
   </div>
@@ -274,18 +296,42 @@ body[data-auth="loading"] #content { display: none; }
 
     <h2 class="section-title">학습 기록</h2>
     <div class="soon-grid">
-      <div class="soon-item">
+      <!-- 목록을 여기 펼치지 않고, 용어집의 북마크 보기로 넘긴다 -->
+      <a class="soon-item soon-item--link" href="glossary.html?view=bookmarks" id="bmLink">
         <span class="soon-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
             <path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
           </svg>
         </span>
-        <div class="soon-main">
-          <p class="soon-name">북마크한 용어</p>
-          <p class="soon-desc">용어집에서 저장한 개념을 모아봅니다</p>
-        </div>
-        <span class="soon-tag">준비 중</span>
-      </div>
+        <span class="soon-main">
+          <span class="soon-name">북마크한 용어</span>
+          <span class="soon-desc" id="bmDesc">용어집에서 저장한 개념을 모아봅니다</span>
+        </span>
+        <span class="soon-count" id="bmCount" hidden></span>
+        <span class="soon-arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+            <path d="m9 18 6-6-6-6"/>
+          </svg>
+        </span>
+      </a>
+
+      <a class="soon-item soon-item--link" href="resources.html?view=bookmarks" id="resBmLink">
+        <span class="soon-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/>
+          </svg>
+        </span>
+        <span class="soon-main">
+          <span class="soon-name">북마크한 자료</span>
+          <span class="soon-desc" id="resBmDesc">자료실에서 북마크한 자료를 모아봅니다</span>
+        </span>
+        <span class="soon-count" id="resBmCount" hidden></span>
+        <span class="soon-arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+            <path d="m9 18 6-6-6-6"/>
+          </svg>
+        </span>
+      </a>
 
       <div class="soon-item">
         <span class="soon-icon" aria-hidden="true">
@@ -313,18 +359,23 @@ body[data-auth="loading"] #content { display: none; }
         <span class="soon-tag">준비 중</span>
       </div>
 
-      <div class="soon-item">
+      <a class="soon-item soon-item--link" href="resources.html?tab=mine" id="myResLink">
         <span class="soon-icon" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
             <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>
           </svg>
         </span>
-        <div class="soon-main">
-          <p class="soon-name">내가 올린 자료</p>
-          <p class="soon-desc">자료실에 공유한 파일을 관리합니다</p>
-        </div>
-        <span class="soon-tag">준비 중</span>
-      </div>
+        <span class="soon-main">
+          <span class="soon-name">내가 올린 자료</span>
+          <span class="soon-desc" id="myResDesc">자료실에 올린 자료를 폴더로 관리합니다</span>
+        </span>
+        <span class="soon-count" id="myResCount" hidden></span>
+        <span class="soon-arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+            <path d="m9 18 6-6-6-6"/>
+          </svg>
+        </span>
+      </a>
     </div>
   </section>
 
@@ -352,13 +403,16 @@ body[data-auth="loading"] #content { display: none; }
         <path d="M12 2a8 8 0 0 0-8 8c0 3.4 2.1 6.3 5 7.4V20a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1v-2.6c2.9-1.1 5-4 5-7.4a8 8 0 0 0-8-8Z"/><path d="M9 22h6"/>
       </svg><span>퀴즈</span>
     </a>
-    <a href="index.html#resources">
+    <a href="resources.html">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true">
         <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>
       </svg><span>자료실</span>
     </a>
   </div>
 </nav>
+
+<!-- 북마크한 용어의 제목·정의를 채우려면 용어집 데이터가 필요하다 -->
+<script src="glossary-data.js"></script>
 
 <!-- 인증 (Supabase Auth) — 로드 순서 고정 -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.min.js"></script>
@@ -376,8 +430,85 @@ body[data-auth="loading"] #content { display: none; }
     name: document.getElementById('profileName'),
     email: document.getElementById('profileEmail'),
     signout: document.getElementById('signoutBtn'),
-    guardLogin: document.getElementById('guardLogin')
+    guardLogin: document.getElementById('guardLogin'),
+    bmCount: document.getElementById('bmCount'),
+    bmDesc: document.getElementById('bmDesc'),
+    resBmCount: document.getElementById('resBmCount'),
+    resBmDesc: document.getElementById('resBmDesc'),
+    myResCount: document.getElementById('myResCount'),
+    myResDesc: document.getElementById('myResDesc')
   };
+
+  /* ---------------------------------------------------------
+     북마크한 용어 — 목록은 용어집(glossary.html?view=bookmarks)이 보여준다.
+     여기서는 같은 localStorage 키를 읽어 개수만 표시한다.
+     서버 저장으로 옮길 때는 loadBookmarks 하나만 갈아끼우면 된다.
+     --------------------------------------------------------- */
+  var BOOKMARK_KEY = 'sw:glossary:bookmarks';
+  var TERM_IDS = {};
+  ((window.GLOSSARY_DATA && window.GLOSSARY_DATA.terms) || []).forEach(function (t) {
+    TERM_IDS[t.id] = true;
+  });
+
+  function loadBookmarks() {
+    try {
+      var raw = localStorage.getItem(BOOKMARK_KEY);
+      var ids = raw ? JSON.parse(raw) : [];
+      return Array.isArray(ids) ? ids : [];
+    } catch (e) {
+      // 사파리 프라이빗 모드 등 localStorage 접근 불가
+      return [];
+    }
+  }
+
+  function renderBookmarkCount() {
+    // 데이터에서 사라진 id(용어 개편 등)는 세지 않는다
+    var n = loadBookmarks().filter(function (id) { return TERM_IDS[id]; }).length;
+
+    el.bmCount.hidden = !n;
+    el.bmCount.textContent = n ? n + '개' : '';
+    el.bmDesc.textContent = n
+      ? '눌러서 북마크한 용어만 모아 봅니다'
+      : '용어집에서 북마크 아이콘을 누르면 여기에 모입니다';
+  }
+
+  /* 자료실 — 자료는 샘플(resource-data.js)과 내가 올린 것(localStorage)에 나뉘어 있다.
+     마이페이지에서는 개수만 필요하므로 두 출처를 합쳐 세기만 한다. */
+  var RES_BOOKMARK_KEY = 'sw:resources:bookmarks';
+  var RES_MATERIAL_KEY = 'sw:resources:materials';
+
+  function readList(key) {
+    try {
+      var raw = localStorage.getItem(key);
+      var v = raw ? JSON.parse(raw) : [];
+      return Array.isArray(v) ? v : [];
+    } catch (e) { return []; }
+  }
+
+  function renderResourceCounts() {
+    var bm = readList(RES_BOOKMARK_KEY).length;
+    el.resBmCount.hidden = !bm;
+    el.resBmCount.textContent = bm ? bm + '개' : '';
+    el.resBmDesc.textContent = bm
+      ? '눌러서 북마크한 자료만 모아 봅니다'
+      : '자료실에서 북마크하면 여기에 모입니다';
+
+    var mine = readList(RES_MATERIAL_KEY).length;
+    el.myResCount.hidden = !mine;
+    el.myResCount.textContent = mine ? mine + '개' : '';
+    el.myResDesc.textContent = mine
+      ? '눌러서 폴더별로 관리합니다'
+      : '자료실 내 자료 탭에서 올릴 수 있습니다';
+  }
+
+  // 다른 탭의 용어집·자료실에서 북마크를 바꾸면 개수도 따라간다
+  window.addEventListener('storage', function (e) {
+    if (e.key === BOOKMARK_KEY) renderBookmarkCount();
+    if (e.key === RES_BOOKMARK_KEY || e.key === RES_MATERIAL_KEY) renderResourceCounts();
+  });
+
+  renderBookmarkCount();
+  renderResourceCounts();
 
   function render(user) {
     if (user) {

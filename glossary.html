@@ -192,6 +192,29 @@ body[data-view="detail"] .panel-list   { display: none; }
   max-width: 60%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
 }
 
+/* 북마크만 보기 — 마이페이지에서 넘어오는 목적지이기도 하다 */
+.bm-filter {
+  display: flex; align-items: center; gap: 7px;
+  width: 100%; margin-top: 10px; padding: 9px 12px;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: 8px;
+  font-size: 13px; font-weight: 600; color: var(--gray-500);
+  transition: background 0.2s, border-color 0.2s, color 0.2s;
+}
+.bm-filter:hover { border-color: var(--primary-light); color: var(--primary-mid); }
+.bm-filter[aria-pressed="true"] {
+  background: var(--primary); border-color: var(--primary); color: var(--white);
+}
+.bm-filter-count {
+  margin-left: auto; padding: 3px 9px; border-radius: 6px;
+  background: var(--gray-100); color: var(--gray-600);
+  font-size: 11.5px; font-weight: 700;
+}
+.bm-filter[aria-pressed="true"] .bm-filter-count { background: rgba(255, 255, 255, 0.18); color: var(--white); }
+.bm-filter-off { font-size: 11.5px; font-weight: 500; opacity: 0.85; }
+.bm-filter[aria-pressed="false"] .bm-filter-off { display: none; }
+
 .filter-chips {
   display: flex; gap: 8px; margin-top: 8px;
   overflow-x: auto; scrollbar-width: none;
@@ -573,7 +596,7 @@ body[data-view="detail"] .panel-list   { display: none; }
       <a href="index.html#articles">시사연결</a>
       <a href="index.html#quiz">퀴즈</a>
       <a href="index.html#community">커뮤니티</a>
-      <a href="index.html#resources">자료실</a>
+      <a href="resources.html">자료실</a>
     </nav>
     <a href="index.html" class="nav-cta">시작하기</a>
   </div>
@@ -598,6 +621,15 @@ body[data-view="detail"] .panel-list   { display: none; }
           </svg>
         </button>
       </div>
+
+      <button type="button" class="bm-filter" id="bmFilter" aria-pressed="false">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="m19 21-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+        </svg>
+        <span>북마크한 용어만 보기</span>
+        <span class="bm-filter-count" id="bmFilterCount">0</span>
+        <span class="bm-filter-off" aria-hidden="true">해제</span>
+      </button>
 
       <button type="button" class="filter-toggle" id="filterToggle" aria-expanded="true" aria-controls="filterChips">
         <span>카테고리</span>
@@ -658,7 +690,7 @@ body[data-view="detail"] .panel-list   { display: none; }
         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
       </svg><span>커뮤니티</span>
     </a>
-    <a href="index.html#resources">
+    <a href="resources.html">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true">
         <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>
       </svg><span>자료실</span>
@@ -723,6 +755,7 @@ body[data-view="detail"] .panel-list   { display: none; }
     selectedId: null,
     expandedSearch: false,   // 정의 본문까지 확장 검색이 걸렸는지
     filterOpen: loadFilterOpen(),
+    bookmarksOnly: /(^|[?&])view=bookmarks($|&)/.test(location.search),
     bookmarks: loadBookmarks()
   };
 
@@ -733,6 +766,8 @@ body[data-view="detail"] .panel-list   { display: none; }
     chips: document.getElementById('filterChips'),
     listSticky: document.getElementById('listSticky'),
     filterToggle: document.getElementById('filterToggle'),
+    bmFilter: document.getElementById('bmFilter'),
+    bmFilterCount: document.getElementById('bmFilterCount'),
     filterCurrent: document.getElementById('filterCurrent'),
     listMeta: document.getElementById('listMeta'),
     list: document.getElementById('termList'),
@@ -807,8 +842,13 @@ body[data-view="detail"] .panel-list   { display: none; }
     return list.filter(function (t) { return t.categories.indexOf(state.category) >= 0; });
   }
 
+  function byBookmark(list) {
+    if (!state.bookmarksOnly) return list;
+    return list.filter(function (t) { return state.bookmarks.has(t.id); });
+  }
+
   function getResults() {
-    var pool = byCategory(TERMS);
+    var pool = byCategory(byBookmark(TERMS));
     var q = state.query.trim().toLowerCase();
     state.expandedSearch = false;
     if (!q) return pool;
@@ -850,6 +890,27 @@ body[data-view="detail"] .panel-list   { display: none; }
     try { localStorage.setItem(FILTER_KEY, open ? '1' : '0'); } catch (e) { /* 무시 */ }
   }
 
+  function renderBmFilter() {
+    el.bmFilterCount.textContent = state.bookmarks.size;
+    el.bmFilter.setAttribute('aria-pressed', String(state.bookmarksOnly));
+  }
+
+  /* 새로고침하거나 링크를 공유해도 같은 화면이 열리도록 주소를 맞춘다.
+     마이페이지가 glossary.html?view=bookmarks 로 보내는 그 주소다. */
+  function syncViewParam() {
+    if (!window.history || !history.replaceState) return;
+    history.replaceState(null, '',
+      location.pathname + (state.bookmarksOnly ? '?view=bookmarks' : '') + location.hash);
+  }
+
+  function setBookmarksOnly(on) {
+    state.bookmarksOnly = on;
+    syncViewParam();
+    renderBmFilter();
+    renderList();
+    el.panelList.scrollTop = 0;
+  }
+
   function rowHTML(t) {
     var on = state.selectedId === t.id;
     var marked = state.bookmarks.has(t.id);
@@ -872,6 +933,8 @@ body[data-view="detail"] .panel-list   { display: none; }
     // 안내 캡션
     if (state.expandedSearch) {
       el.listMeta.textContent = '용어명에는 없어 정의 본문에서 찾은 결과 ' + results.length + '건';
+    } else if (state.bookmarksOnly) {
+      el.listMeta.textContent = '북마크한 용어 ' + results.length + '개';
     } else if (state.query.trim() || state.category !== ALL) {
       el.listMeta.textContent = results.length + '개의 용어';
     } else {
@@ -879,15 +942,21 @@ body[data-view="detail"] .panel-list   { display: none; }
     }
 
     if (!results.length) {
-      el.list.innerHTML =
-        '<div class="empty">' + ICON.search +
-        '<p>찾으시는 용어가 없어요.<br>새로운 용어를 제안해보세요.</p>' +
-        '<button type="button" class="btn btn-secondary" data-action="suggest">용어 제안하기</button></div>';
+      // 북마크 보기에서는 "용어를 제안하라"가 답이 아니다 — 담는 법을 알려준다
+      el.list.innerHTML = state.bookmarksOnly
+        ? '<div class="empty">' + bookmarkIcon(false, 36) +
+          '<p>' + (state.query.trim() || state.category !== ALL
+            ? '조건에 맞는 북마크가 없어요.<br>검색어나 카테고리를 지워보세요.'
+            : '아직 북마크한 용어가 없어요.<br>용어를 열고 북마크 아이콘을 누르면 여기에 모입니다.') + '</p>' +
+          '<button type="button" class="btn btn-secondary" data-action="bookmarks-off">전체 용어 보기</button></div>'
+        : '<div class="empty">' + ICON.search +
+          '<p>찾으시는 용어가 없어요.<br>새로운 용어를 제안해보세요.</p>' +
+          '<button type="button" class="btn btn-secondary" data-action="suggest">용어 제안하기</button></div>';
       return;
     }
 
     // 필터가 걸려 있으면 그룹 헤더 없이 단일 리스트
-    if (state.category !== ALL || state.query.trim()) {
+    if (state.bookmarksOnly || state.category !== ALL || state.query.trim()) {
       el.list.innerHTML = results.slice().sort(sortKo).map(rowHTML).join('');
       return;
     }
@@ -974,6 +1043,7 @@ body[data-view="detail"] .panel-list   { display: none; }
 
   function render() {
     renderChips();
+    renderBmFilter();
     renderList();
     renderDetail();
   }
@@ -1002,6 +1072,16 @@ body[data-view="detail"] .panel-list   { display: none; }
   }
 
   window.addEventListener('hashchange', syncFromHash);
+
+  /* 마이페이지에서 북마크를 해제하면 열려 있는 이 탭도 따라간다.
+     따라가지 않으면 이 탭이 갖고 있던 옛 목록이 다음 저장 때 되살아난다. */
+  window.addEventListener('storage', function (e) {
+    if (e.key !== BOOKMARK_KEY) return;
+    state.bookmarks = loadBookmarks();
+    renderBmFilter();
+    renderList();
+    renderDetail();
+  });
 
   // 브레이크포인트를 넘나들 때 목록/상세 표시 상태를 정리
   TABLET_MQ.addEventListener('change', function () {
@@ -1039,6 +1119,10 @@ body[data-view="detail"] .panel-list   { display: none; }
     setFilterOpen(!state.filterOpen);
   });
 
+  el.bmFilter.addEventListener('click', function () {
+    setBookmarksOnly(!state.bookmarksOnly);
+  });
+
   el.chips.addEventListener('click', function (e) {
     var chip = e.target.closest('.chip');
     if (!chip) return;
@@ -1053,6 +1137,7 @@ body[data-view="detail"] .panel-list   { display: none; }
      --------------------------------------------------------- */
   el.list.addEventListener('click', function (e) {
     if (e.target.closest('[data-action="suggest"]')) { openModal(); return; }
+    if (e.target.closest('[data-action="bookmarks-off"]')) { setBookmarksOnly(false); return; }
     var row = e.target.closest('.term-row');
     if (row) select(row.dataset.id, true);
   });
@@ -1078,6 +1163,7 @@ body[data-view="detail"] .panel-list   { display: none; }
       }
       saveBookmarks();
       renderDetail();
+      renderBmFilter();
       renderList();
       return;
     }
@@ -1204,6 +1290,7 @@ body[data-view="detail"] .panel-list   { display: none; }
      --------------------------------------------------------- */
   setFilterOpen(state.filterOpen);
   renderChips();
+  renderBmFilter();
   syncFromHash();
 })();
 </script>
