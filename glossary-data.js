@@ -388,6 +388,90 @@ var GLOSSARY_DATA = (function () {
       mini_bio: '복지국가를 탈상품화 정도에 따라 세 유형으로 분류한 덴마크의 사회학자.',
       page_link: null,
     },
+    zehr: {
+      name: '하워드 제어',
+      name_en: 'Howard Zehr',
+      years: '1944–',
+      mini_bio: '형사처벌 중심의 응보적 사법을 넘어 피해 회복과 관계 복원을 강조한 회복적 사법의 창시자로 불리는 미국의 범죄학자.',
+      page_link: null,
+    },
+    sykes: {
+      name: '그레셤 사이크스',
+      name_en: 'Gresham Sykes',
+      years: '1922–2010',
+      mini_bio: '청소년 비행이 규범을 부정해서가 아니라 그 구속력을 일시적으로 무력화하는 중화 기술을 통해 일어난다고 본 미국의 범죄사회학자.',
+      page_link: null,
+    },
+    matza: {
+      name: '데이비드 마차',
+      name_en: 'David Matza',
+      years: '1930–2018',
+      mini_bio: '사이크스와 함께 중화기술 이론을 제시하고, 비행이 표류하듯 발생한다는 표류이론을 전개한 미국의 사회학자.',
+      page_link: null,
+    },
+    mannheim: {
+      name: '카를 만하임',
+      name_en: 'Karl Mannheim',
+      years: '1893–1947',
+      mini_bio: '지식과 사고방식이 사회적 위치에 따라 다르게 형성된다고 본 지식사회학의 창시자. 세대를 사회 변화의 동력으로 분석했다.',
+      page_link: null,
+    },
+    weinberg: {
+      name: '조지 와인버그',
+      name_en: 'George Weinberg',
+      years: '1929–2017',
+      mini_bio: '동성애 혐오라는 용어를 처음 만들어 그것이 동성애가 아니라 편견의 문제임을 지적한 미국의 심리학자.',
+      page_link: null,
+    },
+    berelson: {
+      name: '버나드 베럴슨',
+      name_en: 'Bernard Berelson',
+      years: '1912–1979',
+      mini_bio: '언론과 커뮤니케이션 내용을 체계적으로 수량화해 분석하는 내용분석 기법을 정립한 미국의 사회과학자.',
+      page_link: null,
+    },
+    geertz: {
+      name: '클리퍼드 기어츠',
+      name_en: 'Clifford Geertz',
+      years: '1926–2006',
+      mini_bio: "문화를 의미의 그물망으로 보고 '두터운 기술'이라는 해석적 방법을 제시한 미국의 인류학자.",
+      page_link: null,
+    },
+    gini: {
+      name: '코라도 지니',
+      name_en: 'Corrado Gini',
+      years: '1884–1965',
+      mini_bio: '소득과 부의 불평등 정도를 하나의 지수로 나타내는 지니계수를 고안한 이탈리아의 통계학자.',
+      page_link: null,
+    },
+    ritzer: {
+      name: '조지 리처',
+      name_en: 'George Ritzer',
+      years: '1940–',
+      mini_bio: '패스트푸드점의 운영 원리가 사회 전반으로 퍼지는 과정을 맥도날드화 개념으로 분석한 미국의 사회학자.',
+      page_link: null,
+    },
+    jenkins: {
+      name: '헨리 젠킨스',
+      name_en: 'Henry Jenkins',
+      years: '1958–',
+      mini_bio: '팬들을 수동적 소비자가 아니라 텍스트를 재창작하는 능동적 참여자로 재조명한 미국의 미디어학자.',
+      page_link: null,
+    },
+    mudde: {
+      name: '카스 무데',
+      name_en: 'Cas Mudde',
+      years: '1967–',
+      mini_bio: "포퓰리즘을 좌우를 가리지 않고 나타나는 '얇은 이데올로기'로 정의한 네덜란드의 정치학자.",
+      page_link: null,
+    },
+    putnam: {
+      name: '로버트 퍼트넘',
+      name_en: 'Robert D. Putnam',
+      years: '1941–',
+      mini_bio: '미국 공동체의 신뢰와 유대가 약화되는 현상을 사회자본 개념으로 분석한 미국의 정치학자.',
+      page_link: null,
+    },
   };
 
   /* 용어 — curator_definition(내 정의)과 original_definition(원문 정의)은 필수,
@@ -527,6 +611,45 @@ var GLOSSARY_DATA = (function () {
 
     /* ── 방법론 ─────────────────────────────────────────────── */
     {
+      id: 'content-analysis',
+      term_ko: '내용분석',
+      term_en: 'Content Analysis',
+      categories: ['방법론'],
+      curator_definition:
+        '신문 기사나 광고, SNS 게시물 같은 텍스트를 체계적으로 세어보고 분류해서 그 안에 담긴 경향이나 패턴을 읽어내는 연구 방법이다.',
+      original_definition:
+        '내용분석이란 커뮤니케이션 내용의 명시적 속성을 객관적·체계적·양적으로 기술하기 위한 연구 기법이다.',
+      original_definition_source: '버나드 베럴슨, 『커뮤니케이션 연구에서의 내용분석』(1952)',
+      related_theorists: ['berelson'],
+      perspectives: [],
+    },
+    {
+      id: 'sampling-bias',
+      term_ko: '표본편향',
+      term_en: 'Sampling Bias',
+      categories: ['방법론'],
+      curator_definition:
+        '조사 대상을 뽑는 과정 자체가 한쪽으로 치우쳐, 그 결과가 전체를 대표하지 못하게 되는 오류다.',
+      original_definition:
+        '표본편향이란 표본추출 과정에서 특정 집단이 체계적으로 과대 또는 과소 대표됨으로써, 표본에서 얻은 결과가 모집단의 실제 특성과 어긋나게 되는 현상을 말한다.',
+      original_definition_source: '사회조사방법론 일반 개념',
+      related_theorists: [],
+      perspectives: [],
+    },
+    {
+      id: 'ethnography',
+      term_ko: '문화기술지',
+      term_en: 'Ethnography',
+      categories: ['방법론'],
+      curator_definition:
+        '한 집단의 문화를 이해하기 위해 연구자가 오랜 시간 그 안에 머물며 관찰하고 기록한 뒤, 그들의 삶의 방식을 있는 그대로 서술하는 연구이자 그 결과물이다.',
+      original_definition:
+        '문화기술지란 연구자가 현지에 머무르며 관찰과 면접을 통해 자료를 수집하고, 한 집단의 문화를 그 구성원의 관점에서 두텁게 기술하는 질적 연구 방법이자 그 산출물을 말한다.',
+      original_definition_source: "클리퍼드 기어츠, 『문화의 해석』(1973) '두터운 기술' 개념 참조",
+      related_theorists: ['geertz'],
+      perspectives: [],
+    },
+    {
       id: 'verstehen',
       term_ko: '이해',
       term_en: 'Verstehen',
@@ -645,6 +768,32 @@ var GLOSSARY_DATA = (function () {
     },
 
     /* ── 계급·노동·불평등 ────────────────────────────────────── */
+    {
+      id: 'income-inequality',
+      term_ko: '소득불평등',
+      term_en: 'Income Inequality',
+      categories: ['계급·노동·불평등'],
+      curator_definition:
+        '사회 구성원 사이에 소득이 얼마나 고르게, 혹은 치우쳐 분배되는지를 보여주는 정도. 지니계수라는 하나의 숫자로 흔히 나타낸다.',
+      original_definition:
+        '소득불평등은 한 사회 안에서 소득이 개인이나 가구 사이에 분배되는 정도의 격차를 뜻하며, 0(완전 평등)에서 1(완전 불평등) 사이의 값을 갖는 지니계수로 측정하는 것이 대표적이다.',
+      original_definition_source: '코라도 지니, 지니계수 고안(1912)',
+      related_theorists: ['gini'],
+      perspectives: [],
+    },
+    {
+      id: 'neet',
+      term_ko: '니트족',
+      term_en: 'NEET',
+      categories: ['계급·노동·불평등', '가족·인구'],
+      curator_definition:
+        '일도 하지 않고, 학교도 다니지 않고, 취업을 위한 훈련도 받지 않는 청년층을 가리키는 말이다.',
+      original_definition:
+        "니트(NEET)는 'Not in Education, Employment or Training'의 줄임말로, 교육·고용·직업훈련 어디에도 속하지 않은 청년을 지칭하는 노동시장 통계 범주다.",
+      original_definition_source: '영국 정부 사회배제국, 「청년 실태 보고서」(1999) 이후 통용',
+      related_theorists: [],
+      perspectives: [],
+    },
     {
       id: 'class-struggle',
       term_ko: '계급투쟁',
@@ -810,6 +959,45 @@ var GLOSSARY_DATA = (function () {
 
     /* ── 젠더·섹슈얼리티 ─────────────────────────────────────── */
     {
+      id: 'homophobia',
+      term_ko: '동성애 혐오',
+      term_en: 'Homophobia',
+      categories: ['젠더·섹슈얼리티'],
+      curator_definition:
+        '동성애자에 대한 비합리적인 두려움, 혐오, 차별적 태도를 가리키는 말이다.',
+      original_definition:
+        '동성애 혐오란 동성애와 동성애자에 대한 비합리적 두려움과 혐오, 그리고 이를 근거로 한 차별적 태도와 행동을 총칭하는 개념이다.',
+      original_definition_source: '조지 와인버그, 『사회와 건강한 동성애자』(1972)에서 용어화',
+      related_theorists: ['weinberg'],
+      perspectives: [],
+    },
+    {
+      id: 'transgender',
+      term_ko: '트랜스젠더',
+      term_en: 'Transgender',
+      categories: ['젠더·섹슈얼리티'],
+      curator_definition:
+        '태어날 때 지정된 성별과 스스로 느끼는 성별 정체성이 다른 사람을 가리키는 말이다.',
+      original_definition:
+        '트랜스젠더란 출생 시 지정된 성별과 자신이 인식하는 성별 정체성이 일치하지 않는 사람을 포괄적으로 지칭하는 용어다.',
+      original_definition_source: '젠더 연구 일반 개념',
+      related_theorists: ['butler'],
+      perspectives: [],
+    },
+    {
+      id: 'reproductive-rights',
+      term_ko: '재생산권',
+      term_en: 'Reproductive Rights',
+      categories: ['젠더·섹슈얼리티'],
+      curator_definition:
+        '아이를 낳을지 말지, 언제 낳을지를 국가나 타인의 간섭 없이 스스로 결정할 수 있는 권리다.',
+      original_definition:
+        '재생산권은 개인이 자녀의 수, 터울, 시기를 자유롭고 책임 있게 결정할 권리와, 이를 실현하는 데 필요한 정보와 수단에 접근할 권리를 포함한다.',
+      original_definition_source: '국제인구개발회의(카이로), 행동계획(1994)',
+      related_theorists: [],
+      perspectives: [],
+    },
+    {
       id: 'gender',
       term_ko: '젠더',
       term_en: 'Gender',
@@ -961,6 +1149,58 @@ var GLOSSARY_DATA = (function () {
 
     /* ── 가족·인구 ──────────────────────────────────────────── */
     {
+      id: 'non-marriage',
+      term_ko: '비혼',
+      term_en: 'Non-Marriage',
+      categories: ['가족·인구'],
+      curator_definition:
+        '결혼을 하지 못한 것이 아니라, 하지 않기로 스스로 선택한 삶의 방식. 결혼을 인생의 당연한 다음 단계로 여기지 않는 가치관의 변화를 보여준다.',
+      original_definition:
+        '비혼은 결혼을 하지 않은 상태를 지칭하는 데서 나아가, 결혼을 개인의 선택 가능한 여러 삶의 방식 중 하나로 재규정하려는 적극적 용어로 자리잡았다.',
+      original_definition_source: '가족사회학 일반 개념',
+      related_theorists: [],
+      perspectives: [],
+    },
+    {
+      id: 'generation-gap',
+      term_ko: '세대차이',
+      term_en: 'Generation Gap',
+      categories: ['가족·인구', '문화·미디어'],
+      curator_definition:
+        '서로 다른 시대를 살아온 세대 사이에 가치관, 말투, 문화적 취향이 달라 생기는 간극과 갈등이다.',
+      original_definition:
+        '세대차이란 서로 다른 역사적 시기에 사회화를 경험한 세대 집단 사이에 나타나는 가치관과 행동양식의 체계적인 차이를 말하며, 급격한 사회변동기일수록 그 폭이 커지는 경향이 있다.',
+      original_definition_source: '카를 만하임, 「세대 문제」(1928) 논의 참조',
+      related_theorists: ['mannheim'],
+      perspectives: [],
+    },
+    {
+      id: 'empty-nest-syndrome',
+      term_ko: '빈둥지증후군',
+      term_en: 'Empty Nest Syndrome',
+      categories: ['가족·인구'],
+      curator_definition:
+        '자녀가 다 커서 독립해 떠난 뒤, 부모가 느끼는 상실감과 허전함을 가리키는 말이다.',
+      original_definition:
+        '빈둥지증후군은 자녀의 독립 이후 양육이라는 주된 역할을 상실한 부모, 특히 자녀 양육에 정체성을 크게 의존해 온 부모가 겪는 상실감과 우울감을 가리키는 개념이다.',
+      original_definition_source: '가족생애주기 연구 일반 개념',
+      related_theorists: [],
+      perspectives: [],
+    },
+    {
+      id: 'extended-family',
+      term_ko: '확대가족',
+      term_en: 'Extended Family',
+      categories: ['가족·인구'],
+      curator_definition:
+        '부부와 자녀만이 아니라 조부모, 삼촌, 사촌 등 여러 세대와 친족이 함께 살거나 긴밀히 연결된 가족 형태다.',
+      original_definition:
+        '확대가족이란 핵가족을 넘어 조부모, 형제자매의 가족 등 여러 세대의 친족이 함께 거주하거나 밀접한 상호 의존 관계를 유지하는 가족 형태를 말한다.',
+      original_definition_source: '가족사회학 일반 개념',
+      related_theorists: [],
+      perspectives: [],
+    },
+    {
       id: 'nuclear-family',
       term_ko: '핵가족',
       term_en: 'Nuclear Family',
@@ -1066,6 +1306,58 @@ var GLOSSARY_DATA = (function () {
     },
 
     /* ── 도시·공간 ──────────────────────────────────────────── */
+    {
+      id: 'donut-effect',
+      term_ko: '도심공동화',
+      term_en: 'Doughnut Effect',
+      categories: ['도시·공간'],
+      curator_definition:
+        '도심의 지가와 임대료가 오르면서 주거 인구는 외곽으로 빠져나가고, 정작 도심 한복판은 텅 비어가는 현상이다.',
+      original_definition:
+        '도심공동화는 상업·업무 기능이 집중된 도심에서 주거 인구가 빠져나가 야간 인구밀도가 급격히 낮아지는 현상으로, 도넛 모양의 인구 분포를 만든다고 해서 도넛현상이라고도 불린다.',
+      original_definition_source: '도시지리학 일반 개념',
+      related_theorists: [],
+      perspectives: [],
+    },
+    {
+      id: 'smart-city',
+      term_ko: '스마트시티',
+      term_en: 'Smart City',
+      categories: ['도시·공간', '문화·미디어'],
+      curator_definition:
+        '센서와 데이터, 정보통신기술을 활용해 교통·에너지·행정 같은 도시 문제를 효율적으로 해결하려는 도시 모델이다.',
+      original_definition:
+        '스마트시티는 정보통신기술을 도시 인프라와 서비스에 결합해 자원 활용의 효율성을 높이고 시민의 삶의 질을 개선하려는 도시 발전 전략을 가리킨다.',
+      original_definition_source: '도시계획·정보사회론 일반 개념',
+      related_theorists: [],
+      perspectives: [],
+    },
+    {
+      id: 'housing-precarity',
+      term_ko: '주거빈곤',
+      term_en: 'Housing Precarity',
+      categories: ['도시·공간', '계급·노동·불평등'],
+      curator_definition:
+        '집이 없어서가 아니라, 최소한의 면적과 시설을 갖추지 못한 곳에 살거나 소득에 비해 지나치게 많은 돈을 주거비로 써야 하는 상태다.',
+      original_definition:
+        '주거빈곤은 단순히 무주택 상태를 넘어, 최저주거기준에 미달하거나 소득 대비 과도한 주거비를 부담하는 상태까지 포괄하는 개념으로, 주거의 질과 부담 가능성을 함께 고려한다.',
+      original_definition_source: '주거복지 정책 연구 일반 개념',
+      related_theorists: [],
+      perspectives: [],
+    },
+    {
+      id: 'compact-city',
+      term_ko: '압축도시',
+      term_en: 'Compact City',
+      categories: ['도시·공간'],
+      curator_definition:
+        '도시를 외곽으로 넓게 퍼뜨리는 대신, 주거·상업·교통 기능을 도심 가까이 조밀하게 모아 이동 거리와 에너지 소비를 줄이려는 도시 계획 전략이다.',
+      original_definition:
+        '압축도시는 고밀도 개발과 복합적 토지이용, 대중교통 중심의 접근성을 특징으로 하며, 도시 스프롤에 대응해 지속가능한 도시 형태로 제시된다.',
+      original_definition_source: '지속가능한 도시계획 논의 참조',
+      related_theorists: [],
+      perspectives: [],
+    },
     {
       id: 'gentrification',
       term_ko: '젠트리피케이션',
@@ -1198,6 +1490,32 @@ var GLOSSARY_DATA = (function () {
     },
 
     /* ── 문화·미디어 ────────────────────────────────────────── */
+    {
+      id: 'mcdonaldization',
+      term_ko: '맥도날드화',
+      term_en: 'McDonaldization',
+      categories: ['문화·미디어', '정치·권력·사회변동'],
+      curator_definition:
+        '패스트푸드점의 효율성·계산가능성·예측가능성·통제라는 원리가 교육, 의료, 여가 등 사회 전 영역으로 퍼져나가는 현상이다.',
+      original_definition:
+        '맥도날드화란 패스트푸드점의 운영 원리인 효율성, 계산가능성, 예측가능성, 통제가 미국 사회를 비롯한 세계 각지의 점점 더 많은 영역을 지배하게 되는 과정을 뜻한다.',
+      original_definition_source: '조지 리처, 『맥도날드 그리고 맥도날드화』(1993)',
+      related_theorists: ['ritzer'],
+      perspectives: [],
+    },
+    {
+      id: 'fandom',
+      term_ko: '팬덤',
+      term_en: 'Fandom',
+      categories: ['문화·미디어'],
+      curator_definition:
+        '특정 스타나 작품을 단순히 좋아하는 데 그치지 않고, 함께 모여 의미를 만들고 적극적으로 참여하는 팬들의 공동체다.',
+      original_definition:
+        '팬덤은 대중문화 텍스트의 소비자들이 조직적인 사회적·문화적 공동체를 형성해, 텍스트를 수동적으로 소비하는 데 그치지 않고 해석하고 재창작하며 적극적으로 참여하는 현상을 가리킨다.',
+      original_definition_source: '헨리 젠킨스, 『텍스트 밀렵꾼들』(1992)',
+      related_theorists: ['jenkins'],
+      perspectives: [],
+    },
     {
       id: 'ideology',
       term_ko: '이데올로기',
@@ -1336,6 +1654,58 @@ var GLOSSARY_DATA = (function () {
     },
 
     /* ── 일탈·범죄 ──────────────────────────────────────────── */
+    {
+      id: 'recidivism',
+      term_ko: '재범',
+      term_en: 'Recidivism',
+      categories: ['일탈·범죄'],
+      curator_definition:
+        '한 번 처벌받은 사람이 풀려난 뒤 다시 범죄를 저지르는 것. 처벌이 실제로 교화에 성공했는지를 가늠하는 대표적인 지표다.',
+      original_definition:
+        '재범률은 형 집행 종료 후 일정 기간 내에 다시 범죄를 저질러 재체포·재구금되는 비율을 뜻하며, 교정 정책과 사회복귀 지원의 효과를 평가하는 핵심 지표로 쓰인다.',
+      original_definition_source: '범죄학·교정학 일반 개념',
+      related_theorists: [],
+      perspectives: [],
+    },
+    {
+      id: 'restorative-justice',
+      term_ko: '회복적 사법',
+      term_en: 'Restorative Justice',
+      categories: ['일탈·범죄'],
+      curator_definition:
+        '가해자를 처벌하는 데 그치지 않고, 피해자·가해자·공동체가 함께 만나 피해를 회복하고 관계를 복원하는 데 초점을 맞춘 사법 접근이다.',
+      original_definition:
+        '회복적 사법은 범죄를 국가에 대한 위반이 아니라 사람과 관계에 대한 침해로 규정하고, 피해자·가해자·공동체가 함께 참여해 피해 회복과 책임, 화해를 이뤄가는 과정을 지향한다.',
+      original_definition_source: '하워드 제어, 『회복적 정의란 무엇인가』(1990)',
+      related_theorists: ['zehr'],
+      perspectives: [],
+    },
+    {
+      id: 'techniques-of-neutralization',
+      term_ko: '중화기술',
+      term_en: 'Techniques of Neutralization',
+      categories: ['일탈·범죄'],
+      curator_definition:
+        "비행을 저지르는 사람도 대개 규범 자체를 부정하진 않는다. 대신 '이번만은 어쩔 수 없었다'는 식의 핑계를 스스로에게 대며 죄책감을 미리 차단한다는 이론이다.",
+      original_definition:
+        '비행 청소년은 지배적 가치체계를 전면 거부하지 않는다. 대신 책임의 부인, 피해의 부인, 피해자의 부인 등의 중화 기술을 동원해 규범의 구속력을 일시적으로 무력화한 뒤 비행을 저지른다.',
+      original_definition_source: '그레셤 사이크스·데이비드 마차, 「중화의 기술」(1957)',
+      related_theorists: ['sykes', 'matza'],
+      perspectives: [],
+    },
+    {
+      id: 'cybercrime',
+      term_ko: '사이버범죄',
+      term_en: 'Cybercrime',
+      categories: ['일탈·범죄', '문화·미디어'],
+      curator_definition:
+        '해킹, 온라인 사기, 디지털 성범죄처럼 컴퓨터와 네트워크를 이용하거나 그 자체를 대상으로 저질러지는 범죄다.',
+      original_definition:
+        '사이버범죄는 컴퓨터 시스템과 네트워크를 수단 또는 표적으로 하여 이뤄지는 범죄 행위를 총칭하며, 물리적 경계를 넘나든다는 점에서 기존의 범죄 통제·수사 체계에 새로운 과제를 던진다.',
+      original_definition_source: '정보사회 범죄학 일반 개념',
+      related_theorists: [],
+      perspectives: [],
+    },
     {
       id: 'anomie',
       term_ko: '아노미',
@@ -1602,6 +1972,32 @@ var GLOSSARY_DATA = (function () {
         '복지국가는 시장의 힘이 만들어내는 결과를 수정하기 위해 국가 권력이 의도적으로 사용되는 체제다. 그 형태는 탈상품화의 정도와 계층화 방식에 따라 자유주의형, 보수주의형, 사민주의형으로 나뉜다.',
       original_definition_source: '예스타 에스핑안데르센, 『복지자본주의의 세 가지 세계』(1990)',
       related_theorists: ['esping-andersen'],
+      perspectives: [],
+    },
+    {
+      id: 'populism',
+      term_ko: '포퓰리즘',
+      term_en: 'Populism',
+      categories: ['정치·권력·사회변동'],
+      curator_definition:
+        "순수한 '보통 사람들'과 부패한 '기득권 엘리트'를 대립시켜, 자신이 진짜 국민의 뜻을 대변한다고 내세우는 정치 스타일이다.",
+      original_definition:
+        '포퓰리즘은 사회를 적대적인 두 동질적 진영, 즉 순수한 인민과 부패한 엘리트로 나누고, 정치란 인민의 일반의지를 표현하는 것이어야 한다고 주장하는 얄팍한 이데올로기다.',
+      original_definition_source: '카스 무데, 「포퓰리즘이란 무엇인가」(2004)',
+      related_theorists: ['mudde'],
+      perspectives: [],
+    },
+    {
+      id: 'social-capital',
+      term_ko: '사회자본',
+      term_en: 'Social Capital',
+      categories: ['정치·권력·사회변동', '계급·노동·불평등'],
+      curator_definition:
+        '돈이나 학벌 같은 자원이 아니라, 사람들 사이의 신뢰와 관계망, 협력하는 습관 자체가 개인과 공동체에 힘이 된다는 개념이다.',
+      original_definition:
+        '사회자본이란 신뢰, 규범, 네트워크처럼 참여자들이 힘을 합쳐 공동의 목표를 더 효율적으로 추구할 수 있게 해주는 사회 조직의 특성을 가리킨다.',
+      original_definition_source: '로버트 퍼트넘, 『사회적 자본과 민주주의』(1993)',
+      related_theorists: ['putnam', 'bourdieu'],
       perspectives: [],
     },
   ];
