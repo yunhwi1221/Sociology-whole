@@ -269,6 +269,125 @@ var GLOSSARY_DATA = (function () {
       mini_bio: '사회운동을 정치적 자원 동원과 기회 구조의 산물로 분석한 미국의 역사사회학자.',
       page_link: null,
     },
+    mead: {
+      name: '조지 허버트 미드',
+      name_en: 'George Herbert Mead',
+      years: '1863–1931',
+      mini_bio: '자아가 타인의 역할을 취해보는 사회적 상호작용 속에서 형성된다고 본 미국의 철학자. 상징적 상호작용론의 이론적 토대를 놓았다.',
+      page_link: null,
+    },
+    blumer: {
+      name: '허버트 블루머',
+      name_en: 'Herbert Blumer',
+      years: '1900–1987',
+      mini_bio: '미드의 사상을 이어받아 상징적 상호작용론이라는 이름과 방법론을 정립한 미국의 사회학자.',
+      page_link: null,
+    },
+    coleman: {
+      name: '제임스 콜먼',
+      name_en: 'James S. Coleman',
+      years: '1926–1995',
+      mini_bio: '합리적 선택이론을 사회학에 도입하고 사회자본 개념을 발전시킨 미국의 사회학자.',
+      page_link: null,
+    },
+    runciman: {
+      name: '월터 런시먼',
+      name_en: 'W. G. Runciman',
+      years: '1934–2020',
+      mini_bio: '상대적 박탈감 개념을 체계화해 불평등에 대한 주관적 인식을 분석한 영국의 사회학자.',
+      page_link: null,
+    },
+    friedan: {
+      name: '베티 프리단',
+      name_en: 'Betty Friedan',
+      years: '1921–2006',
+      mini_bio: '가정에 갇힌 여성들의 불만을 언어화해 제2물결 페미니즘에 불을 지핀 미국의 작가·사회운동가.',
+      page_link: null,
+    },
+    rich: {
+      name: '에이드리언 리치',
+      name_en: 'Adrienne Rich',
+      years: '1929–2012',
+      mini_bio: '이성애를 자연스러운 본능이 아니라 강제된 제도로 재해석한 미국의 시인·페미니스트 이론가.',
+      page_link: null,
+    },
+    gagnon: {
+      name: '존 개그넌',
+      name_en: 'John H. Gagnon',
+      years: '1931–2016',
+      mini_bio: '섹슈얼리티를 학습된 사회적 각본으로 분석한 미국의 사회학자.',
+      page_link: null,
+    },
+    simon: {
+      name: '윌리엄 사이먼',
+      name_en: 'William Simon',
+      years: '1930–2000',
+      mini_bio: '개그넌과 함께 성적 각본이론을 제시한 미국의 사회학자.',
+      page_link: null,
+    },
+    sassen: {
+      name: '사스키아 사센',
+      name_en: 'Saskia Sassen',
+      years: '1947–',
+      mini_bio: '금융과 자본의 핵심 기능이 집중되는 세계도시 개념을 제시한 네덜란드 태생의 사회학자.',
+      page_link: null,
+    },
+    ogburn: {
+      name: '윌리엄 오그번',
+      name_en: 'William F. Ogburn',
+      years: '1886–1959',
+      mini_bio: '물질문화와 비물질문화 사이의 변화 속도 차이를 문화지체 개념으로 설명한 미국의 사회학자.',
+      page_link: null,
+    },
+    mccombs: {
+      name: '맥스웰 매콤스',
+      name_en: 'Maxwell McCombs',
+      years: '1938–',
+      mini_bio: '언론이 여론의 의제를 설정하는 효과를 실증적으로 규명한 미국의 언론학자.',
+      page_link: null,
+    },
+    shaw: {
+      name: '도널드 쇼',
+      name_en: 'Donald L. Shaw',
+      years: '1936–2017',
+      mini_bio: '매콤스와 함께 의제설정이론을 정립한 미국의 언론학자.',
+      page_link: null,
+    },
+    hirschi: {
+      name: '트래비스 허시',
+      name_en: 'Travis Hirschi',
+      years: '1935–2017',
+      mini_bio: '사회적 유대의 약화가 비행의 원인이라 본 사회통제이론을 제시한 미국의 범죄학자.',
+      page_link: null,
+    },
+    bentham: {
+      name: '제러미 벤담',
+      name_en: 'Jeremy Bentham',
+      years: '1748–1832',
+      mini_bio: '최소 비용으로 최대 감시 효과를 내는 원형 감옥 판옵티콘을 설계한 영국의 철학자.',
+      page_link: null,
+    },
+    lukes: {
+      name: '스티븐 룩스',
+      name_en: 'Steven Lukes',
+      years: '1941–',
+      mini_bio: '권력을 갈등의 승패만이 아니라 의제와 인식을 형성하는 힘까지 포함해 분석한 영국의 정치사회학자.',
+      page_link: null,
+    },
+    nye: {
+      name: '조지프 나이',
+      name_en: 'Joseph S. Nye Jr.',
+      years: '1937–',
+      mini_bio: '강제력이 아닌 매력으로 발휘되는 힘을 소프트파워로 개념화한 미국의 국제정치학자.',
+      page_link: null,
+    },
+    'esping-andersen': {
+      name: '예스타 에스핑안데르센',
+      name_en: 'Gøsta Esping-Andersen',
+      years: '1947–',
+      mini_bio: '복지국가를 탈상품화 정도에 따라 세 유형으로 분류한 덴마크의 사회학자.',
+      page_link: null,
+    },
   };
 
   /* 용어 — curator_definition(내 정의)과 original_definition(원문 정의)은 필수,
@@ -379,6 +498,32 @@ var GLOSSARY_DATA = (function () {
       related_theorists: ['giddens'],
       perspectives: [],
     },
+    {
+      id: 'symbolic-interactionism',
+      term_ko: '상징적 상호작용론',
+      term_en: 'Symbolic Interactionism',
+      categories: ['이론/사상'],
+      curator_definition:
+        '사회는 거대한 구조가 아니라, 사람들이 서로 주고받는 상징(언어·몸짓)의 의미를 해석하며 만들어가는 상호작용의 연속이라는 관점이다.',
+      original_definition:
+        '사람들은 사물이 자신에게 지니는 의미를 바탕으로 그 사물에 대해 행동한다. 그 의미는 사회적 상호작용에서 발생하며, 개인이 그것을 해석하는 과정을 거쳐 다뤄지고 수정된다.',
+      original_definition_source: '허버트 블루머, 『상징적 상호작용론』(1969)',
+      related_theorists: ['mead', 'blumer'],
+      perspectives: [],
+    },
+    {
+      id: 'rational-choice-theory',
+      term_ko: '합리적 선택이론',
+      term_en: 'Rational Choice Theory',
+      categories: ['이론/사상', '방법론'],
+      curator_definition:
+        '사람들은 주어진 조건 안에서 비용과 이익을 따져 자신에게 가장 유리한 선택을 한다고 보고, 이를 바탕으로 사회 현상을 설명하는 이론이다.',
+      original_definition:
+        '행위자는 여러 대안 가운데 자신의 목적을 가장 잘 달성해 줄 것으로 기대되는 행동을 선택한다. 사회적 결과는 이러한 개별 행위자들의 합리적 선택이 모여 만들어진다.',
+      original_definition_source: '제임스 콜먼, 『사회이론의 기초』(1990)',
+      related_theorists: ['coleman'],
+      perspectives: [],
+    },
 
     /* ── 방법론 ─────────────────────────────────────────────── */
     {
@@ -456,6 +601,45 @@ var GLOSSARY_DATA = (function () {
       original_definition:
         '조작적 정의란 하나의 개념을 그것을 측정하거나 조작하는 데 사용되는 구체적 절차와 기준으로 명시하는 것을 말한다. 이를 통해 추상적 개념은 경험적으로 관찰 가능한 변수가 된다.',
       original_definition_source: '조지 룬드버그, 『사회학의 기초』(1939) 논의 참조',
+      related_theorists: [],
+      perspectives: [],
+    },
+    {
+      id: 'validity-reliability',
+      term_ko: '타당도와 신뢰도',
+      term_en: 'Validity and Reliability',
+      categories: ['방법론'],
+      curator_definition:
+        "타당도는 '재려는 것을 제대로 재고 있는가', 신뢰도는 '같은 방식으로 재도 같은 결과가 나오는가'를 따지는 조사도구의 두 가지 기본 기준이다.",
+      original_definition:
+        '타당도란 측정도구가 측정하고자 하는 개념을 실제로 측정하는 정도를 말하며, 신뢰도란 동일한 대상을 반복 측정했을 때 일관된 결과를 산출하는 정도를 말한다.',
+      original_definition_source: '사회조사방법론 일반 개념',
+      related_theorists: [],
+      perspectives: [],
+    },
+    {
+      id: 'longitudinal-study',
+      term_ko: '종단연구',
+      term_en: 'Longitudinal Study',
+      categories: ['방법론'],
+      curator_definition:
+        '같은 대상을 시간을 두고 여러 차례 반복 조사해 변화 과정 자체를 추적하는 연구 방법이다.',
+      original_definition:
+        '종단연구는 동일한 표본 또는 동일 모집단을 서로 다른 시점에서 반복적으로 관찰함으로써, 한 시점의 조사로는 알 수 없는 변화와 인과관계를 파악할 수 있게 해준다.',
+      original_definition_source: '사회조사방법론 일반 개념',
+      related_theorists: [],
+      perspectives: [],
+    },
+    {
+      id: 'triangulation',
+      term_ko: '삼각검증',
+      term_en: 'Triangulation',
+      categories: ['방법론'],
+      curator_definition:
+        '한 가지 방법만 믿지 않고, 설문·인터뷰·관찰 등 여러 자료와 방법을 함께 사용해 연구 결과의 신뢰성을 높이는 전략이다.',
+      original_definition:
+        '삼각검증이란 하나의 현상을 이해하기 위해 둘 이상의 자료원, 방법, 연구자, 또는 이론적 관점을 결합하는 것을 말한다. 이는 단일 방법이 지닌 편향을 서로 보완하기 위함이다.',
+      original_definition_source: '노먼 덴진, 『사회학적 방법들』(1970)',
       related_theorists: [],
       perspectives: [],
     },
@@ -597,6 +781,32 @@ var GLOSSARY_DATA = (function () {
       related_theorists: ['standing'],
       perspectives: [],
     },
+    {
+      id: 'relative-deprivation',
+      term_ko: '상대적 박탈감',
+      term_en: 'Relative Deprivation',
+      categories: ['계급·노동·불평등', '이론/사상'],
+      curator_definition:
+        '실제로 얼마나 가졌는지보다, 내가 비교하는 대상과 견줘 얼마나 덜 가졌다고 느끼는지가 불만의 크기를 좌우한다는 개념이다.',
+      original_definition:
+        '상대적 박탈감은 객관적 결핍의 정도가 아니라, 자신이 선택한 준거집단과 비교했을 때 느끼는 격차의 크기로부터 발생한다. 따라서 객관적으로 나아진 상황에서도 박탈감은 오히려 커질 수 있다.',
+      original_definition_source: 'W. G. 런시먼, 『상대적 박탈과 사회정의』(1966)',
+      related_theorists: ['runciman', 'merton'],
+      perspectives: [],
+    },
+    {
+      id: 'working-poor',
+      term_ko: '근로빈곤층',
+      term_en: 'Working Poor',
+      categories: ['계급·노동·불평등'],
+      curator_definition:
+        "일을 하고 있는데도 소득이 낮아 빈곤에서 벗어나지 못하는 사람들. '일하면 가난을 벗어난다'는 통념이 통하지 않는 경우다.",
+      original_definition:
+        '근로빈곤층이란 취업 상태에 있음에도 불구하고 가구 소득이 빈곤선 이하에 머무르는 인구를 가리킨다. 저임금·불안정 고용의 확산과 밀접하게 관련된다.',
+      original_definition_source: '국제노동기구(ILO), 근로빈곤 통계 정의',
+      related_theorists: [],
+      perspectives: [],
+    },
 
     /* ── 젠더·섹슈얼리티 ─────────────────────────────────────── */
     {
@@ -709,6 +919,45 @@ var GLOSSARY_DATA = (function () {
       related_theorists: [],
       perspectives: [],
     },
+    {
+      id: 'second-wave-feminism',
+      term_ko: '제2물결 페미니즘',
+      term_en: 'Second-Wave Feminism',
+      categories: ['젠더·섹슈얼리티'],
+      curator_definition:
+        '참정권 같은 법적 권리를 넘어, 가정 안의 성역할과 일상적 차별까지 문제 삼은 1960~80년대 페미니즘의 흐름이다.',
+      original_definition:
+        "여성이 겪는 '이름 붙일 수 없는 문제'는 개인의 불행이 아니라, 여성을 가정에 가두는 사회적 신화가 만들어낸 구조적 문제다.",
+      original_definition_source: '베티 프리단, 『여성성의 신화』(1963)',
+      related_theorists: ['friedan'],
+      perspectives: [],
+    },
+    {
+      id: 'compulsory-heterosexuality',
+      term_ko: '강제적 이성애',
+      term_en: 'Compulsory Heterosexuality',
+      categories: ['젠더·섹슈얼리티'],
+      curator_definition:
+        '이성애가 자연스러운 본능이 아니라, 사회가 규범과 제도를 통해 사실상 강요해 온 것이라는 관점이다.',
+      original_definition:
+        '이성애는 자연적으로 주어진 성적 지향이 아니라, 여성에게 강제된 정치적 제도다. 이 제도는 여성 간의 연대 가능성을 지우고 여성을 남성에게 의존하게 만드는 방식으로 유지된다.',
+      original_definition_source: '에이드리언 리치, 「강제적 이성애와 레즈비언 존재」(1980)',
+      related_theorists: ['rich'],
+      perspectives: [],
+    },
+    {
+      id: 'sexual-script-theory',
+      term_ko: '성적 각본이론',
+      term_en: 'Sexual Script Theory',
+      categories: ['젠더·섹슈얼리티'],
+      curator_definition:
+        "섹슈얼리티조차 타고난 본능이 아니라, 사회가 미리 짜놓은 '각본'을 배우고 따라가며 익히는 것이라는 관점이다.",
+      original_definition:
+        '성적 행동은 문화적 시나리오, 대인관계의 각본, 그리고 개인 내적 각본이라는 세 층위에서 학습되고 조직된다. 섹슈얼리티는 자연적 충동이 아니라 사회적으로 각본화된 행위다.',
+      original_definition_source: '존 개그넌·윌리엄 사이먼, 『성적 행동』(1973)',
+      related_theorists: ['gagnon', 'simon'],
+      perspectives: [],
+    },
 
     /* ── 가족·인구 ──────────────────────────────────────────── */
     {
@@ -773,6 +1022,45 @@ var GLOSSARY_DATA = (function () {
       original_definition:
         'UN 기준으로 65세 이상 인구가 전체의 7% 이상이면 고령화사회, 14% 이상이면 고령사회, 20% 이상이면 초고령사회로 분류한다.',
       original_definition_source: 'UN, 「세계 인구 고령화 보고서」 분류 기준',
+      related_theorists: [],
+      perspectives: [],
+    },
+    {
+      id: 'boomerang-generation',
+      term_ko: '캥거루족',
+      term_en: 'Boomerang Generation',
+      categories: ['가족·인구'],
+      curator_definition:
+        '성인이 됐지만 취업난이나 주거비 부담 때문에 독립하지 못하고 부모 집에 계속 머무르거나 다시 돌아오는 세대를 가리키는 말이다.',
+      original_definition:
+        '캥거루족은 경제적 자립이 지연되어 성인이 된 이후에도 부모에게 주거·생계를 의존하는 청년층을 가리키는 사회적 통칭이다. 청년 고용 불안정과 주거비 상승이 주요 원인으로 꼽힌다.',
+      original_definition_source: '청년 고용·주거 실태 조사 논의 참조',
+      related_theorists: [],
+      perspectives: [],
+    },
+    {
+      id: 'fertility-rate',
+      term_ko: '합계출산율',
+      term_en: 'Total Fertility Rate',
+      categories: ['가족·인구'],
+      curator_definition:
+        '여성 한 명이 가임 기간 동안 낳을 것으로 예상되는 평균 자녀 수. 한 사회의 인구가 늘지도 줄지도 않고 유지되려면 대략 2.1명이 필요하다.',
+      original_definition:
+        '합계출산율은 15~49세 가임 여성의 연령별 출산율을 합산해 산출하며, 한 여성이 평생 낳을 것으로 기대되는 자녀 수를 나타내는 대표적인 출산력 지표다.',
+      original_definition_source: '통계청, 「인구동향조사」 지표 정의',
+      related_theorists: [],
+      perspectives: [],
+    },
+    {
+      id: 'multicultural-family',
+      term_ko: '다문화가족',
+      term_en: 'Multicultural Family',
+      categories: ['가족·인구'],
+      curator_definition:
+        '국적이나 문화적 배경이 다른 구성원이 결혼이나 이주로 함께 이룬 가족. 한국 사회의 인구·가족 구성이 다양해지고 있음을 보여주는 지표이기도 하다.',
+      original_definition:
+        '다문화가족이란 결혼이민자 또는 귀화허가자와 대한민국 국민으로 이루어진 가족을 말하며, 문화적 배경이 다른 구성원 간의 적응과 통합이 주요 정책 과제로 다뤄진다.',
+      original_definition_source: '「다문화가족지원법」 제2조 정의',
       related_theorists: [],
       perspectives: [],
     },
@@ -867,6 +1155,45 @@ var GLOSSARY_DATA = (function () {
         '거주지 분리는 인종 집단이 도시 공간 안에서 서로 물리적으로 격리되는 정도를 뜻한다. 이는 개인의 선호만이 아니라 차별적 대출 관행과 주택 정책이 누적되며 만들어진 구조적 산물이다.',
       original_definition_source: '더글러스 매시·낸시 덴턴, 『아메리칸 아파르트헤이트』(1993)',
       related_theorists: ['massey'],
+      perspectives: [],
+    },
+    {
+      id: 'urban-sprawl',
+      term_ko: '도시 스프롤',
+      term_en: 'Urban Sprawl',
+      categories: ['도시·공간'],
+      curator_definition:
+        '도시가 계획 없이 외곽으로 무분별하게 넓게 퍼져나가는 현상. 자동차 의존도는 높아지고 도심 공동체는 오히려 약해지는 부작용을 낳는다.',
+      original_definition:
+        '도시 스프롤은 저밀도의 단일 용도 개발이 도시 외곽으로 무계획하게 확산되는 현상으로, 자동차 의존과 기반시설 비용 증가, 도심 쇠퇴를 동반한다.',
+      original_definition_source: '도시계획학 일반 개념',
+      related_theorists: [],
+      perspectives: [],
+    },
+    {
+      id: 'global-city',
+      term_ko: '세계도시',
+      term_en: 'Global City',
+      categories: ['도시·공간', '정치·권력·사회변동'],
+      curator_definition:
+        '금융과 기업의 핵심 기능이 몰려 국경을 넘어 세계 경제의 흐름을 조율하는 소수의 대도시. 뉴욕·런던·도쿄가 대표적이다.',
+      original_definition:
+        '세계도시는 세계 경제가 조직되는 지휘 통제 지점, 금융과 전문 서비스업의 핵심 입지, 새로운 산업의 생산 현장으로 기능하는 전략적 장소다.',
+      original_definition_source: '사스키아 사센, 『세계도시』(1991)',
+      related_theorists: ['sassen'],
+      perspectives: [],
+    },
+    {
+      id: 'nimby',
+      term_ko: '님비현상',
+      term_en: 'NIMBY',
+      categories: ['도시·공간', '정치·권력·사회변동'],
+      curator_definition:
+        "필요성은 인정하면서도 쓰레기 소각장이나 장애인 시설처럼 꺼려지는 시설이 '내 동네에는' 들어오지 못하게 반대하는 현상이다.",
+      original_definition:
+        "'Not In My Back Yard'의 줄임말인 님비는 공공에 필요한 시설의 설치 필요성 자체는 인정하면서도, 그 입지가 자신이 속한 지역에 배정되는 것에는 반대하는 지역이기주의적 태도를 가리킨다.",
+      original_definition_source: '도시·환경정책 논의에서 통용되는 개념',
+      related_theorists: [],
       perspectives: [],
     },
 
@@ -981,6 +1308,32 @@ var GLOSSARY_DATA = (function () {
       related_theorists: [],
       perspectives: [],
     },
+    {
+      id: 'cultural-lag',
+      term_ko: '문화지체',
+      term_en: 'Cultural Lag',
+      categories: ['문화·미디어'],
+      curator_definition:
+        '기술이나 물질문명은 빠르게 바뀌는데, 그에 맞는 제도와 의식은 훨씬 천천히 따라가면서 생기는 시차와 부조화를 말한다.',
+      original_definition:
+        '물질문화가 비물질문화보다 먼저 변화하고, 적응적 문화가 그 변화를 뒤따라가지 못할 때 문화지체가 발생한다. 이 간극은 사회적 부적응과 갈등의 원인이 된다.',
+      original_definition_source: '윌리엄 오그번, 『사회변동론』(1922)',
+      related_theorists: ['ogburn'],
+      perspectives: [],
+    },
+    {
+      id: 'agenda-setting',
+      term_ko: '의제설정이론',
+      term_en: 'Agenda-Setting Theory',
+      categories: ['문화·미디어'],
+      curator_definition:
+        "언론이 '무엇이 옳은지'를 직접 말해주진 않아도, '무엇을 중요하게 다룰지'를 정함으로써 사람들이 무엇을 중요한 문제로 여기는지를 좌우한다는 이론이다.",
+      original_definition:
+        '언론은 사람들에게 무엇을 생각해야 하는지 지시하는 데는 자주 실패하지만, 무엇에 대해 생각해야 하는지를 결정하는 데는 놀랍도록 성공적이다.',
+      original_definition_source: '맥스웰 매콤스·도널드 쇼, 「매스미디어의 의제설정 기능」(1972)',
+      related_theorists: ['mccombs', 'shaw'],
+      perspectives: [],
+    },
 
     /* ── 일탈·범죄 ──────────────────────────────────────────── */
     {
@@ -1080,6 +1433,45 @@ var GLOSSARY_DATA = (function () {
       related_theorists: ['cohen'],
       perspectives: [],
     },
+    {
+      id: 'social-control-theory',
+      term_ko: '사회통제이론',
+      term_en: 'Social Control Theory',
+      categories: ['일탈·범죄'],
+      curator_definition:
+        '왜 일탈을 저지르는가보다, 애초에 왜 대부분의 사람은 일탈을 저지르지 않는가를 묻는 이론. 답은 가족·학교 등과 맺은 유대라는 것이다.',
+      original_definition:
+        '개인이 사회와 맺는 유대가 약하거나 끊어질 때 비행이 발생한다. 애착, 전념, 참여, 신념이라는 네 가지 유대 요소가 강할수록 개인은 규범을 어기지 않는다.',
+      original_definition_source: '트래비스 허시, 『비행의 원인』(1969)',
+      related_theorists: ['hirschi'],
+      perspectives: [],
+    },
+    {
+      id: 'white-collar-crime',
+      term_ko: '화이트칼라범죄',
+      term_en: 'White-Collar Crime',
+      categories: ['일탈·범죄', '계급·노동·불평등'],
+      curator_definition:
+        '가난하고 소외된 사람들의 범죄라는 통념과 달리, 사회적 지위가 높은 사람이 자신의 직업 활동 과정에서 저지르는 범죄를 가리킨다.',
+      original_definition:
+        '화이트칼라범죄란 높은 사회적 지위를 가진 사람이 자신의 직업 활동 과정에서 저지르는 범죄를 말한다. 이는 범죄가 하층계급에 집중된다는 통념이 계급 편향적 통계의 산물임을 드러낸다.',
+      original_definition_source: '에드윈 서덜랜드, 「화이트칼라범죄」(1939, 미국사회학회 연설)',
+      related_theorists: ['sutherland'],
+      perspectives: [],
+    },
+    {
+      id: 'panopticon',
+      term_ko: '판옵티콘',
+      term_en: 'Panopticon',
+      categories: ['일탈·범죄', '정치·권력·사회변동'],
+      curator_definition:
+        '감시자가 실제로 보고 있는지 알 수 없어도, 언제든 보일 수 있다는 사실만으로 스스로를 감시하고 통제하게 되는 원형 감옥 구조다.',
+      original_definition:
+        '판옵티콘의 핵심 효과는 수감자에게 권력의 가시성과 불확실성이 결합된 의식적이고 지속적인 상태를 만들어내는 데 있다. 감시가 항구적으로 작동하는 것처럼 느끼게 만들면, 실제로는 감시가 이뤄지지 않아도 권력은 자동으로 작동한다.',
+      original_definition_source: '제러미 벤담의 감옥 설계안; 미셸 푸코, 『감시와 처벌』(1975)에서 재해석',
+      related_theorists: ['bentham', 'foucault'],
+      perspectives: [],
+    },
 
     /* ── 정치·권력·사회변동 ──────────────────────────────────── */
     {
@@ -1171,6 +1563,45 @@ var GLOSSARY_DATA = (function () {
         '세계화란 전 세계 사회적 관계가 강화되어, 멀리 떨어진 지역의 사건이 그로부터 멀리 떨어진 곳의 일들에 의해 형성되고 또 그 반대로도 영향을 주는 방식으로 서로 연결되는 과정이다.',
       original_definition_source: '앤서니 기든스, 『근대성의 결과』(1990)',
       related_theorists: ['giddens'],
+      perspectives: [],
+    },
+    {
+      id: 'three-faces-of-power',
+      term_ko: '권력의 세 얼굴',
+      term_en: 'Three Faces of Power',
+      categories: ['정치·권력·사회변동'],
+      curator_definition:
+        '권력은 상대를 굴복시키는 힘만이 아니라, 아예 논쟁이 시작되지 못하게 막거나, 상대가 원하는 것 자체를 다르게 만들어버리는 방식으로도 작동한다는 관점이다.',
+      original_definition:
+        '권력의 세 번째 차원은 실제 관찰 가능한 갈등뿐 아니라, 잠재적 이해관계와 갈등이 애초에 표출되지 못하도록 사람들의 인식과 선호 자체를 형성하는 방식으로도 작동한다는 데 있다.',
+      original_definition_source: '스티븐 룩스, 『권력: 급진적 시각』(1974)',
+      related_theorists: ['lukes'],
+      perspectives: [],
+    },
+    {
+      id: 'soft-power',
+      term_ko: '소프트파워',
+      term_en: 'Soft Power',
+      categories: ['정치·권력·사회변동', '문화·미디어'],
+      curator_definition:
+        '군사력이나 경제 제재 같은 강제력이 아니라, 문화와 가치관의 매력으로 상대가 스스로 따르고 싶게 만드는 힘이다.',
+      original_definition:
+        '소프트파워란 강요나 대가 지불이 아니라 매력을 통해 원하는 것을 얻는 능력이다. 한 나라의 문화, 정치적 가치, 외교정책이 매력적일 때 소프트파워는 커진다.',
+      original_definition_source: '조지프 나이, 『소프트파워』(2004)',
+      related_theorists: ['nye'],
+      perspectives: [],
+    },
+    {
+      id: 'welfare-state',
+      term_ko: '복지국가',
+      term_en: 'Welfare State',
+      categories: ['정치·권력·사회변동', '계급·노동·불평등'],
+      curator_definition:
+        '시장에만 맡기지 않고 국가가 나서서 실업·질병·노령 같은 위험으로부터 국민의 최소한의 삶을 보장하는 정치 체제다.',
+      original_definition:
+        '복지국가는 시장의 힘이 만들어내는 결과를 수정하기 위해 국가 권력이 의도적으로 사용되는 체제다. 그 형태는 탈상품화의 정도와 계층화 방식에 따라 자유주의형, 보수주의형, 사민주의형으로 나뉜다.',
+      original_definition_source: '예스타 에스핑안데르센, 『복지자본주의의 세 가지 세계』(1990)',
+      related_theorists: ['esping-andersen'],
       perspectives: [],
     },
   ];
