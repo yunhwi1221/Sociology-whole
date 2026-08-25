@@ -150,6 +150,125 @@ var GLOSSARY_DATA = (function () {
       mini_bio: '런던의 도시 변화를 관찰하며 젠트리피케이션이라는 용어를 처음 사용한 영국의 도시사회학자.',
       page_link: null,
     },
+    berger: {
+      name: '피터 버거',
+      name_en: 'Peter L. Berger',
+      years: '1929–2017',
+      mini_bio: '사회적 실재가 인간의 상호작용을 통해 구성된다고 본 미국의 사회학자. 루크만과 함께 지식사회학의 고전을 썼다.',
+      page_link: null,
+    },
+    luckmann: {
+      name: '토마스 루크만',
+      name_en: 'Thomas Luckmann',
+      years: '1927–2016',
+      mini_bio: '버거와 함께 사회적 구성주의를 정립한 독일 태생의 사회학자. 일상 세계의 지식이 만들어지고 유지되는 과정을 분석했다.',
+      page_link: null,
+    },
+    cooley: {
+      name: '찰스 쿨리',
+      name_en: 'Charles Horton Cooley',
+      years: '1864–1929',
+      mini_bio: '자아가 타인의 반응을 거울삼아 형성된다고 본 미국의 초기 사회학자. 거울자아와 1차 집단 개념을 제시했다.',
+      page_link: null,
+    },
+    giddens: {
+      name: '앤서니 기든스',
+      name_en: 'Anthony Giddens',
+      years: '1938–',
+      mini_bio: '구조와 행위의 이분법을 넘어서려 한 영국의 사회학자. 구조화이론과 성찰적 근대성 논의로 널리 알려져 있다.',
+      page_link: null,
+    },
+    young: {
+      name: '마이클 영',
+      name_en: 'Michael Young',
+      years: '1915–2002',
+      mini_bio: '능력주의라는 말을 처음 만들어 그 위험성을 경고한 영국의 사회학자이자 정치가.',
+      page_link: null,
+    },
+    standing: {
+      name: '가이 스탠딩',
+      name_en: 'Guy Standing',
+      years: '1948–',
+      mini_bio: '불안정한 고용에 시달리는 새로운 계급을 프레카리아트로 명명한 영국의 경제학자.',
+      page_link: null,
+    },
+    crenshaw: {
+      name: '킴벌리 크렌쇼',
+      name_en: 'Kimberlé Crenshaw',
+      years: '1959–',
+      mini_bio: '인종과 성별 등 여러 억압이 겹쳐 작동하는 방식을 교차성 개념으로 제시한 미국의 법학자.',
+      page_link: null,
+    },
+    oldenburg: {
+      name: '레이 올든버그',
+      name_en: 'Ray Oldenburg',
+      years: '1932–2022',
+      mini_bio: '집도 직장도 아닌 제3의 장소가 공동체 형성에 갖는 중요성을 강조한 미국의 사회학자.',
+      page_link: null,
+    },
+    massey: {
+      name: '더글러스 매시',
+      name_en: 'Douglas S. Massey',
+      years: '1952–',
+      mini_bio: '인종에 따른 거주지 분리가 어떻게 유지·재생산되는지 분석한 미국의 사회학자.',
+      page_link: null,
+    },
+    baudrillard: {
+      name: '장 보드리야르',
+      name_en: 'Jean Baudrillard',
+      years: '1929–2007',
+      mini_bio: '현대 사회를 실재보다 더 실재 같은 이미지, 즉 시뮬라크르가 지배하는 사회로 진단한 프랑스의 철학자.',
+      page_link: null,
+    },
+    hebdige: {
+      name: '딕 헵디지',
+      name_en: 'Dick Hebdige',
+      years: '1951–',
+      mini_bio: '펑크 등 청년 하위문화의 스타일을 저항의 기호로 분석한 영국 버밍엄학파의 문화이론가.',
+      page_link: null,
+    },
+    sutherland: {
+      name: '에드윈 서덜랜드',
+      name_en: 'Edwin H. Sutherland',
+      years: '1883–1950',
+      mini_bio: '범죄가 타인과의 상호작용 속에서 학습된다고 본 미국의 범죄사회학자. 화이트칼라 범죄 개념을 제시했다.',
+      page_link: null,
+    },
+    wilson: {
+      name: '제임스 윌슨',
+      name_en: 'James Q. Wilson',
+      years: '1931–2012',
+      mini_bio: '경미한 무질서 방치가 심각한 범죄로 이어진다고 주장한 미국의 정치학자. 깨진 유리창 이론을 공동 제시했다.',
+      page_link: null,
+    },
+    kelling: {
+      name: '조지 켈링',
+      name_en: 'George L. Kelling',
+      years: '1935–2019',
+      mini_bio: '윌슨과 함께 깨진 유리창 이론을 제시하고 무관용 치안 정책에 영향을 준 미국의 범죄학자.',
+      page_link: null,
+    },
+    cohen: {
+      name: '스탠리 코언',
+      name_en: 'Stanley Cohen',
+      years: '1942–2013',
+      mini_bio: '언론이 특정 집단을 사회 문제의 주범으로 과장해 낙인찍는 과정을 도덕적 공황 개념으로 분석한 영국의 사회학자.',
+      page_link: null,
+    },
+    habermas: {
+      name: '위르겐 하버마스',
+      name_en: 'Jürgen Habermas',
+      years: '1929–',
+      mini_bio: '합리적 토론을 통해 여론이 형성되는 공론장 개념을 제시한 독일의 철학자·사회학자.',
+      page_link: null,
+    },
+    tilly: {
+      name: '찰스 틸리',
+      name_en: 'Charles Tilly',
+      years: '1929–2008',
+      mini_bio: '사회운동을 정치적 자원 동원과 기회 구조의 산물로 분석한 미국의 역사사회학자.',
+      page_link: null,
+    },
   };
 
   /* 용어 — curator_definition(내 정의)과 original_definition(원문 정의)은 필수,
@@ -221,6 +340,45 @@ var GLOSSARY_DATA = (function () {
       related_theorists: ['goffman'],
       perspectives: [],
     },
+    {
+      id: 'social-construction',
+      term_ko: '사회적 구성',
+      term_en: 'Social Construction',
+      categories: ['이론/사상'],
+      curator_definition:
+        '우리가 당연하게 여기는 현실도 사실은 사람들이 상호작용 속에서 만들고 합의해 온 것이라는 관점이다.',
+      original_definition:
+        '실재는 사회적으로 구성된다. 인간이 만든 세계는 객관적 사실처럼 마주하게 되지만, 그 객관성은 인간의 활동이 지속적으로 만들어내고 유지하는 산물이다.',
+      original_definition_source: '피터 버거·토마스 루크만, 『실재의 사회적 구성』(1966)',
+      related_theorists: ['berger', 'luckmann'],
+      perspectives: [],
+    },
+    {
+      id: 'looking-glass-self',
+      term_ko: '거울자아',
+      term_en: 'Looking-Glass Self',
+      categories: ['이론/사상'],
+      curator_definition:
+        '내가 나를 어떻게 보는지는 남들이 나를 어떻게 볼 것 같은지에 달려 있다는 관점. 자아는 타인이라는 거울에 비춰 만들어진다.',
+      original_definition:
+        '자아 관념은 세 요소로 이뤄진다. 내가 남에게 어떻게 보이는지에 대한 상상, 그 모습에 대한 남의 평가에 대한 상상, 그리고 그로부터 생겨나는 자부심이나 수치심 같은 자기 감정이다.',
+      original_definition_source: '찰스 쿨리, 『인간 본성과 사회 질서』(1902)',
+      related_theorists: ['cooley'],
+      perspectives: [],
+    },
+    {
+      id: 'structuration',
+      term_ko: '구조화이론',
+      term_en: 'Structuration Theory',
+      categories: ['이론/사상', '방법론'],
+      curator_definition:
+        '구조가 행위를 일방적으로 결정하지도, 행위가 구조를 완전히 벗어나지도 않는다는 관점. 우리는 구조를 따르는 동시에 매번 그 구조를 다시 만든다.',
+      original_definition:
+        '구조의 이중성이란, 구조가 그것이 재귀적으로 조직하는 실천의 매개이자 결과라는 것을 뜻한다. 사회 체계의 구조적 속성은 그것을 반복적으로 구성하는 행위 자체 안에만 존재한다.',
+      original_definition_source: '앤서니 기든스, 『사회의 구성』(1984)',
+      related_theorists: ['giddens'],
+      perspectives: [],
+    },
 
     /* ── 방법론 ─────────────────────────────────────────────── */
     {
@@ -273,6 +431,32 @@ var GLOSSARY_DATA = (function () {
         '성찰성이란 인식 주체를 인식 대상과 동일한 분석의 층위에 놓는 작업이다. 사회학자는 자신이 대상을 구성하는 데 사용하는 도구들 자체를 사회학적 분석의 대상으로 삼아야 한다.',
       original_definition_source: '피에르 부르디외·로익 바캉, 『성찰적 사회학으로의 초대』(1992)',
       related_theorists: ['bourdieu', 'beck'],
+      perspectives: [],
+    },
+    {
+      id: 'grounded-theory',
+      term_ko: '근거이론',
+      term_en: 'Grounded Theory',
+      categories: ['방법론'],
+      curator_definition:
+        '가설을 먼저 세우고 검증하는 대신, 수집한 자료를 꼼꼼히 들여다보며 그 안에서 이론을 새로 끌어올리는 질적 연구 방법이다.',
+      original_definition:
+        '근거이론은 체계적으로 수집되고 분석된 자료로부터 귀납적으로 도출되는 이론이다. 자료 수집과 분석, 이론이 서로 밀접하게 관계를 맺으며 순환적으로 진행된다.',
+      original_definition_source: '바니 글레이저·안셀름 스트라우스, 『근거이론의 발견』(1967)',
+      related_theorists: [],
+      perspectives: [],
+    },
+    {
+      id: 'operationalization',
+      term_ko: '조작적 정의',
+      term_en: 'Operationalization',
+      categories: ['방법론'],
+      curator_definition:
+        "'행복'처럼 눈에 보이지 않는 추상적 개념을 실제로 측정할 수 있는 구체적 지표로 바꾸는 작업이다.",
+      original_definition:
+        '조작적 정의란 하나의 개념을 그것을 측정하거나 조작하는 데 사용되는 구체적 절차와 기준으로 명시하는 것을 말한다. 이를 통해 추상적 개념은 경험적으로 관찰 가능한 변수가 된다.',
+      original_definition_source: '조지 룬드버그, 『사회학의 기초』(1939) 논의 참조',
+      related_theorists: [],
       perspectives: [],
     },
 
@@ -374,6 +558,45 @@ var GLOSSARY_DATA = (function () {
       related_theorists: ['hochschild', 'goffman'],
       perspectives: [],
     },
+    {
+      id: 'false-consciousness',
+      term_ko: '허위의식',
+      term_en: 'False Consciousness',
+      categories: ['계급·노동·불평등', '이론/사상'],
+      curator_definition:
+        '노동자가 자신에게 불리한 체제를 오히려 당연하고 자연스러운 것으로 믿게 되는 상태. 지배계급의 이해관계가 모두의 상식처럼 스며든 결과다.',
+      original_definition:
+        '허위의식이란 사회적 존재를 규정하는 실제 계급 위치와 어긋나는 의식이다. 지배 이데올로기에 물든 피지배계급은 자신의 진정한 이해관계를 인식하지 못한 채 기존 질서를 받아들이게 된다.',
+      original_definition_source: '프리드리히 엥겔스, 메링에게 보낸 편지(1893)',
+      related_theorists: ['marx'],
+      perspectives: [],
+    },
+    {
+      id: 'meritocracy',
+      term_ko: '능력주의',
+      term_en: 'Meritocracy',
+      categories: ['계급·노동·불평등'],
+      curator_definition:
+        '타고난 배경이 아니라 오로지 개인의 능력과 노력으로 지위가 정해져야 한다는 원칙. 정작 이 말을 만든 사람은 이것이 새로운 불평등의 명분이 될 것이라 경고했다.',
+      original_definition:
+        '능력주의 사회에서 지능과 노력을 겸비한 이들이 상층으로 이동하고 그렇지 못한 이들은 하층에 남는다. 이는 불평등을 정당한 것으로 만들어 오히려 견고하게 고착시킨다.',
+      original_definition_source: '마이클 영, 『능력주의의 부상』(1958)',
+      related_theorists: ['young'],
+      perspectives: [],
+    },
+    {
+      id: 'precariat',
+      term_ko: '프레카리아트',
+      term_en: 'Precariat',
+      categories: ['계급·노동·불평등'],
+      curator_definition:
+        "고용이 불안정해 언제 일자리를 잃을지 모르는 채 살아가는 사람들. '불안정한(precarious)'과 '프롤레타리아트'를 합친 말이다.",
+      original_definition:
+        '프레카리아트는 노동 안정성뿐 아니라 직업 정체성, 사회적 소득, 대표성까지 결여된 새로운 계급이다. 이들은 파편화된 정체성과 만성적 불안 속에서 살아간다.',
+      original_definition_source: '가이 스탠딩, 『프레카리아트』(2011)',
+      related_theorists: ['standing'],
+      perspectives: [],
+    },
 
     /* ── 젠더·섹슈얼리티 ─────────────────────────────────────── */
     {
@@ -460,6 +683,32 @@ var GLOSSARY_DATA = (function () {
       related_theorists: ['hochschild'],
       perspectives: [],
     },
+    {
+      id: 'intersectionality',
+      term_ko: '교차성',
+      term_en: 'Intersectionality',
+      categories: ['젠더·섹슈얼리티', '계급·노동·불평등'],
+      curator_definition:
+        '성별, 인종, 계급 같은 여러 차별이 따로따로가 아니라 한 사람 안에서 겹쳐 작동한다는 관점. 흑인 여성의 경험은 인종차별과 성차별을 단순히 더한 것으로는 설명되지 않는다.',
+      original_definition:
+        '흑인 여성은 인종주의와 성차별주의라는 두 축의 교차점에 서 있지만, 반인종주의 담론은 성차별을, 페미니즘 담론은 인종을 배제해 왔다. 그 결과 흑인 여성의 경험은 어느 담론에서도 온전히 다뤄지지 못한다.',
+      original_definition_source: '킴벌리 크렌쇼, 「인종과 성의 교차점을 주변화하기」(1989)',
+      related_theorists: ['crenshaw'],
+      perspectives: [],
+    },
+    {
+      id: 'glass-ceiling',
+      term_ko: '유리천장',
+      term_en: 'Glass Ceiling',
+      categories: ['젠더·섹슈얼리티', '계급·노동·불평등'],
+      curator_definition:
+        '여성이나 소수자가 조직에서 일정 직급 이상 올라가지 못하게 막는, 눈에 보이지 않지만 분명히 존재하는 장벽이다.',
+      original_definition:
+        '유리천장이란 여성과 소수자가 자격을 갖추었음에도 조직의 위계 안에서 최상위 직위에 도달하지 못하게 가로막는, 보이지 않지만 뚫을 수 없는 장벽을 가리킨다.',
+      original_definition_source: '『월스트리트저널』, 「기업 여성을 가로막는 보이지 않는 장벽」(1986) 이후 통용',
+      related_theorists: [],
+      perspectives: [],
+    },
 
     /* ── 가족·인구 ──────────────────────────────────────────── */
     {
@@ -499,6 +748,32 @@ var GLOSSARY_DATA = (function () {
         '제2차 인구변천은 대체 수준 이하의 출산율, 결혼의 지연과 동거의 확산, 혼외 출산의 증가를 특징으로 하며, 그 배경에는 물질적 안전보다 자기실현과 개인의 자율성을 우선시하는 탈물질주의적 가치의 확산이 있다.',
       original_definition_source: '론 레스타허·데이르크 판더카 (1986) 논의 요약',
       related_theorists: ['beck'],
+      perspectives: [],
+    },
+    {
+      id: 'single-person-household',
+      term_ko: '1인가구',
+      term_en: 'Single-Person Household',
+      categories: ['가족·인구'],
+      curator_definition:
+        '혼자 사는 사람으로만 이뤄진 가구. 비혼과 만혼, 고령 인구 증가와 맞물려 한국에서 가장 빠르게 늘고 있는 가구 형태다.',
+      original_definition:
+        '1인가구란 세대주 혼자 독립적으로 생계를 유지하는 가구를 말한다. 산업화 이후 개인화 경향과 인구구조 변화가 맞물려 전 세계적으로 증가하는 추세를 보인다.',
+      original_definition_source: '통계청, 「인구주택총조사」 가구 구분 기준',
+      related_theorists: [],
+      perspectives: [],
+    },
+    {
+      id: 'aging-society',
+      term_ko: '고령화사회',
+      term_en: 'Aging Society',
+      categories: ['가족·인구'],
+      curator_definition:
+        '전체 인구에서 65세 이상 노인이 차지하는 비중이 일정 수준을 넘어선 사회. 그 비중에 따라 고령화사회, 고령사회, 초고령사회로 나눈다.',
+      original_definition:
+        'UN 기준으로 65세 이상 인구가 전체의 7% 이상이면 고령화사회, 14% 이상이면 고령사회, 20% 이상이면 초고령사회로 분류한다.',
+      original_definition_source: 'UN, 「세계 인구 고령화 보고서」 분류 기준',
+      related_theorists: [],
       perspectives: [],
     },
 
@@ -553,6 +828,45 @@ var GLOSSARY_DATA = (function () {
         '(사회적) 공간은 (사회적) 생산물이다. 각각의 사회는 자신의 공간을 생산한다. 공간은 그 안에서 사물들이 배열되는 중립적 용기가 아니라, 생산관계의 재생산이 이루어지는 수단이자 그 자체로 투쟁의 장이다.',
       original_definition_source: '앙리 르페브르, 『공간의 생산』(1974)',
       related_theorists: ['lefebvre'],
+      perspectives: [],
+    },
+    {
+      id: 'right-to-the-city',
+      term_ko: '도시에 대한 권리',
+      term_en: 'Right to the City',
+      categories: ['도시·공간', '정치·권력·사회변동'],
+      curator_definition:
+        '도시가 자본과 개발업자만의 것이 아니라, 그 안에 사는 사람들이 도시의 삶과 공간을 함께 만들어갈 권리를 가진다는 주장이다.',
+      original_definition:
+        '도시에 대한 권리는 도시적 삶에 대한 권리, 갱신된 도시 중심성에 대한 권리, 만남과 교환의 장소에 대한 권리로서, 오직 도시 거주자들의 집단적 힘을 통해서만 실현될 수 있다.',
+      original_definition_source: '앙리 르페브르, 『도시에 대한 권리』(1968)',
+      related_theorists: ['lefebvre'],
+      perspectives: [],
+    },
+    {
+      id: 'third-place',
+      term_ko: '제3의 장소',
+      term_en: 'Third Place',
+      categories: ['도시·공간', '문화·미디어'],
+      curator_definition:
+        '집(1의 장소)도 직장(2의 장소)도 아닌, 카페나 동네 술집처럼 편하게 어울리며 공동체 감각을 키우는 제3의 공간이다.',
+      original_definition:
+        '제3의 장소란 집과 일터 바깥에 있는 비공식적인 공공 모임 장소로, 격식 없는 분위기 속에서 정기적이고 자발적인 만남을 가능케 한다. 이곳은 민주주의와 공동체 생활의 기반이 된다.',
+      original_definition_source: '레이 올든버그, 『제3의 장소』(1989)',
+      related_theorists: ['oldenburg'],
+      perspectives: [],
+    },
+    {
+      id: 'spatial-segregation',
+      term_ko: '거주지 분리',
+      term_en: 'Spatial Segregation',
+      categories: ['도시·공간', '계급·노동·불평등'],
+      curator_definition:
+        '인종이나 소득에 따라 사람들이 서로 다른 동네에 나뉘어 살게 되는 현상. 우연이 아니라 부동산 시장과 정책이 함께 만들어낸 결과다.',
+      original_definition:
+        '거주지 분리는 인종 집단이 도시 공간 안에서 서로 물리적으로 격리되는 정도를 뜻한다. 이는 개인의 선호만이 아니라 차별적 대출 관행과 주택 정책이 누적되며 만들어진 구조적 산물이다.',
+      original_definition_source: '더글러스 매시·낸시 덴턴, 『아메리칸 아파르트헤이트』(1993)',
+      related_theorists: ['massey'],
       perspectives: [],
     },
 
@@ -628,6 +942,45 @@ var GLOSSARY_DATA = (function () {
       related_theorists: ['bourdieu'],
       perspectives: [],
     },
+    {
+      id: 'simulacra',
+      term_ko: '시뮬라크르',
+      term_en: 'Simulacra',
+      categories: ['문화·미디어', '이론/사상'],
+      curator_definition:
+        '원본이 없거나 원본보다 더 진짜처럼 느껴지는 이미지와 복제물. 현대 사회에서는 이런 이미지가 현실 자체를 대체해 버린다는 진단이다.',
+      original_definition:
+        '시뮬라시옹은 실재하지 않는 것을 실재하는 것처럼 만들어내는 과정이다. 그 결과물인 시뮬라크르는 원본도 사실성도 없는 실재, 즉 하이퍼리얼을 만들어낸다.',
+      original_definition_source: '장 보드리야르, 『시뮬라시옹』(1981)',
+      related_theorists: ['baudrillard'],
+      perspectives: [],
+    },
+    {
+      id: 'subculture',
+      term_ko: '하위문화',
+      term_en: 'Subculture',
+      categories: ['문화·미디어'],
+      curator_definition:
+        '주류 문화 안에서 자신들만의 스타일과 규범을 만들어내는 특정 집단의 문화. 펑크족의 옷차림처럼 그 스타일 자체가 기존 질서에 대한 저항의 표현이 되기도 한다.',
+      original_definition:
+        '하위문화의 스타일은 기호학적 저항의 한 형태다. 지배 문화의 코드를 가져와 그 의미를 뒤틀어 사용함으로써, 하위문화는 눈에 보이는 방식으로 자신들의 차이와 불복종을 드러낸다.',
+      original_definition_source: '딕 헵디지, 『하위문화: 스타일의 의미』(1979)',
+      related_theorists: ['hebdige'],
+      perspectives: [],
+    },
+    {
+      id: 'digital-divide',
+      term_ko: '디지털 격차',
+      term_en: 'Digital Divide',
+      categories: ['문화·미디어', '계급·노동·불평등'],
+      curator_definition:
+        '누구는 최신 기기와 빠른 인터넷을 자유롭게 쓰고, 누구는 접근조차 어려운 정보 격차. 소득·연령·지역에 따라 갈리며 새로운 불평등으로 이어진다.',
+      original_definition:
+        '디지털 격차는 정보통신기술에 대한 접근 여부를 넘어, 그것을 효과적으로 활용할 수 있는 능력과 기회의 격차까지 포함하는 다차원적 불평등 개념이다.',
+      original_definition_source: 'OECD, 「디지털 격차 이해하기」 보고서(2001) 논의 참조',
+      related_theorists: [],
+      perspectives: [],
+    },
 
     /* ── 일탈·범죄 ──────────────────────────────────────────── */
     {
@@ -688,6 +1041,45 @@ var GLOSSARY_DATA = (function () {
       related_theorists: ['goffman', 'merton'],
       perspectives: [],
     },
+    {
+      id: 'differential-association',
+      term_ko: '차별접촉이론',
+      term_en: 'Differential Association',
+      categories: ['일탈·범죄'],
+      curator_definition:
+        '범죄는 타고나는 것이 아니라, 범죄에 우호적인 태도와 기술을 가진 사람들과 자주 어울리며 학습된다는 이론이다.',
+      original_definition:
+        '범죄 행동은 타인과의 상호작용 속에서 학습된다. 법 위반에 우호적인 정의를 법 위반에 비우호적인 정의보다 더 많이 접할 때, 그 사람은 범죄자가 된다.',
+      original_definition_source: '에드윈 서덜랜드, 『범죄학의 원리』(1939)',
+      related_theorists: ['sutherland'],
+      perspectives: [],
+    },
+    {
+      id: 'broken-windows-theory',
+      term_ko: '깨진 유리창 이론',
+      term_en: 'Broken Windows Theory',
+      categories: ['일탈·범죄', '도시·공간'],
+      curator_definition:
+        '깨진 유리창 하나를 방치하면 그 동네 전체가 무질서해 보여 더 큰 범죄로 이어진다는 이론. 사소한 무질서 관리가 강력범죄 예방으로 이어진다는 주장으로 이어졌다.',
+      original_definition:
+        '건물의 깨진 유리창 하나가 수리되지 않은 채 방치되면, 나머지 유리창도 곧 모두 깨질 것이라는 신호를 보낸다. 사소한 무질서에 대한 방치는 더 심각한 범죄에 대한 두려움과 발생 가능성을 키운다.',
+      original_definition_source: '제임스 윌슨·조지 켈링, 「깨진 유리창」(1982)',
+      related_theorists: ['wilson', 'kelling'],
+      perspectives: [],
+    },
+    {
+      id: 'moral-panic',
+      term_ko: '도덕적 공황',
+      term_en: 'Moral Panic',
+      categories: ['일탈·범죄', '문화·미디어'],
+      curator_definition:
+        '특정 집단이나 현상이 사회 전체를 위협하는 존재로 언론과 여론에 의해 실제보다 크게 부풀려지는 현상이다.',
+      original_definition:
+        '사회는 주기적으로 도덕적 공황의 상태에 놓인다. 어떤 상황이나 사람들이 사회의 가치와 이익을 위협하는 존재로 규정되고, 미디어에 의해 정형화된 방식으로 제시되며 대중의 우려가 증폭된다.',
+      original_definition_source: '스탠리 코언, 『민중의 악마와 도덕적 공황』(1972)',
+      related_theorists: ['cohen'],
+      perspectives: [],
+    },
 
     /* ── 정치·권력·사회변동 ──────────────────────────────────── */
     {
@@ -740,6 +1132,45 @@ var GLOSSARY_DATA = (function () {
         '고전적 산업사회의 논리가 부의 생산과 분배를 중심으로 조직되었다면, 위험사회에서는 과학적·기술적으로 생산된 위험의 분배가 중심 문제가 된다. 궁핍은 위계적이지만 스모그는 민주적이다.',
       original_definition_source: '울리히 벡, 『위험사회』(1986)',
       related_theorists: ['beck'],
+      perspectives: [],
+    },
+    {
+      id: 'public-sphere',
+      term_ko: '공론장',
+      term_en: 'Public Sphere',
+      categories: ['정치·권력·사회변동', '문화·미디어'],
+      curator_definition:
+        '국가 권력에서 벗어나 시민들이 자유롭게 모여 공적인 사안을 토론하고 여론을 만들어가는 공간이다.',
+      original_definition:
+        '공론장은 사적 개인들이 모여 공중을 형성하는 영역이다. 이들은 국가 권력의 규제에 맞서 사회의 근본 규칙을 둘러싼 논쟁을 통해 여론을 형성함으로써 공권력 자체를 문제 삼는다.',
+      original_definition_source: '위르겐 하버마스, 『공론장의 구조변동』(1962)',
+      related_theorists: ['habermas'],
+      perspectives: [],
+    },
+    {
+      id: 'social-movement',
+      term_ko: '사회운동',
+      term_en: 'Social Movement',
+      categories: ['정치·권력·사회변동'],
+      curator_definition:
+        '사람들이 함께 조직을 이뤄 사회를 바꾸려고, 혹은 바뀌지 않게 지키려고 지속적으로 벌이는 집단행동이다.',
+      original_definition:
+        '사회운동은 공통의 목표와 사회적 연대를 바탕으로 엘리트, 적대세력, 권력자를 상대로 지속적인 상호작용을 이어가는 집단적 도전이다.',
+      original_definition_source: '찰스 틸리, 『동원에서 혁명으로』(1978)',
+      related_theorists: ['tilly'],
+      perspectives: [],
+    },
+    {
+      id: 'globalization',
+      term_ko: '세계화',
+      term_en: 'Globalization',
+      categories: ['정치·권력·사회변동', '문화·미디어'],
+      curator_definition:
+        '국경을 넘어 경제, 문화, 정보가 더 빠르고 촘촘하게 연결되면서 전 세계가 서로 영향을 주고받게 되는 현상이다.',
+      original_definition:
+        '세계화란 전 세계 사회적 관계가 강화되어, 멀리 떨어진 지역의 사건이 그로부터 멀리 떨어진 곳의 일들에 의해 형성되고 또 그 반대로도 영향을 주는 방식으로 서로 연결되는 과정이다.',
+      original_definition_source: '앤서니 기든스, 『근대성의 결과』(1990)',
+      related_theorists: ['giddens'],
       perspectives: [],
     },
   ];
