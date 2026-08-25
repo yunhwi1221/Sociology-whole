@@ -472,6 +472,27 @@ var GLOSSARY_DATA = (function () {
       mini_bio: '미국 공동체의 신뢰와 유대가 약화되는 현상을 사회자본 개념으로 분석한 미국의 정치학자.',
       page_link: null,
     },
+    'radcliffe-brown': {
+      name: '알프레드 래드클리프브라운',
+      name_en: 'A. R. Radcliffe-Brown',
+      years: '1881–1955',
+      mini_bio: '사회를 유기체처럼 각 부분이 전체 유지에 기여하는 관계망으로 분석한 영국의 구조기능주의 인류학자.',
+      page_link: null,
+    },
+    linton: {
+      name: '랄프 린턴',
+      name_en: 'Ralph Linton',
+      years: '1893–1953',
+      mini_bio: '지위와 역할 개념을 체계화해 개인과 사회구조를 잇는 분석틀을 제시한 미국의 인류학자.',
+      page_link: null,
+    },
+    allport: {
+      name: '고든 올포트',
+      name_en: 'Gordon W. Allport',
+      years: '1897–1967',
+      mini_bio: '편견이 형성되고 줄어드는 조건을 체계적으로 연구해 편견 연구의 기틀을 세운 미국의 심리학자.',
+      page_link: null,
+    },
   };
 
   /* 용어 — curator_definition(내 정의)과 original_definition(원문 정의)은 필수,
@@ -2056,6 +2077,149 @@ var GLOSSARY_DATA = (function () {
         '하나의 유령이 유럽을 배회하고 있다 — 공산주의라는 유령이. 낡은 유럽의 모든 세력들은 이 유령을 몰아내기 위해 신성 동맹을 맺었다. …공산주의자들은 자신의 견해와 의도를 감추는 것을 경멸한다. 그들은 자신의 목적이 현존하는 모든 사회질서를 강제적으로 전복함으로써만 달성될 수 있다고 공공연히 선언한다. 만국의 노동자여, 단결하라!',
       original_definition_source: '카를 마르크스·프리드리히 엥겔스, 『공산당 선언』(1848)',
       related_theorists: ['marx'],
+      perspectives: [],
+    },
+    {
+      id: 'culture',
+      term_ko: '문화',
+      term_en: 'Culture',
+      categories: ['이론/사상', '문화·미디어'],
+      curator_definition:
+        '한 사회의 사람들이 공유하는 생각·행동방식·상징 체계 전체. 태어날 때부터 갖고 있는 게 아니라 자라면서 배우고 다음 세대로 전달된다.',
+      original_definition:
+        '인간은 자기 자신이 짜낸 의미의 그물망에 걸려 있는 동물이다. 나는 그 그물망을 문화라고 본다. 따라서 문화의 분석은 법칙을 찾는 실험적 과학이 아니라 의미를 찾는 해석적 과학이어야 한다.',
+      original_definition_source: '클리퍼드 기어츠, 『문화의 해석』(1973)',
+      related_theorists: ['geertz'],
+      perspectives: [],
+    },
+    {
+      id: 'social-structure',
+      term_ko: '사회구조',
+      term_en: 'Social Structure',
+      categories: ['이론/사상'],
+      curator_definition:
+        '개인들의 관계가 시간이 지나도 반복되면서 만들어지는, 사회 안의 안정된 틀. 지위·역할·제도들이 서로 맞물려 짜인 그물 같은 것이다.',
+      original_definition:
+        '사회구조란 사회적 관계들의 지속적인 배열을 가리킨다. 우리는 어느 한 순간의 구조적 형태뿐 아니라, 그 구조가 스스로를 유지해 나가는 과정 전체, 즉 구조적 지속성을 함께 연구해야 한다.',
+      original_definition_source: '알프레드 래드클리프브라운, 『원시사회의 구조와 기능』(1952)',
+      related_theorists: ['radcliffe-brown'],
+      perspectives: [],
+    },
+    {
+      id: 'socialization',
+      term_ko: '사회화',
+      term_en: 'Socialization',
+      categories: ['이론/사상', '가족·인구'],
+      curator_definition:
+        '한 사회의 규범과 가치, 역할을 배우면서 그 사회의 구성원다운 사람이 되어가는, 평생에 걸친 과정.',
+      original_definition:
+        '사회화란 개인이 자신이 속한 사회체계의 가치와 규범, 역할기대를 자기 인성 구조의 일부로 내면화하는 과정이며, 이를 통해 사회의 문화 유형은 세대를 넘어 재생산된다.',
+      original_definition_source: '탤컷 파슨스, 『사회체계론』(1951)',
+      related_theorists: ['parsons', 'mead'],
+      perspectives: [],
+    },
+    {
+      id: 'status-and-role',
+      term_ko: '지위와 역할',
+      term_en: 'Status and Role',
+      categories: ['이론/사상'],
+      curator_definition:
+        '지위는 내가 사회 안에서 차지하는 자리(예: 학생, 부모), 역할은 그 자리에 따라 기대되는 행동 방식이다. 지위가 자리라면 역할은 그 자리에서 해야 할 몫이다.',
+      original_definition:
+        '지위란 개인이 특정 유형과 관련해 사회체계 안에서 차지하는 위치이며, 역할은 그 지위가 담고 있는 권리와 의무를 행동으로 옮긴 것이다. 지위와 역할은 분리될 수 없다. 역할이 없는 지위, 지위가 없는 역할은 존재하지 않는다.',
+      original_definition_source: '랄프 린턴, 『인간의 연구』(1936)',
+      related_theorists: ['linton'],
+      perspectives: [],
+    },
+    {
+      id: 'social-stratification',
+      term_ko: '사회계층',
+      term_en: 'Social Stratification',
+      categories: ['계급·노동·불평등', '정치·권력·사회변동'],
+      curator_definition:
+        '사람들이 재산, 권력, 사회적 지위에 따라 상하로 층을 이루며 나뉘는 현상. 계급투쟁이 그 층들 사이의 갈등에 초점을 둔다면, 계층은 층이 나뉘는 구조 자체를 가리킨다.',
+      original_definition:
+        '계급 상황이 순전히 경제적 이해관계에 따라 결정되는 반면, 신분 상황은 사회적 명예에 대한 공동체적 평가에 의해 결정된다. 계급, 신분, 정당은 공동체 안에서 권력이 배분되는 서로 다른 세 가지 현상이다.',
+      original_definition_source: '막스 베버, 『경제와 사회』(1922) "계급, 신분, 정당"',
+      related_theorists: ['weber'],
+      perspectives: [
+        {
+          school: '기능주의',
+          definition:
+            '계층은 사회가 중요하고 어려운 지위에 유능한 인재를 유인·배치하기 위해 그에 상응하는 보상을 차등적으로 배분한 결과이며, 어느 사회에나 나타나는 보편적이고 필요한 장치다.',
+          source: '킹슬리 데이비스·윌버트 무어, 「계층화의 몇 가지 원리」(1945)',
+        },
+        {
+          school: '갈등론',
+          definition:
+            '계층은 기능적 필요가 아니라 생산수단을 가진 집단이 그렇지 못한 집단의 노동을 지배하고 그 산물을 전유하는 구조에서 비롯된다. 보상의 차등은 능력이 아니라 권력관계를 반영한다.',
+          source: '카를 마르크스, 『자본론』(1867)',
+        },
+      ],
+    },
+    {
+      id: 'power',
+      term_ko: '권력',
+      term_en: 'Power',
+      categories: ['정치·권력·사회변동'],
+      curator_definition:
+        '상대가 원치 않아도 내 뜻대로 상대의 행동을 움직일 수 있는 힘. 물리력뿐 아니라 설득, 규칙, 자원을 통해서도 작동한다.',
+      original_definition:
+        '권력이란 하나의 사회적 관계 안에서, 한 행위자가 저항에도 불구하고 자신의 의지를 관철시킬 수 있는 모든 개연성을 뜻하며, 그 개연성이 무엇에 근거하는지는 상관이 없다.',
+      original_definition_source: '막스 베버, 『경제와 사회』(1922)',
+      related_theorists: ['weber'],
+      perspectives: [],
+    },
+    {
+      id: 'legitimate-domination',
+      term_ko: '지배의 세 유형',
+      term_en: 'Types of Legitimate Domination',
+      categories: ['정치·권력·사회변동'],
+      curator_definition:
+        '사람들이 권력에 복종하는 이유는 제각각이다. "옛날부터 그래왔으니까"(전통적), "저 사람 자체가 특별하니까"(카리스마적), "정해진 규칙이니까"(합법적) — 베버는 복종의 근거를 이 세 가지로 나눴다.',
+      original_definition:
+        '지배가 정당성을 주장할 수 있는 근거는 세 가지 순수한 유형으로 나뉜다. 예로부터 통용되어 온 질서와 지배권력의 신성함에 근거하는 전통적 지배, 한 개인의 비범한 자질에 대한 헌신에 근거하는 카리스마적 지배, 그리고 제정된 규칙의 합법성과 그에 따라 지배권을 행사하는 자의 명령권에 대한 믿음에 근거하는 합법적 지배가 그것이다.',
+      original_definition_source: '막스 베버, 『경제와 사회』(1922)',
+      related_theorists: ['weber'],
+      perspectives: [],
+    },
+    {
+      id: 'reference-group',
+      term_ko: '준거집단',
+      term_en: 'Reference Group',
+      categories: ['이론/사상', '계급·노동·불평등'],
+      curator_definition:
+        '내가 실제로 속해 있지 않아도, 내 생각과 행동의 기준으로 삼는 집단. 준거집단과 나를 비교하는 데서 만족감이나 상대적 박탈감이 생긴다.',
+      original_definition:
+        '개인은 자신이 속하지 않은 집단을 준거 틀로 삼아 스스로를 평가하고 태도를 형성하는 경우가 많다. 준거집단이란 개인이 자신의 지위, 열망, 행동의 기준으로 삼는 실제 또는 상상의 집단을 말한다.',
+      original_definition_source: '로버트 머튼, 『사회이론과 사회구조』(1949)',
+      related_theorists: ['merton'],
+      perspectives: [],
+    },
+    {
+      id: 'deviance',
+      term_ko: '일탈',
+      term_en: 'Deviance',
+      categories: ['일탈·범죄'],
+      curator_definition:
+        '한 사회가 정해 놓은 규범이나 기대에서 벗어난 행동. 절대적으로 나쁜 행동이 아니라, 그 사회가 무엇을 정상으로 규정하느냐에 따라 달라지는 상대적인 개념이다.',
+      original_definition:
+        '범죄는 모든 건강한 사회의 정상적인 생리의 일부다. 범죄가 없는 사회는 존재하지 않으며, 만약 범죄율이 어느 한계 이상으로 낮아진다면 이는 오히려 사회에 근본적인 이상이 있다는 징후로 봐야 한다.',
+      original_definition_source: '에밀 뒤르켐, 『사회학적 방법의 규칙들』(1895)',
+      related_theorists: ['durkheim'],
+      perspectives: [],
+    },
+    {
+      id: 'prejudice-and-discrimination',
+      term_ko: '편견과 차별',
+      term_en: 'Prejudice and Discrimination',
+      categories: ['계급·노동·불평등', '정치·권력·사회변동'],
+      curator_definition:
+        '편견은 어떤 집단에 대해 충분한 근거 없이 갖는 부정적인 생각이나 감정이고, 차별은 그 편견이 실제 행동으로 이어져 특정 집단을 불리하게 대우하는 것이다.',
+      original_definition:
+        '편견이란 잘못되고 유연하지 못한 일반화에 근거한, 반감을 동반한 생각이다. 그것은 느껴지거나 표현될 수 있으며, 한 집단 전체를 향할 수도, 그 집단에 속했다는 이유만으로 한 개인을 향할 수도 있다.',
+      original_definition_source: '고든 올포트, 『편견의 본질』(1954)',
+      related_theorists: ['allport'],
       perspectives: [],
     },
   ];
