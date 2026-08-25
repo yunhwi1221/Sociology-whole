@@ -364,8 +364,18 @@ body[data-view="detail"] .panel-list   { display: none; }
   font-size: 12px; font-weight: 600; color: var(--leaf-deep);
 }
 
-.def-curator {
+.def-easy-badge {
+  display: inline-flex; align-items: center; gap: 4px;
   margin-top: 18px;
+  padding: 3px 9px;
+  background: var(--leaf-soft); border-radius: 999px;
+  font-size: 11px; font-weight: 700; color: var(--leaf-deep);
+  letter-spacing: .01em;
+}
+.def-easy-badge svg { width: 11px; height: 11px; flex-shrink: 0; }
+
+.def-curator {
+  margin-top: 8px;
   font-size: 16px; font-weight: 500; line-height: 1.8; color: var(--gray-800);
   word-break: keep-all;
 }
@@ -994,6 +1004,10 @@ body[data-view="detail"] .panel-list   { display: none; }
         '<div class="def-cats">' +
           t.categories.map(function (c) { return '<span class="cat-badge">' + esc(c) + '</span>'; }).join('') +
         '</div>' +
+        '<span class="def-easy-badge">' +
+          '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7V17h8v-2.3A7 7 0 0 0 12 2Z"/></svg>' +
+          '<span>쉬운 뜻풀이</span>' +
+        '</span>' +
         '<p class="def-curator">' + esc(t.curator_definition) + '</p>' +
         '<div class="def-divider"></div>' +
         '<p class="def-label">원문 정의</p>' +

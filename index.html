@@ -156,6 +156,35 @@
       word-break: keep-all;
     }
 
+    /* 그냥 시작하기 안내 토스트 */
+    .guide-toast {
+      position: fixed;
+      left: 50%;
+      bottom: 28px;
+      z-index: 210;
+      transform: translate(-50%, 12px);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      max-width: calc(100% - 32px);
+      padding: 14px 18px;
+      background: var(--primary);
+      color: var(--white);
+      border-radius: 10px;
+      font-size: 13.5px;
+      font-weight: 500;
+      box-shadow: 0 8px 24px rgba(6, 31, 23, 0.25);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease, transform 0.25s ease;
+    }
+
+    .guide-toast.is-visible {
+      opacity: 1;
+      transform: translate(-50%, 0);
+      pointer-events: auto;
+    }
+
     /* Header */
     .header {
       position: fixed;
@@ -1389,6 +1418,12 @@
     </div>
   </div>
 
+  <!-- 그냥 시작하기 안내 토스트 -->
+  <div class="guide-toast" id="guideToast" role="status">
+    <span>👇</span>
+    <span>아래 "더 알아보기" 버튼을 눌러 기능을 확인하세요</span>
+  </div>
+
   <script>
     // Header scroll effect
     window.addEventListener('scroll', function() {
@@ -1438,8 +1473,22 @@
         if (loginBtn) loginBtn.click();
       });
 
-      // 그냥 둘러보겠다는 선택이므로 팝업만 닫고 랜딩에 머문다
-      document.getElementById('startGuest').addEventListener('click', closeStart);
+      // 그냥 둘러보겠다는 선택이므로 팝업을 닫고, "더 알아보기"로 안내한다
+      var toast = document.getElementById('guideToast');
+      var toastTimer = null;
+
+      function showGuideToast() {
+        clearTimeout(toastTimer);
+        toast.classList.add('is-visible');
+        toastTimer = setTimeout(function () {
+          toast.classList.remove('is-visible');
+        }, 3500);
+      }
+
+      document.getElementById('startGuest').addEventListener('click', function () {
+        closeStart();
+        showGuideToast();
+      });
     })();
   </script>
 
