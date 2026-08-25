@@ -2000,6 +2000,64 @@ var GLOSSARY_DATA = (function () {
       related_theorists: ['putnam', 'bourdieu'],
       perspectives: [],
     },
+    {
+      id: 'capitalism',
+      term_ko: '자본주의',
+      term_en: 'Capitalism',
+      categories: ['이론/사상', '계급·노동·불평등', '정치·권력·사회변동'],
+      curator_definition:
+        '땅이나 공장, 기계 같은 생산수단을 개인이 사유재산으로 소유하고, 그것을 이용해 이윤을 남기려는 경쟁이 경제를 움직이는 체제다.',
+      original_definition:
+        '자본주의적 생산양식이 지배하는 사회의 부는 하나의 거대한 상품 집적으로 나타나며, 개개의 상품은 그 부의 기본 형태로 나타난다.',
+      original_definition_source: '카를 마르크스, 『자본론』 1권(1867)',
+      related_theorists: ['marx', 'weber'],
+      perspectives: [
+        {
+          school: '마르크스주의',
+          definition:
+            '자본주의는 생산수단을 소유한 자본가 계급이 노동력을 상품으로 구매해 잉여가치를 착취하는 역사적으로 특수한 생산양식이다. 그 내적 모순(이윤율 저하, 과잉생산 등)으로 인해 필연적으로 위기를 반복하며 극복되어야 할 체제로 분석된다.',
+          source: '카를 마르크스, 『자본론』(1867)',
+        },
+        {
+          school: '베버주의',
+          definition:
+            '자본주의의 핵심은 착취가 아니라 예측 가능한 이윤을 향해 합리적으로 계산하고 조직된 평화적 영리 추구에 있다. 프로테스탄트 윤리 같은 문화적·종교적 요인이 서구에서 근대 자본주의가 발생한 이유를 설명하는 중요한 변수다.',
+          source: '막스 베버, 『프로테스탄트 윤리와 자본주의 정신』(1905)',
+        },
+        {
+          school: '경제사회학(실체론)',
+          definition:
+            '자기조정적 시장이 사회 전체를 지배하는 것은 자연스러운 상태가 아니라 역사적으로 만들어진 예외적 상황이다. 시장은 본래 사회적 관계 속에 배태되어 있었으며, 시장을 사회로부터 완전히 분리하려는 시도는 사회의 자기방어 운동을 필연적으로 불러온다.',
+          source: '칼 폴라니, 『거대한 전환』(1944)',
+        },
+      ],
+    },
+    {
+      id: 'socialism',
+      term_ko: '사회주의',
+      term_en: 'Socialism',
+      categories: ['이론/사상', '정치·권력·사회변동'],
+      curator_definition:
+        '생산수단을 개인이 아니라 사회(국가나 공동체)가 소유·관리해서 자본주의가 낳는 불평등과 경쟁을 줄이고 다 함께 잘살자는 사상과 체제다.',
+      original_definition:
+        '사회주의는 무엇보다도 고통의 외침이다. 오늘날 사회주의라 불리는 이론들은 하나같이, 병들었으되 아직 그 병이 무엇인지도, 어디서 왔는지도 명확히 알지 못하는 사회가 겪는 격렬한 초조함에서 태어났다.',
+      original_definition_source: '에밀 뒤르켐, 『사회주의』(1928, 1895–96년 강의 유고)',
+      related_theorists: ['durkheim', 'marx'],
+      perspectives: [],
+    },
+    {
+      id: 'communism',
+      term_ko: '공산주의',
+      term_en: 'Communism',
+      categories: ['이론/사상', '정치·권력·사회변동'],
+      curator_definition:
+        '사유재산 자체를 없애고 생산수단을 모두가 공동으로 소유해서, 계급도 국가도 없는 평등한 사회를 만들자는 사상이다. 사회주의보다 한 걸음 더 나아가 재산의 공동소유를 강조한다.',
+      original_definition:
+        '하나의 유령이 유럽을 배회하고 있다 — 공산주의라는 유령이. 낡은 유럽의 모든 세력들은 이 유령을 몰아내기 위해 신성 동맹을 맺었다. …공산주의자들은 자신의 견해와 의도를 감추는 것을 경멸한다. 그들은 자신의 목적이 현존하는 모든 사회질서를 강제적으로 전복함으로써만 달성될 수 있다고 공공연히 선언한다. 만국의 노동자여, 단결하라!',
+      original_definition_source: '카를 마르크스·프리드리히 엥겔스, 『공산당 선언』(1848)',
+      related_theorists: ['marx'],
+      perspectives: [],
+    },
   ];
 
   return { categories: categories, theorists: theorists, terms: terms };
