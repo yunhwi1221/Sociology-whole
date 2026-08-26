@@ -198,6 +198,36 @@
       });
   }
 
+  /** 내 프로필 수정 — 이름/비밀번호 중 채워진 값만 반영한다.
+      patch: { name?: string, password?: string } */
+  function updateProfile(patch) {
+    if (!client) return Promise.resolve({ ok: false, error: MSG.NOT_READY });
+
+    var payload = {};
+    if (patch && typeof patch.name === 'string' && patch.name.trim()) {
+      payload.data = { name: patch.name.trim() };
+    }
+    if (patch && patch.password) {
+      payload.password = patch.password;
+    }
+    if (!payload.data && !payload.password) {
+      return Promise.resolve({ ok: false, error: '변경할 내용을 입력해주세요.' });
+    }
+
+    return client.auth
+      .updateUser(payload)
+      .then(function (res) {
+        if (res.error) return { ok: false, error: mapAuthError(res.error) };
+        // onAuthStateChange 로도 곧 반영되지만, 지연 없이 화면에 바로 보이도록 즉시 갱신한다.
+        setUser(res.data.user);
+        return { ok: true, error: null };
+      })
+      .catch(function (e) {
+        console.error('[SW_AUTH] updateProfile 실패:', e);
+        return { ok: false, error: MSG.GENERIC };
+      });
+  }
+
   function signOut() {
     if (!client) return Promise.resolve({ ok: false, error: MSG.NOT_READY });
     return client.auth
@@ -233,6 +263,7 @@
     signIn: signIn,
     signUp: signUp,
     signOut: signOut,
+    updateProfile: updateProfile,
 
     get client() {
       return client;

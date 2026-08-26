@@ -117,10 +117,17 @@ svg { display: block; flex-shrink: 0; }
   user-select: none;
 }
 .profile-main { flex: 1; min-width: 0; }
+.profile-name-row { display: flex; align-items: center; gap: 6px; }
 .profile-name {
   font-size: 18px; font-weight: 700; letter-spacing: -0.01em;
   color: var(--gray-900); word-break: keep-all;
 }
+.profile-edit-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 24px; height: 24px; border-radius: 6px; flex-shrink: 0;
+  color: var(--gray-400); transition: background 0.2s, color 0.2s;
+}
+.profile-edit-btn:hover { background: var(--gray-100); color: var(--gray-700); }
 .profile-email {
   margin-top: 3px; font-size: 13px; color: var(--gray-500);
   overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
@@ -254,7 +261,7 @@ svg { display: block; flex-shrink: 0; }
 /* 문의 폼 */
 .field { margin-top: 14px; }
 .field label { display: block; margin-bottom: 6px; font-size: 12.5px; font-weight: 600; color: var(--gray-600); }
-.field select, .field textarea, .field input[type="email"] {
+.field select, .field textarea, .field input[type="email"], .field input[type="text"], .field input[type="password"] {
   width: 100%; padding: 11px 12px;
   background: var(--white);
   border: 1px solid var(--gray-200); border-radius: 10px;
@@ -391,7 +398,14 @@ body[data-auth="loading"] #content { display: none; }
     <div class="profile-card">
       <span class="avatar" id="avatar" aria-hidden="true"></span>
       <div class="profile-main">
-        <p class="profile-name" id="profileName"></p>
+        <div class="profile-name-row">
+          <p class="profile-name" id="profileName"></p>
+          <button type="button" class="profile-edit-btn" id="profileEditBtn" aria-label="프로필 수정">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14" aria-hidden="true">
+              <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+            </svg>
+          </button>
+        </div>
         <p class="profile-email" id="profileEmail"></p>
       </div>
       <button type="button" class="signout-btn" id="signoutBtn">로그아웃</button>
@@ -555,6 +569,46 @@ body[data-auth="loading"] #content { display: none; }
 
 </main>
 
+<!-- 프로필 수정 -->
+<div class="modal" id="profileModal" role="dialog" aria-modal="true" aria-labelledby="profileModalTitle" hidden>
+  <div class="modal-panel">
+    <div class="modal-head">
+      <div>
+        <h2 class="modal-title" id="profileModalTitle">프로필 수정</h2>
+        <p class="modal-sub">이름과 비밀번호를 바꿀 수 있습니다.</p>
+      </div>
+      <button type="button" class="modal-close" id="profileClose" aria-label="닫기">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <form id="profileForm">
+      <div class="field">
+        <label for="pfName">이름</label>
+        <input type="text" id="pfName" required>
+      </div>
+      <div class="field">
+        <label for="pfEmail">이메일</label>
+        <input type="email" id="pfEmail" disabled>
+        <p class="field-hint">이메일 변경은 아직 지원하지 않습니다.</p>
+      </div>
+      <div class="field">
+        <label for="pfPassword">새 비밀번호</label>
+        <input type="password" id="pfPassword" autocomplete="new-password" placeholder="바꾸지 않으려면 비워두세요">
+      </div>
+      <div class="field">
+        <label for="pfPassword2">새 비밀번호 확인</label>
+        <input type="password" id="pfPassword2" autocomplete="new-password">
+      </div>
+
+      <div class="modal-foot">
+        <button type="button" class="modal-btn modal-btn--ghost" id="profileCancel">취소</button>
+        <button type="submit" class="modal-btn modal-btn--primary" id="profileSubmit">저장</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <!-- 공지사항 -->
 <div class="modal" id="noticeModal" role="dialog" aria-modal="true" aria-labelledby="noticeTitle" hidden>
   <div class="modal-panel">
@@ -668,6 +722,14 @@ body[data-auth="loading"] #content { display: none; }
     email: document.getElementById('profileEmail'),
     signout: document.getElementById('signoutBtn'),
     guardLogin: document.getElementById('guardLogin'),
+    profileEditBtn: document.getElementById('profileEditBtn'),
+    profileModal: document.getElementById('profileModal'),
+    profileForm: document.getElementById('profileForm'),
+    pfName: document.getElementById('pfName'),
+    pfEmail: document.getElementById('pfEmail'),
+    pfPassword: document.getElementById('pfPassword'),
+    pfPassword2: document.getElementById('pfPassword2'),
+    profileSubmit: document.getElementById('profileSubmit'),
     bmCount: document.getElementById('bmCount'),
     bmDesc: document.getElementById('bmDesc'),
     thBmCount: document.getElementById('thBmCount'),
@@ -1012,6 +1074,7 @@ body[data-auth="loading"] #content { display: none; }
     if (e.key !== 'Escape') return;
     if (!el.noticeModal.hidden) { closeModal(el.noticeModal); renderNoticeCard(); }
     else if (!el.askModal.hidden) closeModal(el.askModal);
+    else if (!el.profileModal.hidden) closeModal(el.profileModal);
   });
 
   renderNoticeCard();
@@ -1067,6 +1130,44 @@ body[data-auth="loading"] #content { display: none; }
       el.signout.disabled = false;
       el.signout.textContent = '로그아웃';
       if (!res.ok) window.alert(res.error);
+    });
+  });
+
+  /* 프로필 수정 — 이름은 user_metadata, 비밀번호는 채워진 경우에만 변경 */
+  el.profileEditBtn.addEventListener('click', function () {
+    var user = window.SW_AUTH.getUser();
+    if (!user) return;
+    el.pfName.value = user.name;
+    el.pfEmail.value = user.email;
+    el.pfPassword.value = '';
+    el.pfPassword2.value = '';
+    openModal(el.profileModal);
+  });
+
+  document.getElementById('profileClose').addEventListener('click', function () { closeModal(el.profileModal); });
+  document.getElementById('profileCancel').addEventListener('click', function () { closeModal(el.profileModal); });
+  el.profileModal.addEventListener('click', function (e) { if (e.target === el.profileModal) closeModal(el.profileModal); });
+
+  el.profileForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var name = el.pfName.value.trim();
+    if (!name) { el.pfName.focus(); return; }
+
+    var pw1 = el.pfPassword.value;
+    var pw2 = el.pfPassword2.value;
+    if (pw1 || pw2) {
+      if (pw1 !== pw2) { toast('새 비밀번호가 서로 달라요.'); return; }
+      if (pw1.length < 6) { toast('비밀번호는 6자 이상으로 입력해주세요.'); return; }
+    }
+
+    el.profileSubmit.disabled = true;
+    el.profileSubmit.textContent = '저장 중…';
+    window.SW_AUTH.updateProfile({ name: name, password: pw1 || undefined }).then(function (res) {
+      el.profileSubmit.disabled = false;
+      el.profileSubmit.textContent = '저장';
+      if (!res.ok) { toast(res.error); return; }
+      closeModal(el.profileModal);
+      toast('프로필을 수정했습니다.');
     });
   });
 
