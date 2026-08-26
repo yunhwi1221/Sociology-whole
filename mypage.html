@@ -196,6 +196,141 @@ svg { display: block; flex-shrink: 0; }
 .stat-num { display: block; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; color: var(--primary); }
 .stat-label { display: block; margin-top: 4px; font-size: 12px; color: var(--gray-500); }
 
+/* ===== 관리자 패널 (마이페이지 내장) ===== */
+.admin-shell {
+  margin-top: 14px; padding: 18px 16px 6px;
+  background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius);
+}
+.admin-tabs {
+  display: flex; gap: 4px; margin-bottom: 4px; padding-bottom: 0;
+  border-bottom: 1px solid var(--gray-200);
+  overflow-x: auto;
+}
+.admin-tab {
+  display: flex; align-items: center; gap: 6px; white-space: nowrap;
+  padding: 10px 13px; margin-bottom: -1px;
+  font-size: 13px; font-weight: 600; color: var(--gray-500);
+  border-bottom: 2px solid transparent;
+}
+.admin-tab:hover { color: var(--gray-800); }
+.admin-tab.active { color: var(--primary); border-bottom-color: var(--primary); }
+.tab-badge {
+  padding: 1px 7px; border-radius: 999px;
+  background: var(--gray-100); color: var(--gray-500);
+  font-size: 10.5px; font-weight: 700;
+}
+.admin-tab.active .tab-badge { background: var(--accent-soft); color: var(--primary-mid); }
+
+.admin-panel { padding: 16px 2px 20px; }
+.admin-panel[hidden] { display: none; }
+
+.admin-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; margin-bottom: 14px; }
+.admin-note { font-size: 12.5px; color: var(--gray-500); word-break: keep-all; line-height: 1.6; }
+.admin-search {
+  flex: 1; min-width: 180px; padding: 10px 12px;
+  background: var(--white); border: 1px solid var(--gray-200); border-radius: 10px;
+  font-size: 13.5px; outline: none;
+}
+.admin-search:focus { border-color: var(--primary-light); }
+
+.btn-new {
+  flex-shrink: 0; padding: 9px 16px; border-radius: 8px;
+  background: var(--primary); color: var(--white);
+  font-size: 13px; font-weight: 600; transition: background 0.2s;
+}
+.btn-new:hover { background: var(--primary-mid); }
+
+.filter-pills { display: flex; gap: 6px; margin-bottom: 14px; flex-wrap: wrap; }
+.pill {
+  padding: 7px 13px; border-radius: 999px; border: 1px solid var(--gray-200);
+  font-size: 12.5px; font-weight: 600; color: var(--gray-600); background: var(--white);
+}
+.pill.active { background: var(--primary); border-color: var(--primary); color: var(--white); }
+
+.admin-list { list-style: none; border-top: 1px solid var(--gray-200); }
+.admin-row {
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  padding: 14px 4px; border-bottom: 1px solid var(--gray-200); text-align: left;
+  background: var(--white);
+}
+.admin-row-main { flex: 1; min-width: 0; }
+.admin-row-title { font-size: 14px; font-weight: 600; color: var(--gray-900); word-break: keep-all; }
+.admin-row-sub {
+  margin-top: 3px; font-size: 12px; color: var(--gray-500);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.admin-row-meta { display: flex; gap: 6px; flex-shrink: 0; align-items: center; flex-wrap: wrap; justify-content: flex-end; }
+.admin-row-actions { display: flex; gap: 6px; flex-shrink: 0; }
+
+.badge { padding: 2px 8px; border-radius: 6px; font-size: 10.5px; font-weight: 700; white-space: nowrap; }
+.badge--wait { background: var(--gray-100); color: var(--gray-500); }
+.badge--ok { background: var(--leaf-soft); color: var(--leaf-deep); }
+.badge--draft { background: var(--gray-100); color: var(--gray-600); }
+.badge--source { background: var(--gray-100); color: var(--gray-500); }
+.badge--danger { background: #fee2e2; color: #b91c1c; }
+.badge--admin { background: #eef2ff; color: #4338ca; }
+
+.icon-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0;
+  color: var(--gray-500); border: 1px solid var(--gray-200); background: var(--white);
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.icon-btn:hover { background: var(--gray-50); color: var(--gray-800); border-color: var(--gray-300); }
+.icon-btn--danger:hover { background: #fef2f2; color: #b91c1c; border-color: #fecaca; }
+
+.mini-btn {
+  flex-shrink: 0; padding: 6px 11px; border-radius: 7px; background: var(--white);
+  border: 1px solid var(--gray-200); font-size: 12px; font-weight: 600; color: var(--gray-600);
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+}
+.mini-btn:hover { background: var(--gray-50); color: var(--gray-800); }
+.mini-btn--danger { color: #b91c1c; }
+.mini-btn--danger:hover { background: #fef2f2; border-color: #fecaca; }
+.mini-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.empty-state { padding: 40px 10px; text-align: center; color: var(--gray-400); font-size: 13.5px; }
+
+.field-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.chk-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+.chk-item {
+  display: flex; align-items: center; gap: 6px; padding: 7px 11px;
+  border: 1px solid var(--gray-200); border-radius: 8px; background: var(--white);
+  font-size: 12.5px; color: var(--gray-700); cursor: pointer;
+}
+.chk-item input { margin: 0; }
+
+.readonly-box {
+  padding: 11px 12px; background: var(--white); border: 1px solid var(--gray-200); border-radius: 10px;
+  font-size: 13.5px; color: var(--gray-600); white-space: pre-wrap; word-break: keep-all;
+}
+
+.repeater-row { display: flex; gap: 6px; align-items: flex-start; margin-top: 8px; }
+.repeater-row .field { margin-top: 0; flex: 1; }
+.repeater-add { margin-top: 8px; }
+
+.section-label {
+  margin-top: 22px; padding-top: 16px; border-top: 1px solid var(--gray-200);
+  font-size: 13px; font-weight: 700; color: var(--gray-800);
+}
+
+.kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.kpi-box {
+  padding: 16px 10px; text-align: center;
+  background: var(--white); border: 1px solid var(--gray-200); border-radius: var(--radius-sm);
+}
+.kpi-num { display: block; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; color: var(--primary); }
+.kpi-label { display: block; margin-top: 4px; font-size: 12px; color: var(--gray-500); }
+
+.modal-panel--wide { max-width: 680px; }
+.modal-btn--danger { background: var(--white); border: 1px solid #fecaca; color: #b91c1c; font-weight: 600; flex: 0 0 auto; }
+.modal-btn--danger:hover { background: #fef2f2; }
+
+@media (max-width: 520px) {
+  .field-2col { grid-template-columns: 1fr; }
+  .kpi-grid { grid-template-columns: 1fr; }
+}
+
 /* 공지사항·문의하기 모달 */
 .modal {
   position: fixed; inset: 0; z-index: 200;
@@ -261,7 +396,7 @@ svg { display: block; flex-shrink: 0; }
 /* 문의 폼 */
 .field { margin-top: 14px; }
 .field label { display: block; margin-bottom: 6px; font-size: 12.5px; font-weight: 600; color: var(--gray-600); }
-.field select, .field textarea, .field input[type="email"], .field input[type="text"], .field input[type="password"] {
+.field select, .field textarea, .field input[type="email"], .field input[type="text"], .field input[type="password"], .field input[type="url"] {
   width: 100%; padding: 11px 12px;
   background: var(--white);
   border: 1px solid var(--gray-200); border-radius: 10px;
@@ -487,24 +622,6 @@ body[data-auth="loading"] #content { display: none; }
       </a>
     </div>
 
-    <div id="adminStats" hidden>
-      <h2 class="section-title">운영 현황</h2>
-      <div class="stat-grid">
-        <div class="stat-box">
-          <span class="stat-num" id="statTerms">–</span>
-          <span class="stat-label">용어집 단어</span>
-        </div>
-        <div class="stat-box">
-          <span class="stat-num" id="statTheorists">–</span>
-          <span class="stat-label">이론가</span>
-        </div>
-        <div class="stat-box">
-          <span class="stat-num" id="statUsers">–</span>
-          <span class="stat-label">가입 회원</span>
-        </div>
-      </div>
-    </div>
-
     <h2 class="section-title">고객지원</h2>
     <div class="soon-grid">
       <button type="button" class="soon-item soon-item--link" id="noticeOpen">
@@ -546,23 +663,100 @@ body[data-auth="loading"] #content { display: none; }
 
     <div id="adminEntry" hidden>
       <h2 class="section-title">관리자</h2>
-      <div class="soon-grid">
-        <a class="soon-item soon-item--link" href="admin.html">
-          <span class="soon-icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
-              <path d="M12 2 4 6v6c0 5 3.4 8.4 8 10 4.6-1.6 8-5 8-10V6z"/>
-            </svg>
-          </span>
-          <span class="soon-main">
-            <span class="soon-name">관리자창</span>
-            <span class="soon-desc">용어 승인·이론가 관리·자료실 모더레이션·공지·문의 응답</span>
-          </span>
-          <span class="soon-arrow" aria-hidden="true">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
-              <path d="m9 18 6-6-6-6"/>
-            </svg>
-          </span>
-        </a>
+      <div class="admin-shell">
+        <nav class="admin-tabs" role="tablist" aria-label="관리자 메뉴">
+          <button type="button" class="admin-tab" data-atab="dash" role="tab">대시보드</button>
+          <button type="button" class="admin-tab" data-atab="users" role="tab">회원 관리</button>
+          <button type="button" class="admin-tab" data-atab="approve" role="tab">용어 승인 <span class="tab-badge" id="admBadgeApprove" hidden>0</span></button>
+          <button type="button" class="admin-tab" data-atab="theorists" role="tab">이론가 관리</button>
+          <button type="button" class="admin-tab" data-atab="materials" role="tab">자료실</button>
+          <button type="button" class="admin-tab" data-atab="notices" role="tab">공지사항</button>
+          <button type="button" class="admin-tab" data-atab="inquiries" role="tab">문의함 <span class="tab-badge" id="admBadgeInquiries" hidden>0</span></button>
+          <button type="button" class="admin-tab" data-atab="logs" role="tab">로그</button>
+        </nav>
+
+        <!-- 대시보드 -->
+        <section class="admin-panel" id="apanel-dash" hidden>
+          <div class="filter-pills" id="dashPeriodFilters">
+            <button type="button" class="pill active" data-period="today">오늘</button>
+            <button type="button" class="pill" data-period="7d">최근 7일</button>
+            <button type="button" class="pill" data-period="30d">최근 30일</button>
+          </div>
+          <p class="section-label" style="margin-top:0; padding-top:0; border-top:none;">회원</p>
+          <div class="kpi-grid">
+            <div class="kpi-box"><span class="kpi-num" id="kpiTotalUsers">–</span><span class="kpi-label">전체 회원</span></div>
+            <div class="kpi-box"><span class="kpi-num" id="kpiNewUsers">–</span><span class="kpi-label">신규 가입</span></div>
+            <div class="kpi-box"><span class="kpi-num" id="kpiActiveUsers">–</span><span class="kpi-label">활성 사용자</span></div>
+          </div>
+          <p class="section-label">콘텐츠</p>
+          <div class="kpi-grid">
+            <div class="kpi-box"><span class="kpi-num" id="kpiTerms">–</span><span class="kpi-label">용어집 단어</span></div>
+            <div class="kpi-box"><span class="kpi-num" id="kpiTheorists">–</span><span class="kpi-label">이론가</span></div>
+            <div class="kpi-box"><span class="kpi-num" id="kpiMaterials">–</span><span class="kpi-label">학습자료</span></div>
+          </div>
+          <p class="admin-note" style="margin-top:16px;">활성 사용자는 선택한 기간 내 마지막 접속 기록이 있는 회원 수입니다. 콘텐츠별 조회수 등 이용 통계는 아직 수집되지 않아 표시하지 않습니다.</p>
+        </section>
+
+        <!-- 회원 관리 -->
+        <section class="admin-panel" id="apanel-users" hidden>
+          <div class="admin-toolbar">
+            <input type="text" class="admin-search" id="userSearch" placeholder="이름 또는 이메일로 검색">
+          </div>
+          <p class="admin-note">이메일은 기본적으로 일부만 표시됩니다. 상세 화면에서 필요한 경우에만 전체를 확인하세요.</p>
+          <ul class="admin-list" id="userList"></ul>
+        </section>
+
+        <!-- 용어 승인 -->
+        <section class="admin-panel" id="apanel-approve" hidden>
+          <p class="admin-note">학생이 용어집에서 제안한 용어입니다. 게시하면 이 브라우저의 용어집에 즉시 반영됩니다.</p>
+          <ul class="admin-list" id="admApproveList"></ul>
+        </section>
+
+        <!-- 이론가 관리 -->
+        <section class="admin-panel" id="apanel-theorists" hidden>
+          <div class="admin-toolbar">
+            <p class="admin-note" style="flex:1">게시된 이론가는 theorist-data.js에 고정된 자료라 이 화면에서 직접 고치는 대신 새 항목을 초안으로 만들어 검토합니다.</p>
+            <button type="button" class="btn-new" id="admTheoristNewBtn">+ 새 이론가</button>
+          </div>
+          <p class="section-label" style="margin-top:0; padding-top:0; border-top:none;">게시된 이론가 (정적 파일 · 읽기전용)</p>
+          <ul class="admin-list" id="admTheoristPublishedList"></ul>
+          <p class="section-label">관리자 작성 목록</p>
+          <ul class="admin-list" id="admTheoristDraftList"></ul>
+        </section>
+
+        <!-- 자료실 모더레이션 -->
+        <section class="admin-panel" id="apanel-materials" hidden>
+          <div class="admin-toolbar">
+            <input type="text" class="admin-search" id="admMaterialSearch" placeholder="제목으로 검색">
+          </div>
+          <p class="admin-note">업로더 실명은 Supabase 연동 전이라 이 브라우저의 "내 자료"만 확인할 수 있습니다. 공개 샘플은 숨김 처리만 가능합니다.</p>
+          <ul class="admin-list" id="admMaterialList"></ul>
+        </section>
+
+        <!-- 공지사항 관리 -->
+        <section class="admin-panel" id="apanel-notices" hidden>
+          <div class="admin-toolbar">
+            <p class="admin-note" style="flex:1">여기서 작성한 공지는 위 "고객지원 &gt; 공지사항" 목록 맨 위에 노출됩니다.</p>
+            <button type="button" class="btn-new" id="admNoticeNewBtn">+ 새 공지</button>
+          </div>
+          <ul class="admin-list" id="admNoticeList"></ul>
+        </section>
+
+        <!-- 문의함 관리 -->
+        <section class="admin-panel" id="apanel-inquiries" hidden>
+          <div class="filter-pills" id="admInquiryFilters">
+            <button type="button" class="pill active" data-filter="all">전체</button>
+            <button type="button" class="pill" data-filter="pending">대기중</button>
+            <button type="button" class="pill" data-filter="answered">답변완료</button>
+          </div>
+          <ul class="admin-list" id="admInquiryList"></ul>
+        </section>
+
+        <!-- 관리자 로그 -->
+        <section class="admin-panel" id="apanel-logs" hidden>
+          <p class="admin-note">회원 상태·권한 변경, 콘텐츠 게시·삭제 등 주요 작업 기록입니다.</p>
+          <ul class="admin-list" id="admLogList"></ul>
+        </section>
       </div>
     </div>
   </section>
@@ -670,6 +864,251 @@ body[data-auth="loading"] #content { display: none; }
   </div>
 </div>
 
+<!-- [관리자] 회원 상세 -->
+<div class="modal" id="admUserModal" role="dialog" aria-modal="true" aria-labelledby="admUserModalTitle" hidden>
+  <div class="modal-panel">
+    <div class="modal-head">
+      <div>
+        <h2 class="modal-title" id="admUserModalTitle">회원 상세</h2>
+        <p class="modal-sub" id="admUserModalSub"></p>
+      </div>
+      <button type="button" class="modal-close" data-aclose="admUserModal" aria-label="닫기">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="field">
+      <label>이메일</label>
+      <div class="readonly-box" id="admUserEmail"></div>
+      <button type="button" class="mini-btn" id="admUserEmailToggle" style="margin-top:6px">전체 보기</button>
+    </div>
+    <div class="field">
+      <label>가입일 / 마지막 접속</label>
+      <div class="readonly-box" id="admUserDates"></div>
+    </div>
+    <div class="field">
+      <label>계정 상태 / 권한</label>
+      <div class="readonly-box" id="admUserRoleStatus"></div>
+    </div>
+    <p class="admin-note">학습 활동(북마크·자료 등)은 아직 각 사용자의 브라우저에만 저장되어 있어, 관리자가 다른 사용자의 이용 기록을 확인할 수 없습니다.</p>
+
+    <div class="modal-foot">
+      <button type="button" class="modal-btn modal-btn--ghost" id="admUserToggleStatus"></button>
+      <button type="button" class="modal-btn modal-btn--ghost" id="admUserToggleRole"></button>
+      <button type="button" class="modal-btn modal-btn--primary" data-aclose="admUserModal">닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- [관리자] 용어 승인 -->
+<div class="modal" id="admTermModal" role="dialog" aria-modal="true" aria-labelledby="admTermModalTitle" hidden>
+  <div class="modal-panel modal-panel--wide">
+    <div class="modal-head">
+      <div>
+        <h2 class="modal-title" id="admTermModalTitle">용어 승인</h2>
+        <p class="modal-sub">학생이 제출한 내용을 참고해 게시용 정의를 완성하세요.</p>
+      </div>
+      <button type="button" class="modal-close" data-aclose="admTermModal" aria-label="닫기">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="field">
+      <label>제출된 용어명 · 정의 (참고용)</label>
+      <div class="readonly-box" id="admTermSubmitted"></div>
+    </div>
+
+    <form id="admTermForm">
+      <div class="field-2col">
+        <div class="field">
+          <label for="admTTermKo">용어명</label>
+          <input type="text" id="admTTermKo" required>
+        </div>
+        <div class="field">
+          <label for="admTTermEn">영문 원어</label>
+          <input type="text" id="admTTermEn" placeholder="선택">
+        </div>
+      </div>
+      <div class="field">
+        <label for="admTOriginal">원문 정의 *</label>
+        <textarea id="admTOriginal" required></textarea>
+      </div>
+      <div class="field">
+        <label for="admTSource">원문 출처</label>
+        <input type="text" id="admTSource" placeholder="예: 에밀 뒤르켐, 『사회분업론』(1893)">
+      </div>
+      <div class="field">
+        <label for="admTCurator">내 정의 (쉬운 설명) *</label>
+        <textarea id="admTCurator" required></textarea>
+      </div>
+      <div class="field">
+        <label>카테고리</label>
+        <div class="chk-grid" id="admTCategories"></div>
+      </div>
+      <div class="field">
+        <label>관련 이론가</label>
+        <div class="chk-grid" id="admTTheorists"></div>
+      </div>
+      <div class="field">
+        <label>관점별 정의 (선택)</label>
+        <div id="admTPerspectives"></div>
+        <button type="button" class="mini-btn repeater-add" id="admTAddPerspective">+ 관점 추가</button>
+      </div>
+
+      <div class="modal-foot">
+        <button type="button" class="modal-btn modal-btn--danger" id="admTReject">반려</button>
+        <button type="button" class="modal-btn modal-btn--ghost" data-aclose="admTermModal">취소</button>
+        <button type="submit" class="modal-btn modal-btn--primary">게시</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- [관리자] 이론가 작성/수정 -->
+<div class="modal" id="admTheoristModal" role="dialog" aria-modal="true" aria-labelledby="admTheoristModalTitle" hidden>
+  <div class="modal-panel modal-panel--wide">
+    <div class="modal-head">
+      <div>
+        <h2 class="modal-title" id="admTheoristModalTitle">새 이론가</h2>
+        <p class="modal-sub">theorist-data.js 필드를 그대로 따릅니다. 게시해도 정적 파일에는 자동 반영되지 않습니다.</p>
+      </div>
+      <button type="button" class="modal-close" data-aclose="admTheoristModal" aria-label="닫기">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <form id="admTheoristForm">
+      <div class="field-2col">
+        <div class="field">
+          <label for="admThName">이름 *</label>
+          <input type="text" id="admThName" required>
+        </div>
+        <div class="field">
+          <label for="admThNameEn">영문명</label>
+          <input type="text" id="admThNameEn">
+        </div>
+      </div>
+      <div class="field-2col">
+        <div class="field">
+          <label for="admThYears">생몰년</label>
+          <input type="text" id="admThYears" placeholder="예: 1858–1917">
+        </div>
+        <div class="field">
+          <label for="admThNationality">국적</label>
+          <input type="text" id="admThNationality">
+        </div>
+      </div>
+      <div class="field">
+        <label for="admThPortrait">초상화 이미지 URL</label>
+        <input type="url" id="admThPortrait" placeholder="선택">
+      </div>
+      <div class="field">
+        <label>학파</label>
+        <div class="chk-grid" id="admThSchools"></div>
+      </div>
+      <div class="field">
+        <label for="admThMiniBio">한 줄 소개 (용어집 팝오버용)</label>
+        <textarea id="admThMiniBio" style="min-height:60px"></textarea>
+      </div>
+      <div class="field">
+        <label for="admThSummary">프로필 한 줄 요약</label>
+        <textarea id="admThSummary" style="min-height:60px"></textarea>
+      </div>
+      <div class="field">
+        <label for="admThLife">생애 (한 줄에 하나씩)</label>
+        <textarea id="admThLife" placeholder="1858 — 프랑스 에피날에서 태어났다."></textarea>
+        <p class="field-hint">"연도 — 사건" 형식으로 한 줄에 하나씩 입력하세요.</p>
+      </div>
+      <div class="field">
+        <label for="admThIdeas">사상 (한 줄에 하나씩)</label>
+        <textarea id="admThIdeas" placeholder="사회적 사실 — 내 바깥에 있으면서 나를 누르는 것들 — 언어·법·관습처럼 개인보다 앞서 있는 것들을 사회학이 다뤄야 한다는 뜻이다."></textarea>
+        <p class="field-hint">"개념명 — 한 줄 정의 — 설명" 형식으로 한 줄에 하나씩 입력하세요.</p>
+      </div>
+      <div class="field">
+        <label for="admThWorks">대표 저서 (한 줄에 하나씩)</label>
+        <textarea id="admThWorks" style="min-height:60px" placeholder="『사회분업론』, 1893"></textarea>
+      </div>
+      <div class="field-2col">
+        <div class="field">
+          <label for="admThQuote">인용구</label>
+          <textarea id="admThQuote" style="min-height:60px"></textarea>
+        </div>
+        <div class="field">
+          <label for="admThQuoteSource">인용 출처</label>
+          <input type="text" id="admThQuoteSource">
+        </div>
+      </div>
+
+      <div class="modal-foot">
+        <button type="button" class="modal-btn modal-btn--danger" id="admThDelete" hidden>삭제</button>
+        <button type="button" class="modal-btn modal-btn--ghost" data-aclose="admTheoristModal">취소</button>
+        <button type="button" class="modal-btn modal-btn--ghost" id="admThSaveDraft">임시저장</button>
+        <button type="submit" class="modal-btn modal-btn--primary">게시</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- [관리자] 공지 작성/수정 -->
+<div class="modal" id="admNoticeModal" role="dialog" aria-modal="true" aria-labelledby="admNoticeModalTitle" hidden>
+  <div class="modal-panel">
+    <div class="modal-head">
+      <div>
+        <h2 class="modal-title" id="admNoticeModalTitle">새 공지</h2>
+        <p class="modal-sub">전체 학생의 마이페이지 공지사항 목록에 노출됩니다.</p>
+      </div>
+      <button type="button" class="modal-close" data-aclose="admNoticeModal" aria-label="닫기">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <form id="admNoticeForm">
+      <div class="field">
+        <label for="admNTitle">제목 *</label>
+        <input type="text" id="admNTitle" required>
+      </div>
+      <div class="field">
+        <label for="admNBody">본문 *</label>
+        <textarea id="admNBody" required style="min-height:140px"></textarea>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="modal-btn modal-btn--danger" id="admNDelete" hidden>삭제</button>
+        <button type="button" class="modal-btn modal-btn--ghost" data-aclose="admNoticeModal">취소</button>
+        <button type="submit" class="modal-btn modal-btn--primary">게시</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- [관리자] 문의 답변 -->
+<div class="modal" id="admInquiryModal" role="dialog" aria-modal="true" aria-labelledby="admInquiryModalTitle" hidden>
+  <div class="modal-panel">
+    <div class="modal-head">
+      <div>
+        <h2 class="modal-title" id="admInquiryModalTitle">문의 확인</h2>
+        <p class="modal-sub" id="admInquiryModalSub"></p>
+      </div>
+      <button type="button" class="modal-close" data-aclose="admInquiryModal" aria-label="닫기">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="field">
+      <label>문의 내용</label>
+      <div class="readonly-box" id="admInquiryBody"></div>
+    </div>
+    <form id="admInquiryForm">
+      <div class="field">
+        <label for="admIAnswer">답변 *</label>
+        <textarea id="admIAnswer" required></textarea>
+        <p class="field-hint">저장하면 학생의 마이페이지 &gt; 문의하기에서 바로 보입니다.</p>
+      </div>
+      <div class="modal-foot">
+        <button type="button" class="modal-btn modal-btn--ghost" data-aclose="admInquiryModal">닫기</button>
+        <button type="submit" class="modal-btn modal-btn--primary">답변 저장</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <nav class="bottom-nav" aria-label="주요 메뉴">
@@ -702,8 +1141,10 @@ body[data-auth="loading"] #content { display: none; }
   </div>
 </nav>
 
-<!-- 북마크한 용어의 제목·정의를 채우려면 용어집 데이터가 필요하다 -->
+<!-- 북마크한 용어의 제목·정의를 채우려면 용어집 데이터가 필요하다. 이론가/자료실 데이터는 관리자 패널(이론가 관리·자료실 모더레이션)에 필요하다 -->
 <script src="glossary-data.js"></script>
+<script src="theorist-data.js"></script>
+<script src="resource-data.js"></script>
 
 <!-- 인증 (Supabase Auth) — 로드 순서 고정 -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.min.js"></script>
@@ -752,17 +1193,8 @@ body[data-auth="loading"] #content { display: none; }
     askEmail: document.getElementById('askEmail'),
     myInquiryList: document.getElementById('myInquiryList'),
     adminEntry: document.getElementById('adminEntry'),
-    adminStats: document.getElementById('adminStats'),
-    statTerms: document.getElementById('statTerms'),
-    statTheorists: document.getElementById('statTheorists'),
-    statUsers: document.getElementById('statUsers'),
     toast: document.getElementById('toast')
   };
-
-  /* 관리자창 진입 — 1차는 운영자 1명(유니)뿐이라 role 컬럼 대신
-     계정 UUID 화이트리스트로 판별한다. 저장소가 public이라 이메일 대신
-     의미 없는 UUID를 쓴다. admin.html 도 같은 목록을 쓴다. */
-  var ADMIN_IDS = ['7db0b3ed-34fc-4be1-9a85-337f74a23bcb'];
 
   /* ---------------------------------------------------------
      북마크한 용어 — 목록은 용어집(glossary.html?view=bookmarks)이 보여준다.
@@ -890,9 +1322,12 @@ body[data-auth="loading"] #content { display: none; }
 
   /* 관리자창에서 작성한 공지({id, title, body, date})를 기본 공지 뒤에 이어 붙이고
      최신순으로 정렬한다. 필드 이름을 admin.html 과 맞춰 별도 변환 없이 합친다. */
-  var NOTICES = adminNotices().concat(DEFAULT_NOTICES).sort(function (a, b) {
-    return (b.date || '').localeCompare(a.date || '');
-  });
+  function computeNotices() {
+    return adminNotices().concat(DEFAULT_NOTICES).sort(function (a, b) {
+      return (b.date || '').localeCompare(a.date || '');
+    });
+  }
+  var NOTICES = computeNotices();
 
   var toastTimer;
   function toast(msg) {
@@ -1079,23 +1514,44 @@ body[data-auth="loading"] #content { display: none; }
 
   renderNoticeCard();
 
-  /* 운영 현황 — 용어·이론가는 이미 로드된 정적 데이터로 바로 세고,
-     가입 회원 수만 admin_user_count() RPC(관리자 UUID만 허용)로 가져온다. */
+  /* 관리자 판별은 하드코딩 목록이 아니라 profiles.role/status를 직접 조회해서 정한다.
+     본인 행 SELECT는 profiles_select_own RLS 정책으로 허용되어 있다. */
   var APPROVED_TERM_KEY = 'sw:glossary:approved';
-  function renderAdminStats() {
-    var terms = (window.GLOSSARY_DATA && window.GLOSSARY_DATA.terms) || [];
-    var approved = readList(APPROVED_TERM_KEY);
-    el.statTerms.textContent = terms.length + approved.length;
+  var PENDING_TERM_KEY = 'sw:glossary:pending';
+  var ADMIN_THEORIST_KEY = 'sw:admin:theorists';
+  var HIDDEN_MATERIAL_KEY = 'sw:admin:hiddenMaterials';
+  var loggedAdminLoginThisSession = false;
 
-    var theorists = (window.GLOSSARY_DATA && window.GLOSSARY_DATA.theorists) || {};
-    el.statTheorists.textContent = Object.keys(theorists).length;
+  function writeList(key, list) {
+    try { localStorage.setItem(key, JSON.stringify(list)); } catch (e) { /* 저장 실패는 무시 */ }
+  }
 
-    el.statUsers.textContent = '…';
-    var client = window.SW_AUTH && window.SW_AUTH.client;
-    if (!client) { el.statUsers.textContent = '—'; return; }
-    client.rpc('admin_user_count').then(function (res) {
-      el.statUsers.textContent = (res.error || res.data == null) ? '—' : res.data;
-    }).catch(function () { el.statUsers.textContent = '—'; });
+  function sbClient() { return window.SW_AUTH && window.SW_AUTH.client; }
+
+  function logAdminEvent(action, targetType, targetId) {
+    var client = sbClient();
+    if (!client) return;
+    client.rpc('admin_log_event', {
+      p_action: action, p_target_type: targetType || null, p_target_id: targetId != null ? String(targetId) : null
+    }).catch(function () { /* 로그 실패는 조용히 무시 */ });
+  }
+
+  function checkAdminAndRenderPanel(user) {
+    var client = sbClient();
+    if (!client) { el.adminEntry.hidden = true; return; }
+    client.from('profiles').select('role,status').eq('id', user.id).single().then(function (res) {
+      var isAdmin = !res.error && res.data && res.data.role === 'admin' && res.data.status === 'active';
+      el.adminEntry.hidden = !isAdmin;
+      if (!isAdmin) return;
+      if (!loggedAdminLoginThisSession) {
+        loggedAdminLoginThisSession = true;
+        logAdminEvent('admin_login');
+      }
+      loadAdminUsers().then(function () {
+        var hashTab = (location.hash || '').replace('#', '');
+        activateAdminTab(ATABS.indexOf(hashTab) >= 0 ? hashTab : 'dash');
+      });
+    }).catch(function () { el.adminEntry.hidden = true; });
   }
 
   function render(user) {
@@ -1104,15 +1560,12 @@ body[data-auth="loading"] #content { display: none; }
       el.avatar.textContent = user.name.charAt(0);
       el.name.textContent = user.name + '님';
       el.email.textContent = user.email;
-      var isAdmin = ADMIN_IDS.indexOf(user.id) >= 0;
-      el.adminEntry.hidden = !isAdmin;
-      el.adminStats.hidden = !isAdmin;
-      if (isAdmin) renderAdminStats();
       renderAskCard(user.email);
+      checkAdminAndRenderPanel(user);
     } else {
       document.body.dataset.auth = 'out';
       el.adminEntry.hidden = true;
-      el.adminStats.hidden = true;
+      loggedAdminLoginThisSession = false;
     }
   }
 
@@ -1124,6 +1577,7 @@ body[data-auth="loading"] #content { display: none; }
   });
 
   el.signout.addEventListener('click', function () {
+    if (!el.adminEntry.hidden) logAdminEvent('admin_logout');
     el.signout.disabled = true;
     el.signout.textContent = '처리 중…';
     window.SW_AUTH.signOut().then(function (res) {
@@ -1176,6 +1630,794 @@ body[data-auth="loading"] #content { display: none; }
     var btn = document.querySelector('.sw-auth-btn--login');
     if (btn) btn.click();
   });
+
+  /* ===========================================================
+     관리자 패널 (마이페이지 내장) — prd_11.md 기준
+     회원 관리는 Supabase profiles/RPC로 실제 DB를 다루고,
+     용어 승인·이론가 관리·자료실·공지사항·문의함은 기존 admin.html의
+     localStorage 기반 로직을 id만 바꿔 그대로 옮겨왔다.
+     =========================================================== */
+  function fmtDate() { return new Date().toISOString().slice(0, 10); }
+  function fmtDateShort(iso) {
+    if (!iso) return '기록 없음';
+    return String(iso).slice(0, 10);
+  }
+  function maskEmail(email) {
+    var s = String(email || '');
+    var at = s.indexOf('@');
+    if (at <= 0) return s;
+    var local = s.slice(0, at);
+    var domain = s.slice(at);
+    return local.slice(0, Math.min(3, local.length)) + '***' + domain;
+  }
+
+  var GLOSSARY = window.GLOSSARY_DATA || { categories: [], theorists: {} };
+  var CATEGORIES = GLOSSARY.categories || [];
+  var THEORIST_KEYS = Object.keys(GLOSSARY.theorists || {});
+  var EXT = window.THEORIST_DATA || { schools: [], theorists: {} };
+  var SCHOOLS = EXT.schools || [];
+  var SAMPLES = (window.RESOURCE_DATA && window.RESOURCE_DATA.materials) || [];
+
+  function buildCheckGrid(container, items, keyFn, labelFn, checkedKeys) {
+    container.innerHTML = items.map(function (item) {
+      var key = keyFn(item);
+      var checked = checkedKeys.indexOf(key) >= 0 ? ' checked' : '';
+      return '<label class="chk-item"><input type="checkbox" value="' + esc(key) + '"' + checked + '>' + esc(labelFn(item)) + '</label>';
+    }).join('');
+  }
+  function checkedValues(container) {
+    return Array.prototype.slice.call(container.querySelectorAll('input:checked')).map(function (i) { return i.value; });
+  }
+
+  document.querySelectorAll('[data-aclose]').forEach(function (btn) {
+    btn.addEventListener('click', function () { closeModal(document.getElementById(btn.getAttribute('data-aclose'))); });
+  });
+  var ADMIN_MODAL_IDS = ['admUserModal', 'admTermModal', 'admTheoristModal', 'admNoticeModal', 'admInquiryModal'];
+  ADMIN_MODAL_IDS.forEach(function (id) {
+    var modal = document.getElementById(id);
+    modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(modal); });
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    ADMIN_MODAL_IDS.forEach(function (id) {
+      var m = document.getElementById(id);
+      if (!m.hidden) m.hidden = true;
+    });
+  });
+
+  /* ---------------------------------------------------------
+     탭 전환
+     --------------------------------------------------------- */
+  var ATABS = ['dash', 'users', 'approve', 'theorists', 'materials', 'notices', 'inquiries', 'logs'];
+  var adminRenderers = {
+    dash: renderDashboard,
+    users: renderUserList,
+    approve: renderAdmApprove,
+    theorists: renderAdmTheorists,
+    materials: renderAdmMaterials,
+    notices: renderAdmNotices,
+    inquiries: renderAdmInquiries,
+    logs: renderAdminLogs
+  };
+  function activateAdminTab(name) {
+    document.querySelectorAll('.admin-tab').forEach(function (btn) {
+      btn.classList.toggle('active', btn.getAttribute('data-atab') === name);
+    });
+    ATABS.forEach(function (t) {
+      document.getElementById('apanel-' + t).hidden = t !== name;
+    });
+    if (adminRenderers[name]) adminRenderers[name]();
+  }
+  document.querySelectorAll('.admin-tab').forEach(function (btn) {
+    btn.addEventListener('click', function () { activateAdminTab(btn.getAttribute('data-atab')); });
+  });
+
+  /* ---------------------------------------------------------
+     대시보드 (9장) — 회원 KPI는 실제 DB, 콘텐츠 KPI는 로드된 데이터 수
+     --------------------------------------------------------- */
+  var adminUsersCache = [];
+  var dashPeriod = 'today';
+
+  document.getElementById('dashPeriodFilters').addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-period]');
+    if (!btn) return;
+    dashPeriod = btn.getAttribute('data-period');
+    document.querySelectorAll('#dashPeriodFilters .pill').forEach(function (p) { p.classList.toggle('active', p === btn); });
+    renderDashboard();
+  });
+
+  function periodStartDate() {
+    var d = new Date();
+    if (dashPeriod === '7d') d.setDate(d.getDate() - 7);
+    else if (dashPeriod === '30d') d.setDate(d.getDate() - 30);
+    else d.setHours(0, 0, 0, 0);
+    return d;
+  }
+
+  function loadAdminUsers() {
+    var client = sbClient();
+    if (!client) return Promise.resolve();
+    return client.rpc('admin_list_users').then(function (res) {
+      adminUsersCache = res.error ? [] : (res.data || []);
+    }).catch(function () { adminUsersCache = []; });
+  }
+
+  function renderDashboard() {
+    var terms = (window.GLOSSARY_DATA && window.GLOSSARY_DATA.terms) || [];
+    document.getElementById('kpiTerms').textContent = terms.length + readList(APPROVED_TERM_KEY).length;
+
+    var publishedDrafts = readList(ADMIN_THEORIST_KEY).filter(function (t) { return t.status === 'published'; });
+    document.getElementById('kpiTheorists').textContent = THEORIST_KEYS.length + publishedDrafts.length;
+
+    document.getElementById('kpiMaterials').textContent = SAMPLES.length + readList(RES_MATERIAL_KEY).length;
+
+    document.getElementById('kpiTotalUsers').textContent = adminUsersCache.length || '–';
+    if (!adminUsersCache.length) {
+      document.getElementById('kpiNewUsers').textContent = '–';
+      document.getElementById('kpiActiveUsers').textContent = '–';
+      return;
+    }
+    var start = periodStartDate();
+    var newUsers = adminUsersCache.filter(function (u) { return u.created_at && new Date(u.created_at) >= start; }).length;
+    var activeUsers = adminUsersCache.filter(function (u) { return u.last_sign_in_at && new Date(u.last_sign_in_at) >= start; }).length;
+    document.getElementById('kpiNewUsers').textContent = newUsers;
+    document.getElementById('kpiActiveUsers').textContent = activeUsers;
+  }
+
+  /* ---------------------------------------------------------
+     회원 관리 (10~14장)
+     --------------------------------------------------------- */
+  var userSearchEl = document.getElementById('userSearch');
+  var userListEl = document.getElementById('userList');
+  var currentAdminUserId = null;
+  var adminEmailRevealed = false;
+
+  userSearchEl.addEventListener('input', renderUserList);
+
+  function renderUserList() {
+    if (!adminUsersCache.length) {
+      userListEl.innerHTML = '<li class="empty-state">불러온 회원이 없습니다.</li>';
+      return;
+    }
+    var q = userSearchEl.value.trim().toLowerCase();
+    var rows = adminUsersCache.filter(function (u) {
+      if (!q) return true;
+      return (u.name || '').toLowerCase().indexOf(q) >= 0 || (u.email || '').toLowerCase().indexOf(q) >= 0;
+    });
+    if (rows.length === 0) {
+      userListEl.innerHTML = '<li class="empty-state">조건에 맞는 회원이 없습니다.</li>';
+      return;
+    }
+    userListEl.innerHTML = rows.map(function (u) {
+      return '<li><button type="button" class="admin-row" data-user-id="' + esc(u.id) + '">' +
+        '<span class="admin-row-main">' +
+          '<span class="admin-row-title">' + esc(u.name || '(이름 없음)') + '</span>' +
+          '<span class="admin-row-sub">' + esc(maskEmail(u.email)) + ' · 가입 ' + esc(fmtDateShort(u.created_at)) + '</span>' +
+        '</span>' +
+        '<span class="admin-row-meta">' +
+          '<span class="badge ' + (u.status === 'disabled' ? 'badge--danger' : 'badge--ok') + '">' + (u.status === 'disabled' ? '비활성' : '활성') + '</span>' +
+          (u.role === 'admin' ? '<span class="badge badge--admin">관리자</span>' : '') +
+        '</span>' +
+      '</button></li>';
+    }).join('');
+  }
+
+  userListEl.addEventListener('click', function (e) {
+    var row = e.target.closest('[data-user-id]');
+    if (!row) return;
+    var u = adminUsersCache.filter(function (x) { return x.id === row.getAttribute('data-user-id'); })[0];
+    if (!u) return;
+    currentAdminUserId = u.id;
+    adminEmailRevealed = false;
+    fillUserDetail(u);
+    openModal(document.getElementById('admUserModal'));
+  });
+
+  function fillUserDetail(u) {
+    document.getElementById('admUserModalTitle').textContent = u.name || '(이름 없음)';
+    document.getElementById('admUserModalSub').textContent = u.id;
+    document.getElementById('admUserEmail').textContent = adminEmailRevealed ? u.email : maskEmail(u.email);
+    document.getElementById('admUserEmailToggle').textContent = adminEmailRevealed ? '마스킹으로 되돌리기' : '전체 보기';
+    document.getElementById('admUserDates').textContent = '가입일 ' + fmtDateShort(u.created_at) + ' · 마지막 접속 ' + fmtDateShort(u.last_sign_in_at);
+    document.getElementById('admUserRoleStatus').textContent = (u.status === 'disabled' ? '비활성 계정' : '활성 계정') + ' · ' + (u.role === 'admin' ? '관리자 권한' : '일반 사용자');
+
+    var isSelf = window.SW_AUTH.getUser() && window.SW_AUTH.getUser().id === u.id;
+    var statusBtn = document.getElementById('admUserToggleStatus');
+    var roleBtn = document.getElementById('admUserToggleRole');
+    statusBtn.textContent = u.status === 'disabled' ? '계정 활성화' : '계정 비활성화';
+    roleBtn.textContent = u.role === 'admin' ? '관리자 권한 해제' : '관리자 권한 부여';
+    statusBtn.disabled = !!isSelf;
+    roleBtn.disabled = !!isSelf;
+    statusBtn.title = isSelf ? '본인 계정 상태는 여기서 바꿀 수 없습니다.' : '';
+    roleBtn.title = isSelf ? '본인의 관리자 권한은 여기서 바꿀 수 없습니다.' : '';
+  }
+
+  document.getElementById('admUserEmailToggle').addEventListener('click', function () {
+    adminEmailRevealed = !adminEmailRevealed;
+    var u = adminUsersCache.filter(function (x) { return x.id === currentAdminUserId; })[0];
+    if (u) fillUserDetail(u);
+  });
+
+  document.getElementById('admUserToggleStatus').addEventListener('click', function () {
+    var u = adminUsersCache.filter(function (x) { return x.id === currentAdminUserId; })[0];
+    if (!u) return;
+    var next = u.status === 'disabled' ? 'active' : 'disabled';
+    if (!window.confirm(next === 'disabled' ? '이 계정을 비활성화할까요? 로그인이 제한됩니다.' : '이 계정을 다시 활성화할까요?')) return;
+    var client = sbClient();
+    if (!client) return;
+    client.rpc('admin_set_user_status', { target_id: u.id, new_status: next }).then(function (res) {
+      if (res.error) { toast(res.error.message || '변경에 실패했습니다.'); return; }
+      u.status = next;
+      fillUserDetail(u);
+      renderUserList();
+      renderDashboard();
+      toast(next === 'disabled' ? '계정을 비활성화했습니다.' : '계정을 활성화했습니다.');
+    });
+  });
+
+  document.getElementById('admUserToggleRole').addEventListener('click', function () {
+    var u = adminUsersCache.filter(function (x) { return x.id === currentAdminUserId; })[0];
+    if (!u) return;
+    var next = u.role === 'admin' ? 'user' : 'admin';
+    if (!window.confirm(next === 'admin' ? '이 회원에게 관리자 권한을 부여할까요?' : '이 회원의 관리자 권한을 해제할까요?')) return;
+    var client = sbClient();
+    if (!client) return;
+    client.rpc('admin_set_user_role', { target_id: u.id, new_role: next }).then(function (res) {
+      if (res.error) { toast(res.error.message || '변경에 실패했습니다.'); return; }
+      u.role = next;
+      fillUserDetail(u);
+      renderUserList();
+      toast(next === 'admin' ? '관리자 권한을 부여했습니다.' : '관리자 권한을 해제했습니다.');
+    });
+  });
+
+  /* ---------------------------------------------------------
+     용어 승인 (15장)
+     --------------------------------------------------------- */
+  var admApproveList = document.getElementById('admApproveList');
+  var admBadgeApprove = document.getElementById('admBadgeApprove');
+  var currentPendingId = null;
+
+  function renderAdmApprove() {
+    var pending = readList(PENDING_TERM_KEY).sort(function (a, b) {
+      return (b.submitted_at || '').localeCompare(a.submitted_at || '');
+    });
+    admBadgeApprove.hidden = pending.length === 0;
+    admBadgeApprove.textContent = pending.length;
+    if (pending.length === 0) {
+      admApproveList.innerHTML = '<li class="empty-state">대기 중인 제안이 없습니다.</li>';
+      return;
+    }
+    admApproveList.innerHTML = pending.map(function (p) {
+      return '<li><button type="button" class="admin-row" data-approve-id="' + esc(p.id) + '">' +
+        '<span class="admin-row-main">' +
+          '<span class="admin-row-title">' + esc(p.term_ko) + '</span>' +
+          '<span class="admin-row-sub">' + esc(p.definition) + '</span>' +
+        '</span>' +
+        '<span class="admin-row-meta"><span class="badge badge--wait">' + esc(p.submitted_at || '') + '</span></span>' +
+      '</button></li>';
+    }).join('');
+  }
+
+  admApproveList.addEventListener('click', function (e) {
+    var row = e.target.closest('[data-approve-id]');
+    if (!row) return;
+    var p = readList(PENDING_TERM_KEY).filter(function (x) { return x.id === row.getAttribute('data-approve-id'); })[0];
+    if (!p) return;
+    openTermEditor(p);
+  });
+
+  function perspectiveRow(school, definition) {
+    var row = document.createElement('div');
+    row.className = 'repeater-row';
+    row.innerHTML =
+      '<div class="field"><input type="text" placeholder="학파 (예: 갈등론)" class="p-school" value="' + esc(school || '') + '"></div>' +
+      '<div class="field"><textarea placeholder="이 학파의 정의" class="p-def" style="min-height:44px">' + esc(definition || '') + '</textarea></div>' +
+      '<button type="button" class="icon-btn icon-btn--danger p-remove" aria-label="삭제" style="margin-top:6px">' +
+        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>' +
+      '</button>';
+    row.querySelector('.p-remove').addEventListener('click', function () { row.remove(); });
+    return row;
+  }
+  document.getElementById('admTAddPerspective').addEventListener('click', function () {
+    document.getElementById('admTPerspectives').appendChild(perspectiveRow('', ''));
+  });
+
+  function openTermEditor(p) {
+    currentPendingId = p.id;
+    document.getElementById('admTermSubmitted').textContent = p.term_ko + ' — ' + p.definition;
+    document.getElementById('admTTermKo').value = p.term_ko || '';
+    document.getElementById('admTTermEn').value = '';
+    document.getElementById('admTOriginal').value = '';
+    document.getElementById('admTSource').value = '';
+    document.getElementById('admTCurator').value = p.definition || '';
+    buildCheckGrid(document.getElementById('admTCategories'), CATEGORIES, function (c) { return c; }, function (c) { return c; }, []);
+    buildCheckGrid(document.getElementById('admTTheorists'), THEORIST_KEYS, function (k) { return k; }, function (k) { return GLOSSARY.theorists[k].name; }, []);
+    document.getElementById('admTPerspectives').innerHTML = '';
+    openModal(document.getElementById('admTermModal'));
+  }
+
+  document.getElementById('admTReject').addEventListener('click', function () {
+    if (!currentPendingId) return;
+    if (!window.confirm('이 제안을 반려하고 목록에서 지울까요?')) return;
+    writeList(PENDING_TERM_KEY, readList(PENDING_TERM_KEY).filter(function (p) { return p.id !== currentPendingId; }));
+    document.getElementById('admTermModal').hidden = true;
+    logAdminEvent('term_rejected', 'term', currentPendingId);
+    renderAdmApprove();
+    toast('반려했습니다.');
+  });
+
+  document.getElementById('admTermForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var termKo = document.getElementById('admTTermKo').value.trim();
+    var original = document.getElementById('admTOriginal').value.trim();
+    var curator = document.getElementById('admTCurator').value.trim();
+    if (!termKo || !original || !curator) { toast('필수 항목(용어명·원문 정의·내 정의)을 입력해주세요.'); return; }
+
+    var perspectives = Array.prototype.slice.call(document.querySelectorAll('#admTPerspectives .repeater-row')).map(function (row) {
+      return { school: row.querySelector('.p-school').value.trim(), definition: row.querySelector('.p-def').value.trim() };
+    }).filter(function (p) { return p.school && p.definition; });
+
+    var term = {
+      id: 'admin-' + Date.now().toString(36),
+      term_ko: termKo,
+      term_en: document.getElementById('admTTermEn').value.trim(),
+      categories: checkedValues(document.getElementById('admTCategories')),
+      curator_definition: curator,
+      original_definition: original,
+      original_definition_source: document.getElementById('admTSource').value.trim(),
+      related_theorists: checkedValues(document.getElementById('admTTheorists')),
+      perspectives: perspectives
+    };
+
+    var approved = readList(APPROVED_TERM_KEY);
+    approved.push(term);
+    writeList(APPROVED_TERM_KEY, approved);
+    writeList(PENDING_TERM_KEY, readList(PENDING_TERM_KEY).filter(function (p) { return p.id !== currentPendingId; }));
+
+    document.getElementById('admTermModal').hidden = true;
+    logAdminEvent('term_published', 'term', term.id);
+    renderAdmApprove();
+    renderDashboard();
+    toast('게시했습니다. 용어집에 반영됩니다.');
+  });
+
+  /* ---------------------------------------------------------
+     이론가 관리 (16장)
+     --------------------------------------------------------- */
+  var admTheoristPublishedList = document.getElementById('admTheoristPublishedList');
+  var admTheoristDraftList = document.getElementById('admTheoristDraftList');
+  var currentTheoristId = null;
+
+  function renderAdmTheorists() {
+    admTheoristPublishedList.innerHTML = THEORIST_KEYS.map(function (key) {
+      var base = GLOSSARY.theorists[key];
+      var ext = EXT.theorists[key] || {};
+      return '<li class="admin-row">' +
+        '<span class="admin-row-main">' +
+          '<span class="admin-row-title">' + esc(base.name) + '</span>' +
+          '<span class="admin-row-sub">' + esc(base.years || '') + ' · ' + esc((ext.schools || []).join(', ')) + '</span>' +
+        '</span>' +
+        '<span class="admin-row-meta"><span class="badge badge--source">코드 수정 필요</span></span>' +
+      '</li>';
+    }).join('');
+
+    var drafts = readList(ADMIN_THEORIST_KEY).sort(function (a, b) { return (b.updated_at || '').localeCompare(a.updated_at || ''); });
+    if (drafts.length === 0) {
+      admTheoristDraftList.innerHTML = '<li class="empty-state">관리자가 작성한 이론가가 없습니다.</li>';
+      return;
+    }
+    admTheoristDraftList.innerHTML = drafts.map(function (t) {
+      return '<li><button type="button" class="admin-row" data-theorist-id="' + esc(t.id) + '">' +
+        '<span class="admin-row-main">' +
+          '<span class="admin-row-title">' + esc(t.name) + '</span>' +
+          '<span class="admin-row-sub">' + esc(t.years || '') + ' · ' + esc((t.schools || []).join(', ')) + '</span>' +
+        '</span>' +
+        '<span class="admin-row-meta"><span class="badge ' + (t.status === 'published' ? 'badge--ok' : 'badge--draft') + '">' + (t.status === 'published' ? '게시됨' : '임시저장') + '</span></span>' +
+      '</button></li>';
+    }).join('');
+  }
+
+  function resetTheoristForm() {
+    ['admThName', 'admThNameEn', 'admThYears', 'admThNationality', 'admThPortrait', 'admThMiniBio', 'admThSummary', 'admThLife', 'admThIdeas', 'admThWorks', 'admThQuote', 'admThQuoteSource']
+      .forEach(function (id) { document.getElementById(id).value = ''; });
+    buildCheckGrid(document.getElementById('admThSchools'), SCHOOLS, function (s) { return s; }, function (s) { return s; }, []);
+  }
+
+  function fillTheoristForm(t) {
+    document.getElementById('admThName').value = t.name || '';
+    document.getElementById('admThNameEn').value = t.name_en || '';
+    document.getElementById('admThYears').value = t.years || '';
+    document.getElementById('admThNationality').value = t.nationality || '';
+    document.getElementById('admThPortrait').value = t.portrait_url || '';
+    document.getElementById('admThMiniBio').value = t.mini_bio || '';
+    document.getElementById('admThSummary').value = t.summary || '';
+    document.getElementById('admThLife').value = (t.life || []).map(function (l) { return l.year + ' — ' + l.text; }).join('\n');
+    document.getElementById('admThIdeas').value = (t.ideas || []).map(function (i) { return i.name + ' — ' + i.line + ' — ' + i.body; }).join('\n');
+    document.getElementById('admThWorks').value = (t.key_works || []).map(function (w) { return w.title + (w.year ? ', ' + w.year : ''); }).join('\n');
+    document.getElementById('admThQuote').value = t.quote || '';
+    document.getElementById('admThQuoteSource').value = t.quote_source || '';
+    buildCheckGrid(document.getElementById('admThSchools'), SCHOOLS, function (s) { return s; }, function (s) { return s; }, t.schools || []);
+  }
+
+  function parseLifeLines(text) {
+    return text.split('\n').map(function (line) { return line.trim(); }).filter(Boolean).map(function (line) {
+      var idx = line.indexOf('—');
+      if (idx < 0) return { year: '', text: line };
+      return { year: line.slice(0, idx).trim(), text: line.slice(idx + 1).trim() };
+    });
+  }
+  function parseIdeaLines(text) {
+    return text.split('\n').map(function (line) { return line.trim(); }).filter(Boolean).map(function (line) {
+      var parts = line.split('—').map(function (p) { return p.trim(); });
+      return { name: parts[0] || '', line: parts[1] || '', body: parts.slice(2).join(' — ') || '', term: '' };
+    });
+  }
+  function parseWorkLines(text) {
+    return text.split('\n').map(function (line) { return line.trim(); }).filter(Boolean).map(function (line) {
+      var parts = line.split(',');
+      var year = parts.length > 1 ? parseInt(parts[parts.length - 1], 10) : null;
+      var title = year ? parts.slice(0, -1).join(',').trim() : line;
+      return { title: title, year: isNaN(year) ? null : year };
+    });
+  }
+
+  function collectTheoristForm() {
+    return {
+      name: document.getElementById('admThName').value.trim(),
+      name_en: document.getElementById('admThNameEn').value.trim(),
+      years: document.getElementById('admThYears').value.trim(),
+      nationality: document.getElementById('admThNationality').value.trim(),
+      portrait_url: document.getElementById('admThPortrait').value.trim(),
+      schools: checkedValues(document.getElementById('admThSchools')),
+      mini_bio: document.getElementById('admThMiniBio').value.trim(),
+      summary: document.getElementById('admThSummary').value.trim(),
+      life: parseLifeLines(document.getElementById('admThLife').value),
+      ideas: parseIdeaLines(document.getElementById('admThIdeas').value),
+      key_works: parseWorkLines(document.getElementById('admThWorks').value),
+      quote: document.getElementById('admThQuote').value.trim(),
+      quote_source: document.getElementById('admThQuoteSource').value.trim()
+    };
+  }
+
+  document.getElementById('admTheoristNewBtn').addEventListener('click', function () {
+    currentTheoristId = null;
+    document.getElementById('admTheoristModalTitle').textContent = '새 이론가';
+    document.getElementById('admThDelete').hidden = true;
+    resetTheoristForm();
+    openModal(document.getElementById('admTheoristModal'));
+  });
+
+  admTheoristDraftList.addEventListener('click', function (e) {
+    var row = e.target.closest('[data-theorist-id]');
+    if (!row) return;
+    var t = readList(ADMIN_THEORIST_KEY).filter(function (x) { return x.id === row.getAttribute('data-theorist-id'); })[0];
+    if (!t) return;
+    currentTheoristId = t.id;
+    document.getElementById('admTheoristModalTitle').textContent = t.name;
+    document.getElementById('admThDelete').hidden = false;
+    fillTheoristForm(t);
+    openModal(document.getElementById('admTheoristModal'));
+  });
+
+  function saveTheorist(status) {
+    var name = document.getElementById('admThName').value.trim();
+    if (!name) { toast('이름을 입력해주세요.'); return; }
+    var data = collectTheoristForm();
+    data.status = status;
+    data.updated_at = fmtDate();
+
+    var list = readList(ADMIN_THEORIST_KEY);
+    if (currentTheoristId) {
+      list = list.map(function (t) { return t.id === currentTheoristId ? Object.assign({}, t, data) : t; });
+    } else {
+      data.id = 'th-' + Date.now().toString(36);
+      currentTheoristId = data.id;
+      list.push(data);
+    }
+    writeList(ADMIN_THEORIST_KEY, list);
+    document.getElementById('admTheoristModal').hidden = true;
+    logAdminEvent(status === 'published' ? 'theorist_published' : 'theorist_draft_saved', 'theorist', currentTheoristId);
+    renderAdmTheorists();
+    renderDashboard();
+    toast(status === 'published' ? '게시했습니다.' : '임시저장했습니다.');
+  }
+
+  document.getElementById('admTheoristForm').addEventListener('submit', function (e) { e.preventDefault(); saveTheorist('published'); });
+  document.getElementById('admThSaveDraft').addEventListener('click', function () { saveTheorist('draft'); });
+  document.getElementById('admThDelete').addEventListener('click', function () {
+    if (!currentTheoristId || !window.confirm('이 이론가 초안을 삭제할까요?')) return;
+    writeList(ADMIN_THEORIST_KEY, readList(ADMIN_THEORIST_KEY).filter(function (t) { return t.id !== currentTheoristId; }));
+    logAdminEvent('theorist_deleted', 'theorist', currentTheoristId);
+    document.getElementById('admTheoristModal').hidden = true;
+    renderAdmTheorists();
+    renderDashboard();
+    toast('삭제했습니다.');
+  });
+
+  /* ---------------------------------------------------------
+     자료실 모더레이션 (17~18장)
+     --------------------------------------------------------- */
+  var admMaterialList = document.getElementById('admMaterialList');
+  var admMaterialSearch = document.getElementById('admMaterialSearch');
+
+  function renderAdmMaterials() {
+    var q = admMaterialSearch.value.trim().toLowerCase();
+    var hidden = readList(HIDDEN_MATERIAL_KEY);
+    var mine = readList(RES_MATERIAL_KEY);
+
+    var rows = SAMPLES.map(function (m) { return { m: m, source: 'sample', hidden: hidden.indexOf(m.id) >= 0 }; })
+      .concat(mine.map(function (m) { return { m: m, source: 'mine', hidden: false }; }));
+
+    if (q) rows = rows.filter(function (r) { return (r.m.title || '').toLowerCase().indexOf(q) >= 0; });
+    rows.sort(function (a, b) { return (b.m.created_at || '').localeCompare(a.m.created_at || ''); });
+
+    if (rows.length === 0) {
+      admMaterialList.innerHTML = '<li class="empty-state">조건에 맞는 자료가 없습니다.</li>';
+      return;
+    }
+    admMaterialList.innerHTML = rows.map(function (r) {
+      var m = r.m;
+      var visLabel = r.source === 'sample' ? (r.hidden ? '숨김' : '공개') : (m.visibility === 'public' ? '공개' : '비공개');
+      var visBadge = r.hidden ? 'badge--danger' : (visLabel === '공개' ? 'badge--ok' : 'badge--wait');
+      var sourceLabel = r.source === 'sample' ? '샘플 데이터' : '내 자료 (이 브라우저)';
+
+      var actions = r.source === 'sample'
+        ? '<button type="button" class="mini-btn" data-toggle-hide="' + esc(m.id) + '">' + (r.hidden ? '숨김 해제' : '숨기기') + '</button>'
+        : '<button type="button" class="mini-btn" data-toggle-vis="' + esc(m.id) + '">' + (m.visibility === 'public' ? '비공개 전환' : '공개 전환') + '</button>' +
+          '<button type="button" class="mini-btn mini-btn--danger" data-delete-mine="' + esc(m.id) + '">삭제</button>';
+
+      return '<li class="admin-row">' +
+        '<span class="admin-row-main">' +
+          '<span class="admin-row-title">' + esc(m.title) + '</span>' +
+          '<span class="admin-row-sub">' + esc((m.tags || []).join(', ')) + ' · ' + esc(m.created_at || '') + '</span>' +
+        '</span>' +
+        '<span class="admin-row-meta">' +
+          '<span class="badge badge--source">' + esc(sourceLabel) + '</span>' +
+          '<span class="badge ' + visBadge + '">' + esc(r.hidden ? '숨김' : visLabel) + '</span>' +
+        '</span>' +
+        '<span class="admin-row-actions">' + actions + '</span>' +
+      '</li>';
+    }).join('');
+  }
+  admMaterialSearch.addEventListener('input', renderAdmMaterials);
+
+  admMaterialList.addEventListener('click', function (e) {
+    var hideBtn = e.target.closest('[data-toggle-hide]');
+    if (hideBtn) {
+      var id1 = hideBtn.getAttribute('data-toggle-hide');
+      var hidden = readList(HIDDEN_MATERIAL_KEY);
+      var i = hidden.indexOf(id1);
+      if (i >= 0) hidden.splice(i, 1); else hidden.push(id1);
+      writeList(HIDDEN_MATERIAL_KEY, hidden);
+      logAdminEvent(i >= 0 ? 'material_unhidden' : 'material_hidden', 'material', id1);
+      renderAdmMaterials();
+      toast(i >= 0 ? '전체 탐색에 다시 노출됩니다.' : '전체 탐색에서 숨겼습니다.');
+      return;
+    }
+    var visBtn = e.target.closest('[data-toggle-vis]');
+    if (visBtn) {
+      var id2 = visBtn.getAttribute('data-toggle-vis');
+      writeList(RES_MATERIAL_KEY, readList(RES_MATERIAL_KEY).map(function (m) {
+        if (m.id === id2) m.visibility = m.visibility === 'public' ? 'private' : 'public';
+        return m;
+      }));
+      logAdminEvent('material_visibility_changed', 'material', id2);
+      renderAdmMaterials();
+      toast('공개 설정을 바꿨습니다.');
+      return;
+    }
+    var delBtn = e.target.closest('[data-delete-mine]');
+    if (delBtn) {
+      if (!window.confirm('이 자료를 완전히 삭제할까요? 되돌릴 수 없습니다.')) return;
+      var id3 = delBtn.getAttribute('data-delete-mine');
+      writeList(RES_MATERIAL_KEY, readList(RES_MATERIAL_KEY).filter(function (m) { return m.id !== id3; }));
+      logAdminEvent('material_deleted', 'material', id3);
+      renderAdmMaterials();
+      renderDashboard();
+      toast('삭제했습니다.');
+    }
+  });
+
+  /* ---------------------------------------------------------
+     공지사항 관리 (23장)
+     --------------------------------------------------------- */
+  var admNoticeListEl = document.getElementById('admNoticeList');
+  var currentAdmNoticeId = null;
+
+  function renderAdmNotices() {
+    var notices = readList(ADMIN_NOTICE_KEY).sort(function (a, b) { return (b.date || '').localeCompare(a.date || ''); });
+    if (notices.length === 0) {
+      admNoticeListEl.innerHTML = '<li class="empty-state">작성한 공지가 없습니다. (출시 초기 고정 공지 3건은 별도로 항상 노출됩니다)</li>';
+      return;
+    }
+    admNoticeListEl.innerHTML = notices.map(function (n) {
+      return '<li class="admin-row">' +
+        '<span class="admin-row-main">' +
+          '<span class="admin-row-title">' + esc(n.title) + '</span>' +
+          '<span class="admin-row-sub">' + esc(n.date) + '</span>' +
+        '</span>' +
+        '<span class="admin-row-actions">' +
+          '<button type="button" class="mini-btn" data-edit-notice="' + esc(n.id) + '">수정</button>' +
+          '<button type="button" class="mini-btn mini-btn--danger" data-delete-notice="' + esc(n.id) + '">삭제</button>' +
+        '</span>' +
+      '</li>';
+    }).join('');
+  }
+
+  document.getElementById('admNoticeNewBtn').addEventListener('click', function () {
+    currentAdmNoticeId = null;
+    document.getElementById('admNoticeModalTitle').textContent = '새 공지';
+    document.getElementById('admNDelete').hidden = true;
+    document.getElementById('admNTitle').value = '';
+    document.getElementById('admNBody').value = '';
+    openModal(document.getElementById('admNoticeModal'));
+  });
+
+  admNoticeListEl.addEventListener('click', function (e) {
+    var editBtn = e.target.closest('[data-edit-notice]');
+    if (editBtn) {
+      var n = readList(ADMIN_NOTICE_KEY).filter(function (x) { return x.id === editBtn.getAttribute('data-edit-notice'); })[0];
+      if (!n) return;
+      currentAdmNoticeId = n.id;
+      document.getElementById('admNoticeModalTitle').textContent = '공지 수정';
+      document.getElementById('admNDelete').hidden = false;
+      document.getElementById('admNTitle').value = n.title;
+      document.getElementById('admNBody').value = n.body;
+      openModal(document.getElementById('admNoticeModal'));
+      return;
+    }
+    var delBtn = e.target.closest('[data-delete-notice]');
+    if (delBtn) {
+      if (!window.confirm('이 공지를 삭제할까요?')) return;
+      var id = delBtn.getAttribute('data-delete-notice');
+      writeList(ADMIN_NOTICE_KEY, readList(ADMIN_NOTICE_KEY).filter(function (x) { return x.id !== id; }));
+      logAdminEvent('notice_deleted', 'notice', id);
+      renderAdmNotices();
+      NOTICES = computeNotices();
+      renderNoticeCard();
+      toast('삭제했습니다.');
+    }
+  });
+
+  document.getElementById('admNoticeForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var title = document.getElementById('admNTitle').value.trim();
+    var body = document.getElementById('admNBody').value.trim();
+    if (!title || !body) { toast('제목과 본문을 모두 입력해주세요.'); return; }
+
+    var list = readList(ADMIN_NOTICE_KEY);
+    var isNew = !currentAdmNoticeId;
+    if (!isNew) {
+      list = list.map(function (n) { return n.id === currentAdmNoticeId ? Object.assign({}, n, { title: title, body: body }) : n; });
+    } else {
+      currentAdmNoticeId = 'n-' + Date.now().toString(36);
+      list.push({ id: currentAdmNoticeId, title: title, body: body, date: fmtDate() });
+    }
+    writeList(ADMIN_NOTICE_KEY, list);
+    logAdminEvent(isNew ? 'notice_created' : 'notice_updated', 'notice', currentAdmNoticeId);
+    document.getElementById('admNoticeModal').hidden = true;
+    renderAdmNotices();
+    NOTICES = computeNotices();
+    renderNoticeCard();
+    toast('게시했습니다.');
+  });
+
+  document.getElementById('admNDelete').addEventListener('click', function () {
+    if (!currentAdmNoticeId || !window.confirm('이 공지를 삭제할까요?')) return;
+    writeList(ADMIN_NOTICE_KEY, readList(ADMIN_NOTICE_KEY).filter(function (n) { return n.id !== currentAdmNoticeId; }));
+    logAdminEvent('notice_deleted', 'notice', currentAdmNoticeId);
+    document.getElementById('admNoticeModal').hidden = true;
+    renderAdmNotices();
+    NOTICES = computeNotices();
+    renderNoticeCard();
+    toast('삭제했습니다.');
+  });
+
+  /* ---------------------------------------------------------
+     문의함 관리 (24장 기록 대상 중 신고 처리 제외 — 신고 기능 자체가 없음)
+     --------------------------------------------------------- */
+  var admInquiryList = document.getElementById('admInquiryList');
+  var admBadgeInquiries = document.getElementById('admBadgeInquiries');
+  var admInquiryFilter = 'all';
+  var currentAdmInquiryId = null;
+
+  document.getElementById('admInquiryFilters').addEventListener('click', function (e) {
+    var btn = e.target.closest('[data-filter]');
+    if (!btn) return;
+    admInquiryFilter = btn.getAttribute('data-filter');
+    document.querySelectorAll('#admInquiryFilters .pill').forEach(function (p) { p.classList.toggle('active', p === btn); });
+    renderAdmInquiries();
+  });
+
+  function renderAdmInquiries() {
+    var all = readList(INQUIRY_KEY).sort(function (a, b) { return (b.created_at || '').localeCompare(a.created_at || ''); });
+    var pendingCount = all.filter(function (q) { return q.status !== 'answered'; }).length;
+    admBadgeInquiries.hidden = pendingCount === 0;
+    admBadgeInquiries.textContent = pendingCount;
+
+    var rows = admInquiryFilter === 'all' ? all : all.filter(function (q) {
+      return admInquiryFilter === 'answered' ? q.status === 'answered' : q.status !== 'answered';
+    });
+    if (rows.length === 0) {
+      admInquiryList.innerHTML = '<li class="empty-state">해당하는 문의가 없습니다.</li>';
+      return;
+    }
+    admInquiryList.innerHTML = rows.map(function (q) {
+      var answered = q.status === 'answered';
+      return '<li><button type="button" class="admin-row" data-inquiry-id="' + esc(q.id) + '">' +
+        '<span class="admin-row-main">' +
+          '<span class="admin-row-title">[' + esc(ASK_TYPE_LABEL[q.type] || '문의') + '] ' + esc((q.body || '').slice(0, 30)) + '</span>' +
+          '<span class="admin-row-sub">' + esc(q.email || '') + ' · ' + esc(q.created_at || '') + '</span>' +
+        '</span>' +
+        '<span class="admin-row-meta"><span class="badge ' + (answered ? 'badge--ok' : 'badge--wait') + '">' + (answered ? '답변완료' : '대기중') + '</span></span>' +
+      '</button></li>';
+    }).join('');
+  }
+
+  admInquiryList.addEventListener('click', function (e) {
+    var row = e.target.closest('[data-inquiry-id]');
+    if (!row) return;
+    var q = readList(INQUIRY_KEY).filter(function (x) { return x.id === row.getAttribute('data-inquiry-id'); })[0];
+    if (!q) return;
+    currentAdmInquiryId = q.id;
+    document.getElementById('admInquiryModalSub').textContent = (ASK_TYPE_LABEL[q.type] || '문의') + ' · ' + (q.email || '') + ' · ' + (q.created_at || '');
+    document.getElementById('admInquiryBody').textContent = q.body;
+    document.getElementById('admIAnswer').value = q.answer || '';
+    openModal(document.getElementById('admInquiryModal'));
+  });
+
+  document.getElementById('admInquiryForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var answer = document.getElementById('admIAnswer').value.trim();
+    if (!answer) { toast('답변 내용을 입력해주세요.'); return; }
+    writeList(INQUIRY_KEY, readList(INQUIRY_KEY).map(function (q) {
+      if (q.id !== currentAdmInquiryId) return q;
+      return Object.assign({}, q, { status: 'answered', answer: answer, answered_at: fmtDate() });
+    }));
+    logAdminEvent('inquiry_answered', 'inquiry', currentAdmInquiryId);
+    document.getElementById('admInquiryModal').hidden = true;
+    renderAdmInquiries();
+    var user = window.SW_AUTH.getUser();
+    if (user) renderAskCard(user.email);
+    toast('답변을 저장했습니다.');
+  });
+
+  /* ---------------------------------------------------------
+     관리자 로그 (24장)
+     --------------------------------------------------------- */
+  var ACTION_LABELS = {
+    admin_login: '관리자 로그인', admin_logout: '관리자 로그아웃',
+    user_status_active: '계정 활성화', user_status_disabled: '계정 비활성화',
+    user_role_admin: '관리자 권한 부여', user_role_user: '관리자 권한 해제',
+    term_published: '용어 게시', term_rejected: '용어 반려',
+    theorist_published: '이론가 게시', theorist_draft_saved: '이론가 임시저장', theorist_deleted: '이론가 삭제',
+    material_hidden: '자료 숨김', material_unhidden: '자료 숨김 해제',
+    material_visibility_changed: '자료 공개 설정 변경', material_deleted: '자료 삭제',
+    notice_created: '공지 작성', notice_updated: '공지 수정', notice_deleted: '공지 삭제',
+    inquiry_answered: '문의 답변'
+  };
+
+  function renderAdminLogs() {
+    var client = sbClient();
+    var listEl = document.getElementById('admLogList');
+    if (!client) { listEl.innerHTML = '<li class="empty-state">불러오지 못했습니다.</li>'; return; }
+    client.rpc('admin_list_logs', { limit_n: 100 }).then(function (res) {
+      if (res.error || !res.data || res.data.length === 0) {
+        listEl.innerHTML = '<li class="empty-state">기록된 로그가 없습니다.</li>';
+        return;
+      }
+      listEl.innerHTML = res.data.map(function (l) {
+        return '<li class="admin-row">' +
+          '<span class="admin-row-main">' +
+            '<span class="admin-row-title">' + esc(ACTION_LABELS[l.action] || l.action) + '</span>' +
+            '<span class="admin-row-sub">' + esc(l.admin_email || '') + (l.target_type ? ' · ' + esc(l.target_type) : '') + (l.target_id ? ' #' + esc(l.target_id) : '') + '</span>' +
+          '</span>' +
+          '<span class="admin-row-meta"><span class="badge badge--source">' + esc(String(l.created_at || '').slice(0, 16).replace('T', ' ')) + '</span></span>' +
+        '</li>';
+      }).join('');
+    }).catch(function () { listEl.innerHTML = '<li class="empty-state">불러오지 못했습니다.</li>'; });
+  }
 })();
 </script>
 </body>
