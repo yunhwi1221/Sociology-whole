@@ -180,6 +180,15 @@ svg { display: block; flex-shrink: 0; }
 .soon-arrow { flex-shrink: 0; color: var(--gray-300); }
 .soon-item--link:hover .soon-arrow { color: var(--primary-light); }
 
+/* 운영 현황(관리자 전용) */
+.stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.stat-box {
+  padding: 16px 10px; text-align: center;
+  background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius-sm);
+}
+.stat-num { display: block; font-size: 22px; font-weight: 800; letter-spacing: -0.02em; color: var(--primary); }
+.stat-label { display: block; margin-top: 4px; font-size: 12px; color: var(--gray-500); }
+
 /* 공지사항·문의하기 모달 */
 .modal {
   position: fixed; inset: 0; z-index: 200;
@@ -228,6 +237,18 @@ svg { display: block; flex-shrink: 0; }
   flex-shrink: 0; padding: 2px 8px; border-radius: 5px;
   background: var(--leaf-soft); color: var(--leaf-deep);
   font-size: 10.5px; font-weight: 700;
+}
+.notice-tag--wait { background: var(--gray-100); color: var(--gray-500); }
+
+/* 내 문의 내역 — 답변 블록 */
+.inquiry-answer {
+  margin-top: 10px; padding: 12px 14px;
+  background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: 10px;
+  font-size: 13px; line-height: 1.7; color: var(--gray-700);
+  white-space: pre-wrap; word-break: keep-all;
+}
+.inquiry-answer-label {
+  display: block; margin-bottom: 5px; font-size: 11.5px; font-weight: 700; color: var(--leaf-deep);
 }
 
 /* 문의 폼 */
@@ -452,6 +473,24 @@ body[data-auth="loading"] #content { display: none; }
       </a>
     </div>
 
+    <div id="adminStats" hidden>
+      <h2 class="section-title">운영 현황</h2>
+      <div class="stat-grid">
+        <div class="stat-box">
+          <span class="stat-num" id="statTerms">–</span>
+          <span class="stat-label">용어집 단어</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num" id="statTheorists">–</span>
+          <span class="stat-label">이론가</span>
+        </div>
+        <div class="stat-box">
+          <span class="stat-num" id="statUsers">–</span>
+          <span class="stat-label">가입 회원</span>
+        </div>
+      </div>
+    </div>
+
     <h2 class="section-title">고객지원</h2>
     <div class="soon-grid">
       <button type="button" class="soon-item soon-item--link" id="noticeOpen">
@@ -482,12 +521,35 @@ body[data-auth="loading"] #content { display: none; }
           <span class="soon-name">문의하기</span>
           <span class="soon-desc" id="askDesc">오류 제보나 궁금한 점을 보냅니다</span>
         </span>
+        <span class="soon-count" id="askAnsweredCount" hidden></span>
         <span class="soon-arrow" aria-hidden="true">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
             <path d="m9 18 6-6-6-6"/>
           </svg>
         </span>
       </button>
+    </div>
+
+    <div id="adminEntry" hidden>
+      <h2 class="section-title">관리자</h2>
+      <div class="soon-grid">
+        <a class="soon-item soon-item--link" href="admin.html">
+          <span class="soon-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+              <path d="M12 2 4 6v6c0 5 3.4 8.4 8 10 4.6-1.6 8-5 8-10V6z"/>
+            </svg>
+          </span>
+          <span class="soon-main">
+            <span class="soon-name">관리자창</span>
+            <span class="soon-desc">용어 승인·이론가 관리·자료실 모더레이션·공지·문의 응답</span>
+          </span>
+          <span class="soon-arrow" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+              <path d="m9 18 6-6-6-6"/>
+            </svg>
+          </span>
+        </a>
+      </div>
     </div>
   </section>
 
@@ -521,6 +583,8 @@ body[data-auth="loading"] #content { display: none; }
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
     </div>
+
+    <ul class="notice-list" id="myInquiryList" hidden></ul>
 
     <form id="askForm">
       <div class="field">
@@ -618,13 +682,25 @@ body[data-auth="loading"] #content { display: none; }
     noticeCount: document.getElementById('noticeCount'),
     noticeDesc: document.getElementById('noticeDesc'),
     askOpen: document.getElementById('askOpen'),
+    askAnsweredCount: document.getElementById('askAnsweredCount'),
     askModal: document.getElementById('askModal'),
     askForm: document.getElementById('askForm'),
     askType: document.getElementById('askType'),
     askBody: document.getElementById('askBody'),
     askEmail: document.getElementById('askEmail'),
+    myInquiryList: document.getElementById('myInquiryList'),
+    adminEntry: document.getElementById('adminEntry'),
+    adminStats: document.getElementById('adminStats'),
+    statTerms: document.getElementById('statTerms'),
+    statTheorists: document.getElementById('statTheorists'),
+    statUsers: document.getElementById('statUsers'),
     toast: document.getElementById('toast')
   };
+
+  /* 관리자창 진입 — 1차는 운영자 1명(유니)뿐이라 role 컬럼 대신
+     계정 UUID 화이트리스트로 판별한다. 저장소가 public이라 이메일 대신
+     의미 없는 UUID를 쓴다. admin.html 도 같은 목록을 쓴다. */
+  var ADMIN_IDS = ['7db0b3ed-34fc-4be1-9a85-337f74a23bcb'];
 
   /* ---------------------------------------------------------
      북마크한 용어 — 목록은 용어집(glossary.html?view=bookmarks)이 보여준다.
@@ -716,8 +792,16 @@ body[data-auth="loading"] #content { display: none; }
      --------------------------------------------------------- */
   var NOTICE_READ_KEY = 'sw:notices:readAt';
   var INQUIRY_KEY = 'sw:inquiries';
+  var ADMIN_NOTICE_KEY = 'sw:admin:notices';
 
-  var NOTICES = [
+  function adminNotices() {
+    try {
+      var v = JSON.parse(localStorage.getItem(ADMIN_NOTICE_KEY) || '[]');
+      return Array.isArray(v) ? v : [];
+    } catch (e) { return []; }
+  }
+
+  var DEFAULT_NOTICES = [
     {
       date: '2026-08-22',
       id: 'n-archive',
@@ -741,6 +825,12 @@ body[data-auth="loading"] #content { display: none; }
             '\n북마크는 아직 이 브라우저에 저장되므로 다른 기기에서는 따로 담아야 합니다.'
     }
   ];
+
+  /* 관리자창에서 작성한 공지({id, title, body, date})를 기본 공지 뒤에 이어 붙이고
+     최신순으로 정렬한다. 필드 이름을 admin.html 과 맞춰 별도 변환 없이 합친다. */
+  var NOTICES = adminNotices().concat(DEFAULT_NOTICES).sort(function (a, b) {
+    return (b.date || '').localeCompare(a.date || '');
+  });
 
   var toastTimer;
   function toast(msg) {
@@ -832,10 +922,60 @@ body[data-auth="loading"] #content { display: none; }
     if (e.target === el.noticeModal) { closeModal(el.noticeModal); renderNoticeCard(); }
   });
 
+  /* 내 문의 내역 — user_id 가 없어 이메일로 내 것을 가려낸다(로컬 프로토타입 한계) */
+  function myInquiries(email) {
+    return readList(INQUIRY_KEY)
+      .filter(function (q) { return q.email && q.email === email; })
+      .sort(function (a, b) { return (b.created_at || '').localeCompare(a.created_at || ''); });
+  }
+
+  var ASK_TYPE_LABEL = { content: '콘텐츠 오류·수정', bug: '기능 오류', account: '계정·로그인', etc: '기타' };
+
+  function renderMyInquiries(email) {
+    var mine = myInquiries(email);
+    el.myInquiryList.hidden = mine.length === 0;
+    el.myInquiryList.innerHTML = mine.map(function (q, i) {
+      var answered = q.status === 'answered';
+      return '<li class="notice-item">' +
+        '<button type="button" class="notice-head" aria-expanded="' + (i === 0) + '" data-inquiry="' + esc(q.id) + '">' +
+          '<span class="notice-main">' +
+            '<span class="notice-title">[' + esc(ASK_TYPE_LABEL[q.type] || '문의') + '] ' + esc(q.body.slice(0, 24)) + (q.body.length > 24 ? '…' : '') + '</span>' +
+            '<span class="notice-date">' + esc(q.created_at) + '</span>' +
+          '</span>' +
+          '<span class="notice-tag' + (answered ? '' : ' notice-tag--wait') + '">' + (answered ? '답변완료' : '대기중') + '</span>' +
+          '<span class="notice-chevron" aria-hidden="true">' +
+            '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>' +
+          '</span>' +
+        '</button>' +
+        '<div class="notice-body" id="iq-' + esc(q.id) + '"' + (i === 0 ? '' : ' hidden') + '>' +
+          esc(q.body) +
+          (answered
+            ? '<div class="inquiry-answer"><span class="inquiry-answer-label">운영자 답변 · ' + esc(q.answered_at || '') + '</span>' + esc(q.answer) + '</div>'
+            : '') +
+        '</div>' +
+      '</li>';
+    }).join('');
+  }
+
+  el.myInquiryList.addEventListener('click', function (e) {
+    var head = e.target.closest('[data-inquiry]');
+    if (!head) return;
+    var open = head.getAttribute('aria-expanded') === 'true';
+    head.setAttribute('aria-expanded', String(!open));
+    document.getElementById('iq-' + head.getAttribute('data-inquiry')).hidden = open;
+  });
+
+  function renderAskCard(email) {
+    var n = myInquiries(email).filter(function (q) { return q.status === 'answered'; }).length;
+    el.askAnsweredCount.hidden = !n;
+    el.askAnsweredCount.textContent = n ? '답변 ' + n + '건' : '';
+  }
+
   el.askOpen.addEventListener('click', function () {
     el.askForm.reset();
     var user = window.SW_AUTH && window.SW_AUTH.getUser && window.SW_AUTH.getUser();
     el.askEmail.value = user ? user.email : '';
+    renderMyInquiries(user ? user.email : '');
     openModal(el.askModal);
   });
 
@@ -848,18 +988,24 @@ body[data-auth="loading"] #content { display: none; }
     var body = el.askBody.value.trim();
     if (!body) { el.askBody.focus(); return; }
 
+    var email = el.askEmail.value;
     var list = readList(INQUIRY_KEY);
     list.push({
       id: 'q-' + Date.now().toString(36),
       type: el.askType.value,
       body: body,
-      email: el.askEmail.value,
-      created_at: new Date().toISOString().slice(0, 10)
+      email: email,
+      created_at: new Date().toISOString().slice(0, 10),
+      status: 'pending',
+      answer: null,
+      answered_at: null
     });
     try { localStorage.setItem(INQUIRY_KEY, JSON.stringify(list)); } catch (e2) { /* 저장 실패는 무시 */ }
 
-    closeModal(el.askModal);
-    toast('문의를 남겼습니다. 접수 서버가 연결되면 전송됩니다.');
+    el.askBody.value = '';
+    renderMyInquiries(email);
+    renderAskCard(email);
+    toast('문의를 남겼습니다. 아래 목록에서 답변을 확인할 수 있어요.');
   });
 
   document.addEventListener('keydown', function (e) {
@@ -870,14 +1016,40 @@ body[data-auth="loading"] #content { display: none; }
 
   renderNoticeCard();
 
+  /* 운영 현황 — 용어·이론가는 이미 로드된 정적 데이터로 바로 세고,
+     가입 회원 수만 admin_user_count() RPC(관리자 UUID만 허용)로 가져온다. */
+  var APPROVED_TERM_KEY = 'sw:glossary:approved';
+  function renderAdminStats() {
+    var terms = (window.GLOSSARY_DATA && window.GLOSSARY_DATA.terms) || [];
+    var approved = readList(APPROVED_TERM_KEY);
+    el.statTerms.textContent = terms.length + approved.length;
+
+    var theorists = (window.GLOSSARY_DATA && window.GLOSSARY_DATA.theorists) || {};
+    el.statTheorists.textContent = Object.keys(theorists).length;
+
+    el.statUsers.textContent = '…';
+    var client = window.SW_AUTH && window.SW_AUTH.client;
+    if (!client) { el.statUsers.textContent = '—'; return; }
+    client.rpc('admin_user_count').then(function (res) {
+      el.statUsers.textContent = (res.error || res.data == null) ? '—' : res.data;
+    }).catch(function () { el.statUsers.textContent = '—'; });
+  }
+
   function render(user) {
     if (user) {
       document.body.dataset.auth = 'in';
       el.avatar.textContent = user.name.charAt(0);
       el.name.textContent = user.name + '님';
       el.email.textContent = user.email;
+      var isAdmin = ADMIN_IDS.indexOf(user.id) >= 0;
+      el.adminEntry.hidden = !isAdmin;
+      el.adminStats.hidden = !isAdmin;
+      if (isAdmin) renderAdminStats();
+      renderAskCard(user.email);
     } else {
       document.body.dataset.auth = 'out';
+      el.adminEntry.hidden = true;
+      el.adminStats.hidden = true;
     }
   }
 

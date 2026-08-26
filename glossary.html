@@ -749,7 +749,15 @@ body[data-view="detail"] .panel-list   { display: none; }
   'use strict';
 
   var DATA = window.GLOSSARY_DATA;
-  var TERMS = DATA.terms;
+  var APPROVED_KEY = 'sw:glossary:approved';
+  var PENDING_KEY = 'sw:glossary:pending';
+  function loadApprovedTerms() {
+    try {
+      var v = JSON.parse(localStorage.getItem(APPROVED_KEY) || '[]');
+      return Array.isArray(v) ? v : [];
+    } catch (e) { return []; }
+  }
+  var TERMS = DATA.terms.concat(loadApprovedTerms());
   var THEORISTS = DATA.theorists;
   var CATEGORIES = DATA.categories;
   var ALL = '전체';
@@ -1273,6 +1281,19 @@ body[data-view="detail"] .panel-list   { display: none; }
     var term = document.getElementById('suggestTerm').value.trim();
     var def = document.getElementById('suggestDef').value.trim();
     if (!term || !def) { toast('용어명과 정의를 모두 입력해주세요.'); return; }
+
+    var pending;
+    try { pending = JSON.parse(localStorage.getItem(PENDING_KEY) || '[]'); } catch (e) { pending = []; }
+    if (!Array.isArray(pending)) pending = [];
+    pending.push({
+      id: 'p-' + Date.now().toString(36),
+      term_ko: term,
+      definition: def,
+      submitted_at: new Date().toISOString().slice(0, 10),
+      status: 'pending'
+    });
+    try { localStorage.setItem(PENDING_KEY, JSON.stringify(pending)); } catch (e2) { /* 저장 실패는 무시 */ }
+
     closeModal();
     toast('제안해주셔서 감사합니다. 검토 중입니다.');
   });

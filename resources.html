@@ -991,9 +991,19 @@ body[data-auth="loading"] #mineGuard { display: none; }
      --------------------------------------------------------- */
   function myMaterials() { return store.materials(); }
 
+  var ADMIN_HIDDEN_KEY = 'sw:admin:hiddenMaterials';
+  function hiddenSampleIds() {
+    try {
+      var v = JSON.parse(localStorage.getItem(ADMIN_HIDDEN_KEY) || '[]');
+      return Array.isArray(v) ? v : [];
+    } catch (e) { return []; }
+  }
+
   function publicMaterials() {
+    var hidden = hiddenSampleIds();
+    var visibleSamples = SAMPLES.filter(function (m) { return hidden.indexOf(m.id) < 0; });
     var mine = myMaterials().filter(function (m) { return m.visibility === 'public'; });
-    return SAMPLES.concat(mine);
+    return visibleSamples.concat(mine);
   }
 
   function findMaterial(id) {
