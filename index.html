@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LKPBVL47XT"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-LKPBVL47XT');
+  </script>
+  <meta name="google-site-verification" content="VFNsaMSKWCZL9gFhzeAYfpDLw2eO7j670ExmVyMfIQk" />
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sociology-whole | 사회학 통합 학습 플랫폼</title>
@@ -588,6 +597,21 @@
       color: var(--gray-600);
     }
 
+    .article-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 16px;
+    }
+
+    .article-more {
+      display: inline-block;
+      margin-top: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--primary-mid);
+    }
+    .article-more:hover { color: var(--primary); }
+
     /* AI Section */
     .ai-section {
       background: linear-gradient(160deg, var(--primary) 0%, var(--primary-mid) 100%);
@@ -934,6 +958,10 @@
         display: flex;
       }
 
+      .article-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
       .start-modal {
         align-items: center;
         padding: 24px;
@@ -1014,6 +1042,10 @@
     @media (min-width: 1440px) {
       .header-inner {
         max-width: 1320px;
+      }
+
+      .article-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
       }
 
       .hero {
@@ -1157,7 +1189,7 @@
       <nav class="nav-links">
         <a href="glossary.html">용어집</a>
         <a href="theorists.html">이론가</a>
-        <a href="#">시사연결</a>
+        <a href="issue.html">시사연결</a>
         <a href="community.html">커뮤니티</a>
         <a href="resources.html">자료실</a>
         <a href="#" class="nav-cta" data-action="start">시작하기</a>
@@ -1218,7 +1250,7 @@
           <h3>이론가</h3>
           <p>주요 이론가의 생애, 핵심 개념, 대표 저서를 한눈에</p>
         </a>
-        <a href="#" class="feature-card">
+        <a href="issue.html" class="feature-card">
           <div class="feature-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
           </div>
@@ -1260,16 +1292,19 @@
         <h2>시사 · 현실 연결</h2>
         <p>추상적 이론을 현실 이슈에 적용해보는 학습 경험</p>
       </div>
-      <a href="#" class="article-card">
-        <span class="article-tag">NEW</span>
-        <h3>저출산 현상을 뒤르켐의 아노미 개념으로 보면?</h3>
-        <p>급격한 사회변동 속에서 결혼·출산에 대한 기존 규범이 약화되고, 새로운 규범이 아직 확립되지 않은 아노미 상태로 저출산을 해석해봅니다.</p>
-        <div class="article-meta">
-          <span class="meta-tag">뒤르켐</span>
-          <span class="meta-tag">아노미</span>
-          <span class="meta-tag">사회적 연대</span>
-        </div>
-      </a>
+      <div class="article-grid" id="landingArticleGrid">
+        <a href="issue.html" class="article-card">
+          <span class="article-tag">NEW</span>
+          <h3>저출산 현상을 뒤르켐의 아노미 개념으로 보면?</h3>
+          <p>급격한 사회변동 속에서 결혼·출산에 대한 기존 규범이 약화되고, 새로운 규범이 아직 확립되지 않은 아노미 상태로 저출산을 해석해봅니다.</p>
+          <div class="article-meta">
+            <span class="meta-tag">뒤르켐</span>
+            <span class="meta-tag">아노미</span>
+            <span class="meta-tag">사회적 연대</span>
+          </div>
+        </a>
+      </div>
+      <a href="issue.html" class="article-more">시사 연결 더보기 →</a>
     </div>
   </section>
 
@@ -1346,7 +1381,7 @@
           <h4>서비스</h4>
           <a href="glossary.html">용어집</a>
           <a href="theorists.html">이론가</a>
-          <a href="#">시사연결</a>
+          <a href="issue.html">시사연결</a>
           <a href="#">AI 질답</a>
         </div>
         <div class="footer-col">
@@ -1385,7 +1420,7 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         <span>이론가</span>
       </a>
-      <a href="#">
+      <a href="issue.html">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
         <span>시사연결</span>
       </a>
@@ -1501,6 +1536,40 @@
   <script src="supabase-config.js"></script>
   <script src="auth.js"></script>
   <script src="auth-ui.js"></script>
+
+  <!-- 시사 연결 미리보기 — 최신 게시글 3개. 실패하거나 아직 하나도 없으면
+       위의 정적 카드(하드코딩된 예시)를 그대로 둔다. -->
+  <script>
+  (function () {
+    var NEW_BADGE_DAYS = 7;
+    function esc(s) {
+      return String(s).replace(/[&<>"']/g, function (c) {
+        return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+      });
+    }
+    function isNew(publishedAt) {
+      if (!publishedAt) return false;
+      return (Date.now() - new Date(publishedAt).getTime()) < NEW_BADGE_DAYS * 86400000;
+    }
+    window.SW_AUTH.ready.then(function () {
+      var client = window.SW_AUTH.client;
+      if (!client) return;
+      client.from('issue_articles').select('id,question_title,summary,published_at')
+        .eq('status', 'published').order('published_at', { ascending: false }).limit(3)
+        .then(function (res) {
+          if (res.error || !res.data || !res.data.length) return;
+          var grid = document.getElementById('landingArticleGrid');
+          grid.innerHTML = res.data.map(function (a) {
+            return '<a href="issue.html#' + esc(a.id) + '" class="article-card">' +
+              (isNew(a.published_at) ? '<span class="article-tag">NEW</span>' : '') +
+              '<h3>' + esc(a.question_title) + '</h3>' +
+              '<p>' + esc(a.summary) + '</p>' +
+            '</a>';
+          }).join('');
+        });
+    });
+  })();
+  </script>
 
 </body>
 </html>

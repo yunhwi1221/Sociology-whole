@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LKPBVL47XT"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-LKPBVL47XT');
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>마이페이지 | Sociology-whole</title>
@@ -503,7 +511,7 @@ body[data-auth="loading"] #content { display: none; }
     <nav class="nav-links">
       <a href="glossary.html">용어집</a>
       <a href="theorists.html">이론가</a>
-      <a href="index.html#articles">시사연결</a>
+      <a href="issue.html">시사연결</a>
       <a href="community.html">커뮤니티</a>
       <a href="resources.html">자료실</a>
     </nav>
@@ -639,6 +647,24 @@ body[data-auth="loading"] #content { display: none; }
           </svg>
         </span>
       </a>
+
+      <a class="soon-item soon-item--link" href="issue.html?view=bookmarks" id="issueBmLink">
+        <span class="soon-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+            <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/>
+          </svg>
+        </span>
+        <span class="soon-main">
+          <span class="soon-name">북마크한 시사연결 글</span>
+          <span class="soon-desc" id="issueBmDesc">오늘의 이슈 해석을 모아봅니다</span>
+        </span>
+        <span class="soon-count" id="issueBmCount" hidden></span>
+        <span class="soon-arrow" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="18" height="18">
+            <path d="m9 18 6-6-6-6"/>
+          </svg>
+        </span>
+      </a>
     </div>
     </div>
 
@@ -690,6 +716,7 @@ body[data-auth="loading"] #content { display: none; }
           <button type="button" class="admin-tab" data-atab="approve" role="tab">용어 승인 <span class="tab-badge" id="admBadgeApprove" hidden>0</span></button>
           <button type="button" class="admin-tab" data-atab="theorists" role="tab">이론가 관리</button>
           <button type="button" class="admin-tab" data-atab="materials" role="tab">자료실</button>
+          <button type="button" class="admin-tab" data-atab="issues" role="tab">시사연결</button>
           <button type="button" class="admin-tab" data-atab="notices" role="tab">공지사항</button>
           <button type="button" class="admin-tab" data-atab="inquiries" role="tab">문의함 <span class="tab-badge" id="admBadgeInquiries" hidden>0</span></button>
           <button type="button" class="admin-tab" data-atab="reports" role="tab">신고 <span class="tab-badge" id="admBadgeReports" hidden>0</span></button>
@@ -714,6 +741,7 @@ body[data-auth="loading"] #content { display: none; }
             <div class="kpi-box"><span class="kpi-num" id="kpiTerms">–</span><span class="kpi-label">용어집 단어</span></div>
             <div class="kpi-box"><span class="kpi-num" id="kpiTheorists">–</span><span class="kpi-label">이론가</span></div>
             <div class="kpi-box"><span class="kpi-num" id="kpiMaterials">–</span><span class="kpi-label">학습자료</span></div>
+            <div class="kpi-box"><span class="kpi-num" id="kpiIssues">–</span><span class="kpi-label">시사연결</span></div>
           </div>
           <p class="admin-note" style="margin-top:16px;">활성 사용자는 선택한 기간 내 마지막 접속 기록이 있는 회원 수입니다. 콘텐츠별 조회수 등 이용 통계는 아직 수집되지 않아 표시하지 않습니다.</p>
         </section>
@@ -752,6 +780,14 @@ body[data-auth="loading"] #content { display: none; }
           </div>
           <p class="admin-note">업로더 실명은 Supabase 연동 전이라 이 브라우저의 "내 자료"만 확인할 수 있습니다. 공개 샘플은 숨김 처리만 가능합니다.</p>
           <ul class="admin-list" id="admMaterialList"></ul>
+        </section>
+
+        <!-- 시사 연결 관리 (issue-prd_1.md — 네이버 뉴스 API·AI 초안은 범위 밖, 관리자가 직접 작성) -->
+        <section class="admin-panel" id="apanel-issues" hidden>
+          <div class="admin-toolbar">
+            <button type="button" class="btn-new" id="admIssueNewBtn">+ 새 시사연결</button>
+          </div>
+          <ul class="admin-list" id="admIssueList"></ul>
         </section>
 
         <!-- 공지사항 관리 -->
@@ -1087,6 +1123,66 @@ body[data-auth="loading"] #content { display: none; }
   </div>
 </div>
 
+<!-- [관리자] 시사 연결 작성/수정 -->
+<div class="modal" id="admIssueModal" role="dialog" aria-modal="true" aria-labelledby="admIssueModalTitle" hidden>
+  <div class="modal-panel modal-panel--wide">
+    <div class="modal-head">
+      <div>
+        <h2 class="modal-title" id="admIssueModalTitle">새 시사 연결</h2>
+        <p class="modal-sub">네이버 뉴스 검색·AI 초안 생성은 이번 범위에 없어 직접 작성합니다. 게시 상태로 저장해야 학생에게 노출됩니다.</p>
+      </div>
+      <button type="button" class="modal-close" data-aclose="admIssueModal" aria-label="닫기">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <form id="admIssueForm">
+      <div class="field">
+        <label for="admIQuestionTitle">질문형 제목 *</label>
+        <input type="text" id="admIQuestionTitle" required placeholder="예: 저출산 현상을 뒤르켐의 아노미 개념으로 보면?">
+      </div>
+      <div class="field">
+        <label for="admISummary">요약 (카드 미리보기 · 상세 공용) *</label>
+        <textarea id="admISummary" required style="min-height:60px"></textarea>
+      </div>
+      <div class="field">
+        <label for="admIInterpretation">이론적 해석 본문 *</label>
+        <textarea id="admIInterpretation" required placeholder="첫 문단이 카드 안(도입부)으로 쓰입니다. 빈 줄로 문단을 나눠주세요."></textarea>
+        <p class="field-hint">빈 줄(엔터 두 번)로 나눈 첫 문단은 카드 안(요약 아래)에, 나머지는 카드 밖(펼쳐보기)에 노출됩니다.</p>
+      </div>
+      <div class="field-2col">
+        <div class="field">
+          <label for="admINewsSource">원문 언론사</label>
+          <input type="text" id="admINewsSource" placeholder="선택">
+        </div>
+        <div class="field">
+          <label for="admINewsDate">원문 게재일</label>
+          <input type="date" id="admINewsDate">
+        </div>
+      </div>
+      <div class="field">
+        <label for="admINewsUrl">원문 링크</label>
+        <input type="url" id="admINewsUrl" placeholder="선택">
+      </div>
+      <div class="field">
+        <label>관련 이론가</label>
+        <div class="chk-grid" id="admITheorists"></div>
+      </div>
+      <div class="field">
+        <label>관련 용어</label>
+        <div class="chk-grid" id="admITerms"></div>
+      </div>
+
+      <div class="modal-foot">
+        <button type="button" class="modal-btn modal-btn--danger" id="admIDelete" hidden>삭제</button>
+        <button type="button" class="modal-btn modal-btn--ghost" data-aclose="admIssueModal">취소</button>
+        <button type="button" class="modal-btn modal-btn--ghost" id="admISaveDraft">임시저장</button>
+        <button type="submit" class="modal-btn modal-btn--primary">게시</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <!-- [관리자] 공지 작성/수정 -->
 <div class="modal" id="admNoticeModal" role="dialog" aria-modal="true" aria-labelledby="admNoticeModalTitle" hidden>
   <div class="modal-panel">
@@ -1161,7 +1257,7 @@ body[data-auth="loading"] #content { display: none; }
         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
       </svg><span>이론가</span>
     </a>
-    <a href="index.html#articles">
+    <a href="issue.html">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true">
         <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/>
       </svg><span>시사연결</span>
@@ -1220,6 +1316,8 @@ body[data-auth="loading"] #content { display: none; }
     myResDesc: document.getElementById('myResDesc'),
     communityBmCount: document.getElementById('communityBmCount'),
     communityBmDesc: document.getElementById('communityBmDesc'),
+    issueBmCount: document.getElementById('issueBmCount'),
+    issueBmDesc: document.getElementById('issueBmDesc'),
     noticeOpen: document.getElementById('noticeOpen'),
     noticeModal: document.getElementById('noticeModal'),
     noticeList: document.getElementById('noticeList'),
@@ -1657,6 +1755,7 @@ body[data-auth="loading"] #content { display: none; }
       el.email.textContent = user.email;
       renderAskCard(user.email);
       renderCommunityBookmarkCount(user.id);
+      renderIssueBookmarkCount(user.id);
       checkAdminAndRenderPanel(user);
     } else {
       document.body.dataset.auth = 'out';
@@ -1666,7 +1765,22 @@ body[data-auth="loading"] #content { display: none; }
       loggedAdminLoginThisSession = false;
       el.communityBmCount.hidden = true;
       el.communityBmDesc.textContent = '로그인하면 스터디·세미나·취업 정보 글을 북마크할 수 있어요';
+      el.issueBmCount.hidden = true;
+      el.issueBmDesc.textContent = '로그인하면 시사연결 글을 북마크할 수 있어요';
     }
+  }
+
+  function renderIssueBookmarkCount(userId) {
+    var client = window.SW_AUTH && window.SW_AUTH.client;
+    if (!client) return;
+    client.from('issue_article_bookmarks').select('issue_article_id', { count: 'exact', head: true }).eq('user_id', userId).then(function (res) {
+      var n = res.count || 0;
+      el.issueBmCount.hidden = !n;
+      el.issueBmCount.textContent = n ? n + '개' : '';
+      el.issueBmDesc.textContent = n
+        ? '눌러서 북마크한 글만 모아 봅니다'
+        : '시사연결 글 상세에서 북마크하면 여기에 모입니다';
+    });
   }
 
   function renderCommunityBookmarkCount(userId) {
@@ -1810,7 +1924,7 @@ body[data-auth="loading"] #content { display: none; }
   document.querySelectorAll('[data-aclose]').forEach(function (btn) {
     btn.addEventListener('click', function () { closeModal(document.getElementById(btn.getAttribute('data-aclose'))); });
   });
-  var ADMIN_MODAL_IDS = ['admUserModal', 'admTermModal', 'admTheoristModal', 'admNoticeModal', 'admInquiryModal'];
+  var ADMIN_MODAL_IDS = ['admUserModal', 'admTermModal', 'admTheoristModal', 'admIssueModal', 'admNoticeModal', 'admInquiryModal'];
   ADMIN_MODAL_IDS.forEach(function (id) {
     var modal = document.getElementById(id);
     modal.addEventListener('click', function (e) { if (e.target === modal) closeModal(modal); });
@@ -1826,13 +1940,14 @@ body[data-auth="loading"] #content { display: none; }
   /* ---------------------------------------------------------
      탭 전환
      --------------------------------------------------------- */
-  var ATABS = ['dash', 'users', 'approve', 'theorists', 'materials', 'notices', 'inquiries', 'reports', 'logs'];
+  var ATABS = ['dash', 'users', 'approve', 'theorists', 'materials', 'issues', 'notices', 'inquiries', 'reports', 'logs'];
   var adminRenderers = {
     dash: renderDashboard,
     users: renderUserList,
     approve: renderAdmApprove,
     theorists: renderAdmTheorists,
     materials: renderAdmMaterials,
+    issues: renderAdmIssues,
     notices: renderAdmNotices,
     inquiries: renderAdmInquiries,
     reports: renderAdmReports,
@@ -1930,6 +2045,13 @@ body[data-auth="loading"] #content { display: none; }
     document.getElementById('kpiTheorists').textContent = THEORIST_KEYS.length + publishedDrafts.length;
 
     document.getElementById('kpiMaterials').textContent = SAMPLES.length + readList(RES_MATERIAL_KEY).length;
+
+    var issueKpiClient = sbClient();
+    if (issueKpiClient) {
+      issueKpiClient.from('issue_articles').select('id', { count: 'exact', head: true }).then(function (res) {
+        document.getElementById('kpiIssues').textContent = res.error ? '–' : (res.count || 0);
+      });
+    }
 
     document.getElementById('kpiTotalUsers').textContent = adminUsersCache.length || '–';
     if (!adminUsersCache.length) {
@@ -2400,6 +2522,138 @@ body[data-auth="loading"] #content { display: none; }
   });
 
   /* ---------------------------------------------------------
+     시사 연결 관리 (issue-prd_1.md — 실제 Supabase 테이블,
+     네이버 뉴스 검색·AI 초안 생성은 범위 밖이라 관리자가 직접 작성한다)
+     --------------------------------------------------------- */
+  var admIssueListEl = document.getElementById('admIssueList');
+  var currentIssueId = null;
+  var admIssuesCache = [];
+  var GLOSSARY_TERMS = (window.GLOSSARY_DATA && window.GLOSSARY_DATA.terms) || [];
+
+  function renderAdmIssues() {
+    var client = sbClient();
+    if (!client) { admIssueListEl.innerHTML = '<li class="empty-state">불러오지 못했습니다.</li>'; return; }
+    client.from('issue_articles').select('*').order('created_at', { ascending: false }).then(function (res) {
+      admIssuesCache = res.error ? [] : (res.data || []);
+      if (!admIssuesCache.length) {
+        admIssueListEl.innerHTML = '<li class="empty-state">작성한 시사 연결 글이 없습니다.</li>';
+        return;
+      }
+      admIssueListEl.innerHTML = admIssuesCache.map(function (a) {
+        return '<li><button type="button" class="admin-row" data-issue-id="' + esc(a.id) + '">' +
+          '<span class="admin-row-main">' +
+            '<span class="admin-row-title">' + esc(a.question_title) + '</span>' +
+            '<span class="admin-row-sub">' + esc(a.news_source || '') + (a.news_published_at ? ' · ' + esc(a.news_published_at) : '') + '</span>' +
+          '</span>' +
+          '<span class="admin-row-meta"><span class="badge ' + (a.status === 'published' ? 'badge--ok' : 'badge--draft') + '">' + (a.status === 'published' ? '게시됨' : '임시저장') + '</span></span>' +
+        '</button></li>';
+      }).join('');
+    });
+  }
+
+  function resetIssueForm() {
+    ['admIQuestionTitle', 'admISummary', 'admIInterpretation', 'admINewsSource', 'admINewsDate', 'admINewsUrl']
+      .forEach(function (id) { document.getElementById(id).value = ''; });
+    buildCheckGrid(document.getElementById('admITheorists'), THEORIST_KEYS, function (k) { return k; }, function (k) { return GLOSSARY.theorists[k].name; }, []);
+    buildCheckGrid(document.getElementById('admITerms'), GLOSSARY_TERMS, function (t) { return t.id; }, function (t) { return t.term_ko; }, []);
+  }
+
+  function fillIssueForm(a) {
+    document.getElementById('admIQuestionTitle').value = a.question_title || '';
+    document.getElementById('admISummary').value = a.summary || '';
+    document.getElementById('admIInterpretation').value = a.interpretation || '';
+    document.getElementById('admINewsSource').value = a.news_source || '';
+    document.getElementById('admINewsDate').value = a.news_published_at || '';
+    document.getElementById('admINewsUrl').value = a.news_url || '';
+    buildCheckGrid(document.getElementById('admITheorists'), THEORIST_KEYS, function (k) { return k; }, function (k) { return GLOSSARY.theorists[k].name; }, a.related_theorists || []);
+    buildCheckGrid(document.getElementById('admITerms'), GLOSSARY_TERMS, function (t) { return t.id; }, function (t) { return t.term_ko; }, a.related_terms || []);
+  }
+
+  function collectIssueForm() {
+    return {
+      question_title: document.getElementById('admIQuestionTitle').value.trim(),
+      summary: document.getElementById('admISummary').value.trim(),
+      interpretation: document.getElementById('admIInterpretation').value.trim(),
+      news_source: document.getElementById('admINewsSource').value.trim() || null,
+      news_published_at: document.getElementById('admINewsDate').value || null,
+      news_url: document.getElementById('admINewsUrl').value.trim() || null,
+      related_theorists: checkedValues(document.getElementById('admITheorists')),
+      related_terms: checkedValues(document.getElementById('admITerms'))
+    };
+  }
+
+  document.getElementById('admIssueNewBtn').addEventListener('click', function () {
+    currentIssueId = null;
+    document.getElementById('admIssueModalTitle').textContent = '새 시사 연결';
+    document.getElementById('admIDelete').hidden = true;
+    resetIssueForm();
+    openModal(document.getElementById('admIssueModal'));
+  });
+
+  admIssueListEl.addEventListener('click', function (e) {
+    var row = e.target.closest('[data-issue-id]');
+    if (!row) return;
+    var a = admIssuesCache.filter(function (x) { return x.id === row.getAttribute('data-issue-id'); })[0];
+    if (!a) return;
+    currentIssueId = a.id;
+    document.getElementById('admIssueModalTitle').textContent = a.question_title;
+    document.getElementById('admIDelete').hidden = false;
+    fillIssueForm(a);
+    openModal(document.getElementById('admIssueModal'));
+  });
+
+  function saveIssue(status) {
+    var client = sbClient();
+    if (!client) return;
+    var title = document.getElementById('admIQuestionTitle').value.trim();
+    var summary = document.getElementById('admISummary').value.trim();
+    var interpretation = document.getElementById('admIInterpretation').value.trim();
+    if (!title || !summary || !interpretation) { toast('제목·요약·해석 본문은 필수입니다.'); return; }
+
+    var isNewRecord = !currentIssueId;
+    var prev = isNewRecord ? null : admIssuesCache.filter(function (x) { return x.id === currentIssueId; })[0];
+    var wasPublished = !!(prev && prev.status === 'published');
+    var data = collectIssueForm();
+    data.status = status;
+    data.updated_at = new Date().toISOString();
+    if (status === 'published') data.published_at = new Date().toISOString();
+
+    var task = isNewRecord
+      ? client.from('issue_articles').insert(data).select().single()
+      : client.from('issue_articles').update(data).eq('id', currentIssueId).select().single();
+
+    task.then(function (res) {
+      if (res.error) { toast('저장에 실패했습니다: ' + res.error.message); return; }
+      currentIssueId = res.data.id;
+      document.getElementById('admIssueModal').hidden = true;
+      var action = isNewRecord ? 'issue_created'
+        : status === 'published' ? 'issue_published'
+        : wasPublished ? 'issue_unpublished'
+        : 'issue_updated';
+      logAdminEvent(action, 'issue_article', currentIssueId);
+      renderAdmIssues();
+      renderDashboard();
+      toast(status === 'published' ? '게시했습니다.' : '임시저장했습니다.');
+    });
+  }
+
+  document.getElementById('admIssueForm').addEventListener('submit', function (e) { e.preventDefault(); saveIssue('published'); });
+  document.getElementById('admISaveDraft').addEventListener('click', function () { saveIssue('draft'); });
+  document.getElementById('admIDelete').addEventListener('click', function () {
+    if (!currentIssueId || !window.confirm('이 시사 연결 글을 삭제할까요? 되돌릴 수 없습니다.')) return;
+    var client = sbClient();
+    if (!client) return;
+    client.from('issue_articles').delete().eq('id', currentIssueId).then(function (res) {
+      if (res.error) { toast('삭제에 실패했습니다.'); return; }
+      logAdminEvent('issue_deleted', 'issue_article', currentIssueId);
+      document.getElementById('admIssueModal').hidden = true;
+      renderAdmIssues();
+      renderDashboard();
+      toast('삭제했습니다.');
+    });
+  });
+
+  /* ---------------------------------------------------------
      공지사항 관리 (23장)
      --------------------------------------------------------- */
   var admNoticeListEl = document.getElementById('admNoticeList');
@@ -2672,6 +2926,8 @@ body[data-auth="loading"] #content { display: none; }
     theorist_published: '이론가 게시', theorist_draft_saved: '이론가 임시저장', theorist_deleted: '이론가 삭제',
     material_hidden: '자료 숨김', material_unhidden: '자료 숨김 해제',
     material_visibility_changed: '자료 공개 설정 변경', material_deleted: '자료 삭제',
+    issue_created: '시사연결 작성', issue_updated: '시사연결 수정',
+    issue_published: '시사연결 게시', issue_unpublished: '시사연결 비공개 전환', issue_deleted: '시사연결 삭제',
     notice_created: '공지 작성', notice_updated: '공지 수정', notice_deleted: '공지 삭제',
     inquiry_answered: '문의 답변',
     report_received: '신고 접수', report_reviewing: '신고 검토중 전환', report_resolved: '신고 처리 완료',
