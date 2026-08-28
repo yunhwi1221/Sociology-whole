@@ -1633,7 +1633,7 @@ body[data-auth="loading"] #content { display: none; }
         loggedAdminLoginThisSession = true;
         logAdminEvent('admin_login');
       }
-      loadAdminUsers().then(function () {
+      ensureAdminUsersLoaded().then(function () {
         var hashTab = (location.hash || '').replace('#', '');
         activateAdminTab(ATABS.indexOf(hashTab) >= 0 ? hashTab : 'dash');
       });
@@ -1841,6 +1841,14 @@ body[data-auth="loading"] #content { display: none; }
       document.getElementById('apanel-' + t).hidden = t !== name;
     });
     if (adminRenderers[name]) adminRenderers[name]();
+    // 회원 데이터가 아직 없으면(초기 로딩이 인증 이벤트 경합으로 유실된 경우 포함)
+    // 탭을 열 때마다 확실하게 다시 불러와서 화면을 갱신한다.
+    if ((name === 'users' || name === 'dash') && !adminUsersLoadOk) {
+      ensureAdminUsersLoaded().then(function () {
+        renderUserList();
+        renderDashboard();
+      });
+    }
   }
   document.querySelectorAll('.admin-tab').forEach(function (btn) {
     btn.addEventListener('click', function () { activateAdminTab(btn.getAttribute('data-atab')); });
@@ -1869,6 +1877,7 @@ body[data-auth="loading"] #content { display: none; }
   }
 
   var adminUsersLoadOk = false;
+  var adminUsersLoadPromise = null;
 
   // 프로필 조회와 같은 이유로 이 RPC도 세션이 자리잡기 전엔 실패할 수 있다.
   // 실패를 "회원 없음"으로 캐싱하지 않고 짧게 재시도해서, 회원 관리·대시보드가
@@ -1891,6 +1900,21 @@ body[data-auth="loading"] #content { display: none; }
         }, ADMIN_RETRY_DELAYS[attempt]);
       });
     });
+  }
+
+  /* 로그인 직후 인증 이벤트가 짧은 시간 안에 여러 번 겹치면(토큰 갱신·멀티탭 동기화 등)
+     checkAdminAndRenderPanel의 세대 취소 로직 때문에 최초 로딩 시도 자체가 끝까지
+     완료되지 못하고 계속 취소될 수 있다. 그 경우를 대비해, 회원 관리·대시보드 탭을
+     열 때마다 데이터가 아직 없으면 여기서 한 번 더 확실하게 불러온다. 이미 불러왔거나
+     불러오는 중이면 새 요청을 만들지 않고 기존 Promise를 그대로 재사용한다. */
+  function ensureAdminUsersLoaded() {
+    if (adminUsersLoadOk) return Promise.resolve();
+    if (!adminUsersLoadPromise) {
+      adminUsersLoadPromise = loadAdminUsers().then(function () {
+        adminUsersLoadPromise = null;
+      });
+    }
+    return adminUsersLoadPromise;
   }
 
   function renderDashboard() {
