@@ -1581,11 +1581,12 @@ body[data-auth="loading"] #content { display: none; }
   /* SW_AUTH.subscribe는 토큰 자동 갱신 등으로 같은 로그인 상태에서도 render()를
      반복 호출한다. 매번 profiles를 다시 조회해 el.adminEntry.hidden을 새로 쓰면,
      여러 번의 비동기 조회가 서로 다른 순서로 끝나면서 관리자 영역이 껐다 켜졌다
-     하는 깜빡임이 생긴다. 같은 사용자에 대해서는 한 번만 조회하고 결과를 캐싱해서
-     반복 호출에서는 캐시된 값으로만 화면을 맞춘다. */
+     하는 깜빡임이 생긴다. 확인된(관리자다) 결과만 캐싱해서 반복 호출을 건너뛰고,
+     실패·비관리자 결과는 절대 캐싱하지 않는다 — 로그인 직후 세션이 아직 자리잡기
+     전 첫 조회가 일시적으로 실패해도, 다음 render() 호출(토큰 갱신 등) 때 다시
+     시도해서 결국 정상적으로 확인되도록 하기 위해서다. */
   var adminCheckGeneration = 0;
-  var adminCheckedUserId = null;
-  var adminConfirmed = false;
+  var adminConfirmedUserId = null;
 
   function applyAdminVisibility(isAdmin) {
     el.adminEntry.hidden = !isAdmin;
@@ -1596,8 +1597,8 @@ body[data-auth="loading"] #content { display: none; }
     var client = sbClient();
     if (!client) { applyAdminVisibility(false); return; }
 
-    if (adminCheckedUserId === user.id) {
-      applyAdminVisibility(adminConfirmed);
+    if (adminConfirmedUserId === user.id) {
+      applyAdminVisibility(true);
       return;
     }
 
@@ -1605,10 +1606,9 @@ body[data-auth="loading"] #content { display: none; }
     client.from('profiles').select('role,status').eq('id', user.id).single().then(function (res) {
       if (myGeneration !== adminCheckGeneration) return; // 더 최신 요청이 있으면 이 결과는 버린다
       var isAdmin = !res.error && res.data && res.data.role === 'admin' && res.data.status === 'active';
-      adminCheckedUserId = user.id;
-      adminConfirmed = isAdmin;
       applyAdminVisibility(isAdmin);
-      if (!isAdmin) return;
+      if (!isAdmin) return; // 실패·비관리자 결과는 캐싱하지 않는다 — 다음 호출 때 재시도
+      adminConfirmedUserId = user.id;
       if (!loggedAdminLoginThisSession) {
         loggedAdminLoginThisSession = true;
         logAdminEvent('admin_login');
@@ -1619,8 +1619,6 @@ body[data-auth="loading"] #content { display: none; }
       });
     }).catch(function () {
       if (myGeneration !== adminCheckGeneration) return;
-      adminCheckedUserId = user.id;
-      adminConfirmed = false;
       applyAdminVisibility(false);
     });
   }
@@ -1637,8 +1635,7 @@ body[data-auth="loading"] #content { display: none; }
     } else {
       document.body.dataset.auth = 'out';
       adminCheckGeneration++;
-      adminCheckedUserId = null;
-      adminConfirmed = false;
+      adminConfirmedUserId = null;
       applyAdminVisibility(false);
       loggedAdminLoginThisSession = false;
       el.communityBmCount.hidden = true;
