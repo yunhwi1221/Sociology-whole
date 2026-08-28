@@ -1573,9 +1573,14 @@ body[data-auth="loading"] #content { display: none; }
   function logAdminEvent(action, targetType, targetId) {
     var client = sbClient();
     if (!client) return;
+    // client.rpc(...)는 then은 있지만 catch는 없는 thenable이라, .catch()를 바로
+    // 붙이면 "catch is not a function"으로 동기 예외가 터진다. 이 함수는 관리자
+    // 확인 성공 경로·로그아웃 버튼 클릭 핸들러에서 그대로 호출되므로, 여기서 터지면
+    // 호출부의 나머지 코드(회원 목록 로딩, 로그아웃 처리)까지 통째로 실행되지 않는다.
+    // .then(성공, 실패) 형태로 호출해야 이 thenable에서도 안전하게 에러를 무시할 수 있다.
     client.rpc('admin_log_event', {
       p_action: action, p_target_type: targetType || null, p_target_id: targetId != null ? String(targetId) : null
-    }).catch(function () { /* 로그 실패는 조용히 무시 */ });
+    }).then(function () {}, function () { /* 로그 실패는 조용히 무시 */ });
   }
 
   /* SW_AUTH.subscribe는 토큰 자동 갱신 등으로 같은 로그인 상태에서도 render()를
