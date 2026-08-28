@@ -43,14 +43,19 @@
     if (!cta.dataset.swOriginalText) {
       cta.dataset.swOriginalText = cta.textContent.trim();
       cta.dataset.swOriginalHref = cta.getAttribute('href') || '#';
+      cta.dataset.swOriginalAction = cta.getAttribute('data-action') || '';
     }
 
     if (user) {
       cta.textContent = '마이페이지';
       cta.setAttribute('href', 'mypage.html');
+      // data-action="start"가 남아있으면 index.html의 전역 클릭 핸들러가
+      // 이 클릭을 가로채 시작하기 팝업을 띄우고 mypage.html 이동을 막아버린다.
+      cta.removeAttribute('data-action');
     } else {
       cta.textContent = cta.dataset.swOriginalText;
       cta.setAttribute('href', cta.dataset.swOriginalHref);
+      if (cta.dataset.swOriginalAction) cta.setAttribute('data-action', cta.dataset.swOriginalAction);
     }
   }
 
