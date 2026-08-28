@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /mypage.html
+Disallow: /admin.html
+
+Sitemap: https://sociology-whole.vercel.app/sitemap.xml
