@@ -1,0 +1,32 @@
+name: Keep Supabase Awake
+
+# Supabase 무료 플랜은 7일간 API 요청이 없으면 프로젝트를 자동으로
+# 일시정지(pause)한다. 3일에 한 번 REST API에 가벼운 요청을 보내
+# "활동"으로 인식시켜서 자동 일시정지를 막는다.
+#
+# 주소·퍼블리셔블 키는 리포지토리 Secrets(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY)에서
+# 읽는다. publishable key는 브라우저 노출을 전제로 설계된 공개 키라 유출 위험은
+# 없지만, 워크플로우 코드 자체에는 값을 적지 않는다.
+on:
+  schedule:
+    - cron: '0 3 */3 * *' # 3일마다 03:00 UTC (한국시간 12:00) 근처. cron 특성상 매월 1일 기준으로 끊기므로 최대 간격은 4일을 넘지 않는다.
+  workflow_dispatch: {} # 필요할 때 수동으로도 실행 가능
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Supabase REST API
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_PUBLISHABLE_KEY: ${{ secrets.SUPABASE_PUBLISHABLE_KEY }}
+        run: |
+          status=$(curl -sS -o /dev/null -w "%{http_code}" \
+            "$SUPABASE_URL/rest/v1/profiles?select=id&limit=1" \
+            -H "apikey: $SUPABASE_PUBLISHABLE_KEY" \
+            -H "Authorization: Bearer $SUPABASE_PUBLISHABLE_KEY")
+          echo "Supabase REST API responded with HTTP $status"
+          if [ "$status" -ge 500 ]; then
+            echo "::error::Supabase가 응답하지 않습니다 (HTTP $status)"
+            exit 1
+          fi
