@@ -1593,7 +1593,17 @@ body[data-auth="loading"] #content { display: none; }
     el.learningSection.hidden = isAdmin;
   }
 
-  function checkAdminAndRenderPanel(user) {
+  var ADMIN_RETRY_DELAYS = [400, 900, 1800]; // ms — 세션이 자리잡기 전 첫 조회가 실패해도 탭 전환 없이 스스로 재시도
+
+  function scheduleAdminRetry(user, myGeneration, attempt) {
+    if (attempt >= ADMIN_RETRY_DELAYS.length) return;
+    setTimeout(function () {
+      if (myGeneration !== adminCheckGeneration) return; // 그 사이 다른 render()가 이미 새로 확인했다
+      checkAdminAndRenderPanel(user, attempt + 1);
+    }, ADMIN_RETRY_DELAYS[attempt]);
+  }
+
+  function checkAdminAndRenderPanel(user, retryAttempt) {
     var client = sbClient();
     if (!client) { applyAdminVisibility(false); return; }
 
@@ -1602,12 +1612,22 @@ body[data-auth="loading"] #content { display: none; }
       return;
     }
 
-    var myGeneration = ++adminCheckGeneration;
+    var myGeneration = retryAttempt ? adminCheckGeneration : ++adminCheckGeneration;
     client.from('profiles').select('role,status').eq('id', user.id).single().then(function (res) {
       if (myGeneration !== adminCheckGeneration) return; // 더 최신 요청이 있으면 이 결과는 버린다
-      var isAdmin = !res.error && res.data && res.data.role === 'admin' && res.data.status === 'active';
+
+      // 로그인 직후에는 세션이 완전히 자리잡기 전에 조회가 나가 RLS에 막혀
+      // res.error가 뜰 수 있다 — 이건 "관리자 아님"이 아니라 일시적 실패이므로
+      // 캐싱하지 않고 짧게 재시도한다 (탭 전환 같은 우연한 이벤트에 기대지 않는다).
+      if (res.error) {
+        applyAdminVisibility(false);
+        scheduleAdminRetry(user, myGeneration, retryAttempt || 0);
+        return;
+      }
+
+      var isAdmin = res.data && res.data.role === 'admin' && res.data.status === 'active';
       applyAdminVisibility(isAdmin);
-      if (!isAdmin) return; // 실패·비관리자 결과는 캐싱하지 않는다 — 다음 호출 때 재시도
+      if (!isAdmin) return; // 실제로 관리자가 아닌 결과는 정상 상태이므로 재시도하지 않는다
       adminConfirmedUserId = user.id;
       if (!loggedAdminLoginThisSession) {
         loggedAdminLoginThisSession = true;
@@ -1620,6 +1640,7 @@ body[data-auth="loading"] #content { display: none; }
     }).catch(function () {
       if (myGeneration !== adminCheckGeneration) return;
       applyAdminVisibility(false);
+      scheduleAdminRetry(user, myGeneration, retryAttempt || 0);
     });
   }
 
