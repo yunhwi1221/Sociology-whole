@@ -1626,18 +1626,32 @@ body[data-auth="loading"] #content { display: none; }
       }
 
       var isAdmin = res.data && res.data.role === 'admin' && res.data.status === 'active';
+      console.log('[admin-debug] profiles ok, isAdmin=', isAdmin, 'data=', res.data);
       applyAdminVisibility(isAdmin);
       if (!isAdmin) return; // 실제로 관리자가 아닌 결과는 정상 상태이므로 재시도하지 않는다
       adminConfirmedUserId = user.id;
       if (!loggedAdminLoginThisSession) {
         loggedAdminLoginThisSession = true;
-        logAdminEvent('admin_login');
+        try {
+          logAdminEvent('admin_login');
+        } catch (e) {
+          console.error('[admin-debug] logAdminEvent threw synchronously', e);
+        }
       }
-      loadAdminUsers().then(function () {
-        var hashTab = (location.hash || '').replace('#', '');
-        activateAdminTab(ATABS.indexOf(hashTab) >= 0 ? hashTab : 'dash');
-      });
-    }).catch(function () {
+      console.log('[admin-debug] about to call loadAdminUsers()');
+      try {
+        loadAdminUsers().then(function () {
+          console.log('[admin-debug] loadAdminUsers resolved, cache length=', adminUsersCache.length, 'loadOk=', adminUsersLoadOk);
+          var hashTab = (location.hash || '').replace('#', '');
+          activateAdminTab(ATABS.indexOf(hashTab) >= 0 ? hashTab : 'dash');
+        }, function (e) {
+          console.error('[admin-debug] loadAdminUsers rejected unexpectedly', e);
+        });
+      } catch (e) {
+        console.error('[admin-debug] loadAdminUsers() threw synchronously', e);
+      }
+    }).catch(function (e) {
+      console.error('[admin-debug] profiles query rejected', e);
       if (myGeneration !== adminCheckGeneration) return;
       applyAdminVisibility(false);
       scheduleAdminRetry(user, myGeneration, retryAttempt || 0);
