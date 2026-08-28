@@ -90,7 +90,7 @@
     '  <form class="sw-auth-form" id="sw-auth-form" novalidate>',
     '    <label class="sw-auth-field" id="sw-auth-name-field">',
     '      <span>사용자 이름</span>',
-    '      <input type="text" id="sw-auth-name" name="name" autocomplete="name" placeholder="예: 김윤휘">',
+    '      <input type="text" id="sw-auth-name" name="name" autocomplete="name" placeholder="예: 홍길동">',
     '    </label>',
     '    <label class="sw-auth-field">',
     '      <span>이메일</span>',
