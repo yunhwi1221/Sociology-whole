@@ -733,7 +733,7 @@ body[data-auth="loading"] #mineGuard { display: none; }
           <button type="button" class="btn btn-secondary" id="filePick">파일 선택</button>
           <input type="file" id="fileInput" class="sr-only">
         </div>
-        <p class="field-hint" id="fileHint">지금은 파일 정보(이름·크기·형식)만 저장됩니다. 실제 파일 보관은 스토리지 연동 후 열립니다.</p>
+        <p class="field-hint" id="fileHint">최대 20MB까지 올릴 수 있어요.</p>
       </div>
 
       <div class="field" id="textField" hidden>
@@ -840,15 +840,13 @@ body[data-auth="loading"] #mineGuard { display: none; }
 <script>
 /* ============================================================
    자료실 — archive-PRD_1.md 4장 / archive-design.md 3~4장 구현
-   서버가 아직 없어 내 자료(폴더·자료·메모·북마크)는 localStorage 에 쌓는다.
-   Supabase 로 옮길 때는 아래 store.* 함수만 갈아끼우면 화면은 그대로 쓴다.
+   Supabase resources / resource_folders / resource_bookmarks 테이블 +
+   'resources' Storage 버킷에 실제로 저장한다(RLS: 소유자 또는 공개 자료만 조회 가능).
    ============================================================ */
 (function () {
   'use strict';
 
-  var FOLDER_KEY = 'sw:resources:folders';
-  var MATERIAL_KEY = 'sw:resources:materials';
-  var BOOKMARK_KEY = 'sw:resources:bookmarks';
+  var BUCKET = 'resources';
   var ALL = '전체';
   var UNFILED = 'unfiled';   // 미분류는 실제 폴더가 아니라 가상 폴더(PRD 4.3)
 
@@ -865,9 +863,19 @@ body[data-auth="loading"] #mineGuard { display: none; }
     selectedId: null,
     user: null,
     draftType: 'file',
-    draftFile: null,
+    draftFile: null,      // 실제 File 객체 (업로드용)
     draftPublic: false
   };
+
+  /* DB에서 받아온 값을 화면 캐시에 담아둔다. 읽기(render*)는 전부 이 캐시만 본다. */
+  var cache = {
+    publicMaterials: [], // 다른 사람 포함 전체 공개 자료 (owner_id 등 개인 식별 필드 없음)
+    mineFolders: [],
+    mineMaterials: [],   // 내 자료(공개+비공개) 전체
+    myBookmarkIds: []
+  };
+
+  function sbClient() { return window.SW_AUTH && window.SW_AUTH.client; }
 
   var el = {
     tabAll: document.getElementById('tabAll'),
@@ -919,34 +927,38 @@ body[data-auth="loading"] #mineGuard { display: none; }
   };
 
   /* ---------------------------------------------------------
-     저장소 — 여기만 서버 호출로 바꾸면 된다
+     서버 로딩 — 실패해도 화면은 빈 목록으로 계속 동작한다
      --------------------------------------------------------- */
-  function readJSON(key, fallback) {
-    try {
-      var raw = localStorage.getItem(key);
-      if (!raw) return fallback;
-      var v = JSON.parse(raw);
-      return v == null ? fallback : v;
-    } catch (e) {
-      // 사파리 프라이빗 모드 등 localStorage 접근 불가 — 세션 한정으로 동작시킨다
-      return fallback;
+  var PUBLIC_COLUMNS = 'id,type,title,tags,visibility,text_content,file_name,file_size,file_type,storage_path,created_at,updated_at,bookmark_count';
+
+  function loadPublicMaterials() {
+    var client = sbClient();
+    if (!client) return Promise.resolve();
+    return client.from('resources_with_meta').select(PUBLIC_COLUMNS)
+      .eq('visibility', 'public').order('created_at', { ascending: false })
+      .then(function (res) {
+        cache.publicMaterials = res.error ? [] : (res.data || []);
+      });
+  }
+
+  function loadMine() {
+    var client = sbClient();
+    var user = window.SW_AUTH && window.SW_AUTH.getUser();
+    if (!client || !user) {
+      cache.mineFolders = [];
+      cache.mineMaterials = [];
+      cache.myBookmarkIds = [];
+      return Promise.resolve();
     }
-  }
-  function writeJSON(key, value) {
-    try { localStorage.setItem(key, JSON.stringify(value)); } catch (e) { /* 저장 실패는 무시 */ }
-  }
-
-  var store = {
-    folders: function () { return readJSON(FOLDER_KEY, []); },
-    saveFolders: function (v) { writeJSON(FOLDER_KEY, v); },
-    materials: function () { return readJSON(MATERIAL_KEY, []); },
-    saveMaterials: function (v) { writeJSON(MATERIAL_KEY, v); },
-    bookmarks: function () { return readJSON(BOOKMARK_KEY, []); },
-    saveBookmarks: function (v) { writeJSON(BOOKMARK_KEY, v); }
-  };
-
-  function uid(prefix) {
-    return prefix + '-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    return Promise.all([
+      client.from('resource_folders').select('*').order('created_at'),
+      client.from('resources_with_meta').select('*').eq('owner_id', user.id).order('updated_at', { ascending: false }),
+      client.from('resource_bookmarks').select('resource_id').eq('user_id', user.id)
+    ]).then(function (results) {
+      cache.mineFolders = results[0].error ? [] : (results[0].data || []);
+      cache.mineMaterials = results[1].error ? [] : (results[1].data || []);
+      cache.myBookmarkIds = results[2].error ? [] : (results[2].data || []).map(function (r) { return r.resource_id; });
+    });
   }
 
   function esc(s) {
@@ -955,10 +967,9 @@ body[data-auth="loading"] #mineGuard { display: none; }
     });
   }
 
-  function today() {
-    var d = new Date();
-    function pad(n) { return (n < 10 ? '0' : '') + n; }
-    return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+  /* DB의 타임스탬프(ISO)와 샘플 데이터의 'YYYY-MM-DD' 표기를 화면에서는 동일한 형태로 보여준다 */
+  function fmtDate(v) {
+    return v ? String(v).slice(0, 10) : '';
   }
 
   function formatSize(bytes) {
@@ -998,7 +1009,7 @@ body[data-auth="loading"] #mineGuard { display: none; }
   /* ---------------------------------------------------------
      자료 조회 — 샘플(공개) + 내 자료를 한 배열로 다룬다
      --------------------------------------------------------- */
-  function myMaterials() { return store.materials(); }
+  function myMaterials() { return cache.mineMaterials; }
 
   var ADMIN_HIDDEN_KEY = 'sw:admin:hiddenMaterials';
   function hiddenSampleIds() {
@@ -1011,14 +1022,15 @@ body[data-auth="loading"] #mineGuard { display: none; }
   function publicMaterials() {
     var hidden = hiddenSampleIds();
     var visibleSamples = SAMPLES.filter(function (m) { return hidden.indexOf(m.id) < 0; });
-    var mine = myMaterials().filter(function (m) { return m.visibility === 'public'; });
-    return visibleSamples.concat(mine);
+    return visibleSamples.concat(cache.publicMaterials);
   }
 
   function findMaterial(id) {
     var mine = myMaterials();
     for (var i = 0; i < mine.length; i++) if (mine[i].id === id) return mine[i];
-    for (var j = 0; j < SAMPLES.length; j++) if (SAMPLES[j].id === id) return SAMPLES[j];
+    var pub = cache.publicMaterials;
+    for (var j = 0; j < pub.length; j++) if (pub[j].id === id) return pub[j];
+    for (var k = 0; k < SAMPLES.length; k++) if (SAMPLES[k].id === id) return SAMPLES[k];
     return null;
   }
 
@@ -1026,18 +1038,45 @@ body[data-auth="loading"] #mineGuard { display: none; }
     return myMaterials().some(function (m) { return m.id === id; });
   }
 
-  function isBookmarked(id) { return store.bookmarks().indexOf(id) >= 0; }
+  function isBookmarked(id) { return cache.myBookmarkIds.indexOf(id) >= 0; }
 
   function bookmarkCount(m) {
-    return (m.bookmark_count || 0) + (isBookmarked(m.id) ? 1 : 0);
+    return m.bookmark_count || 0;
   }
 
   function toggleBookmark(id) {
-    var list = store.bookmarks();
-    var i = list.indexOf(id);
-    if (i >= 0) { list.splice(i, 1); toast('북마크를 해제했습니다.'); }
-    else { list.push(id); toast('마이페이지에 북마크했습니다.'); }
-    store.saveBookmarks(list);
+    var client = sbClient();
+    var user = window.SW_AUTH && window.SW_AUTH.getUser();
+    if (!client || !user) { toast('로그인하면 북마크할 수 있어요.'); return; }
+
+    var marked = isBookmarked(id);
+    var task = marked
+      ? client.from('resource_bookmarks').delete().eq('user_id', user.id).eq('resource_id', id)
+      : client.from('resource_bookmarks').insert({ user_id: user.id, resource_id: id });
+
+    task.then(function (res) {
+      if (res.error) { toast('처리하지 못했습니다. 잠시 후 다시 시도해주세요.'); return; }
+      if (marked) {
+        cache.myBookmarkIds = cache.myBookmarkIds.filter(function (x) { return x !== id; });
+        toast('북마크를 해제했습니다.');
+      } else {
+        cache.myBookmarkIds.push(id);
+        toast('마이페이지에 북마크했습니다.');
+      }
+      bumpBookmarkCount(id, marked ? -1 : 1);
+      renderBmFilter();
+      renderAll();
+      renderDetail();
+    });
+  }
+
+  /* 서버 재조회 없이 화면에 보이는 카운트만 즉시 맞춰준다(진짜 합계는 다음 새로고침 때 다시 맞음) */
+  function bumpBookmarkCount(id, delta) {
+    [cache.publicMaterials, cache.mineMaterials].forEach(function (list) {
+      list.forEach(function (m) {
+        if (m.id === id) m.bookmark_count = Math.max(0, (m.bookmark_count || 0) + delta);
+      });
+    });
   }
 
   function allTags() {
@@ -1083,7 +1122,7 @@ body[data-auth="loading"] #mineGuard { display: none; }
           '<span class="mat-meta">' +
             '<span class="mat-tags">' + tagsHTML(m.tags) + '</span>' +
             '<span class="dot">북마크 ' + bookmarkCount(m) + '</span>' +
-            '<span class="dot">' + esc(m.created_at || '') + '</span>' +
+            '<span class="dot">' + esc(fmtDate(m.created_at)) + '</span>' +
           '</span>' +
         '</span>' +
       '</button>' +
@@ -1103,7 +1142,7 @@ body[data-auth="loading"] #mineGuard { display: none; }
   }
 
   function renderBmFilter() {
-    var n = store.bookmarks().filter(function (id) { return findMaterial(id); }).length;
+    var n = cache.myBookmarkIds.filter(function (id) { return findMaterial(id); }).length;
     el.bmFilterCount.textContent = n;
     el.bmFilter.setAttribute('aria-pressed', String(state.bookmarksOnly));
   }
@@ -1133,7 +1172,7 @@ body[data-auth="loading"] #mineGuard { display: none; }
      --------------------------------------------------------- */
   function folderName(id) {
     if (id === UNFILED || !id) return '미분류';
-    var f = store.folders().filter(function (x) { return x.id === id; })[0];
+    var f = cache.mineFolders.filter(function (x) { return x.id === id; })[0];
     return f ? f.name : '미분류';
   }
 
@@ -1147,7 +1186,7 @@ body[data-auth="loading"] #mineGuard { display: none; }
   }
 
   function renderFolders() {
-    var folders = store.folders();
+    var folders = cache.mineFolders;
     var rows = [{ id: UNFILED, name: '미분류', system: true }].concat(folders);
 
     el.folderMeta.textContent = folders.length ? folders.length + '개' : '';
@@ -1187,7 +1226,7 @@ body[data-auth="loading"] #mineGuard { display: none; }
             '<span class="vis-badge ' + (isPublic ? 'vis-badge--public' : 'vis-badge--private') + '">' +
               (isPublic ? ICON.globe + '공개' : ICON.lockSm + '비공개') + '</span>' +
             '<span class="mat-tags">' + tagsHTML(m.tags) + '</span>' +
-            '<span class="dot">' + esc(m.updated_at || m.created_at || '') + '</span>' +
+            '<span class="dot">' + esc(fmtDate(m.updated_at || m.created_at)) + '</span>' +
           '</span>' +
         '</span>' +
       '</button>' +
@@ -1244,7 +1283,7 @@ body[data-auth="loading"] #mineGuard { display: none; }
           ? '<span class="vis-badge ' + (m.visibility === 'public' ? 'vis-badge--public' : 'vis-badge--private') + '">' +
             (m.visibility === 'public' ? ICON.globe + '공개' : ICON.lockSm + '비공개') + '</span> &nbsp;'
           : '') +
-        esc(m.created_at || '') + ' 등록' +
+        esc(fmtDate(m.created_at)) + ' 등록' +
         (isPublic && !owner ? ' · 북마크 ' + bookmarkCount(m) : '') +
       '</p>';
 
@@ -1255,9 +1294,8 @@ body[data-auth="loading"] #mineGuard { display: none; }
           '<span class="file-name">' + esc(m.file_name || '파일') + '</span>' +
           '<span class="file-sub">' + esc(formatSize(m.file_size)) + (m.file_type ? ' · ' + esc(String(m.file_type).split('/').pop()) : '') + '</span>' +
         '</span>' +
-        '<button type="button" class="btn btn-secondary" data-action="download" disabled>내려받기</button>' +
-      '</div>' +
-      '<p class="field-hint" style="margin-top:8px;">파일 보관·내려받기는 스토리지 연동 후 열립니다. 지금은 파일 정보만 보관합니다.</p>';
+        '<button type="button" class="btn btn-secondary" data-action="download" data-id="' + esc(m.id) + '">내려받기</button>' +
+      '</div>';
     } else {
       html += '<div class="text-body">' + esc(m.text_content || '') + '</div>';
     }
@@ -1275,7 +1313,7 @@ body[data-auth="loading"] #mineGuard { display: none; }
     }
 
     if (owner) {
-      var folders = store.folders();
+      var folders = cache.mineFolders;
       var options = ['<option value="' + UNFILED + '"' + ((m.folder_id || UNFILED) === UNFILED ? ' selected' : '') + '>미분류</option>']
         .concat(folders.map(function (f) {
           return '<option value="' + esc(f.id) + '"' + (m.folder_id === f.id ? ' selected' : '') + '>' + esc(f.name) + '</option>';
@@ -1383,7 +1421,7 @@ body[data-auth="loading"] #mineGuard { display: none; }
   }
 
   function fillFolderSelect() {
-    var folders = store.folders();
+    var folders = cache.mineFolders;
     el.folderSelect.innerHTML = ['<option value="' + UNFILED + '">미분류</option>']
       .concat(folders.map(function (f) {
         return '<option value="' + esc(f.id) + '"' + (state.folderId === f.id ? ' selected' : '') + '>' + esc(f.name) + '</option>';
@@ -1435,19 +1473,23 @@ body[data-auth="loading"] #mineGuard { display: none; }
       ok: '만들기',
       onOk: function (name) {
         if (!name) return;
-        var folders = store.folders();
-        folders.push({ id: uid('f'), name: name, created_at: today() });
-        store.saveFolders(folders);
-        state.folderId = folders[folders.length - 1].id;
-        renderMine();
-        toast('폴더를 만들었습니다.');
+        var client = sbClient();
+        var user = window.SW_AUTH.getUser();
+        if (!client || !user) return;
+        client.from('resource_folders').insert({ owner_id: user.id, name: name }).select().single()
+          .then(function (res) {
+            if (res.error) { toast('폴더를 만들지 못했습니다.'); return; }
+            cache.mineFolders.push(res.data);
+            state.folderId = res.data.id;
+            renderMine();
+            toast('폴더를 만들었습니다.');
+          });
       }
     });
   }
 
   function renameFolder(id) {
-    var folders = store.folders();
-    var f = folders.filter(function (x) { return x.id === id; })[0];
+    var f = cache.mineFolders.filter(function (x) { return x.id === id; })[0];
     if (!f) return;
     ask({
       title: '폴더 이름 변경',
@@ -1457,15 +1499,17 @@ body[data-auth="loading"] #mineGuard { display: none; }
       ok: '저장',
       onOk: function (name) {
         if (!name) return;
-        f.name = name;
-        store.saveFolders(folders);
-        renderMine();
-        toast('폴더 이름을 바꿨습니다.');
+        sbClient().from('resource_folders').update({ name: name }).eq('id', id).then(function (res) {
+          if (res.error) { toast('이름을 바꾸지 못했습니다.'); return; }
+          f.name = name;
+          renderMine();
+          toast('폴더 이름을 바꿨습니다.');
+        });
       }
     });
   }
 
-  /* 폴더를 지워도 자료는 남기고 미분류로 옮긴다(PRD 4.9) */
+  /* 폴더를 지워도 자료는 남기고 미분류로 옮긴다(PRD 4.9) — DB의 on delete set null 이 처리한다 */
   function deleteFolder(id) {
     ask({
       title: '폴더를 삭제할까요?',
@@ -1473,33 +1517,39 @@ body[data-auth="loading"] #mineGuard { display: none; }
       ok: '삭제',
       danger: true,
       onOk: function () {
-        store.saveFolders(store.folders().filter(function (f) { return f.id !== id; }));
-        var mats = myMaterials().map(function (m) {
-          if (m.folder_id === id) m.folder_id = null;
-          return m;
+        sbClient().from('resource_folders').delete().eq('id', id).then(function (res) {
+          if (res.error) { toast('폴더를 삭제하지 못했습니다.'); return; }
+          cache.mineFolders = cache.mineFolders.filter(function (f) { return f.id !== id; });
+          cache.mineMaterials.forEach(function (m) { if (m.folder_id === id) m.folder_id = null; });
+          if (state.folderId === id) state.folderId = UNFILED;
+          renderMine();
+          toast('폴더를 삭제하고 자료는 미분류로 옮겼습니다.');
         });
-        store.saveMaterials(mats);
-        if (state.folderId === id) state.folderId = UNFILED;
-        renderMine();
-        toast('폴더를 삭제하고 자료는 미분류로 옮겼습니다.');
       }
     });
   }
 
   function setVisibility(id, makePublic) {
-    var mats = myMaterials();
-    var m = mats.filter(function (x) { return x.id === id; })[0];
+    var m = myMaterials().filter(function (x) { return x.id === id; })[0];
     if (!m) return;
 
     function apply() {
-      m.visibility = makePublic ? 'public' : 'private';
-      m.updated_at = today();
-      store.saveMaterials(mats);
-      renderMine();
-      renderAll();
-      renderBmFilter();
-      renderDetail();
-      toast(makePublic ? '공개로 바꿨습니다. 전체 탐색에서 보입니다.' : '비공개로 바꿨습니다.');
+      var visibility = makePublic ? 'public' : 'private';
+      sbClient().from('resources').update({ visibility: visibility }).eq('id', id).then(function (res) {
+        if (res.error) { toast('처리하지 못했습니다.'); return; }
+        m.visibility = visibility;
+        m.updated_at = new Date().toISOString();
+        if (makePublic) {
+          if (!cache.publicMaterials.some(function (x) { return x.id === id; })) cache.publicMaterials.unshift(m);
+        } else {
+          cache.publicMaterials = cache.publicMaterials.filter(function (x) { return x.id !== id; });
+        }
+        renderMine();
+        renderAll();
+        renderBmFilter();
+        renderDetail();
+        toast(makePublic ? '공개로 바꿨습니다. 전체 탐색에서 보입니다.' : '비공개로 바꿨습니다.');
+      });
     }
 
     // 공개로 올릴 때만 확인을 받는다. 내리는 방향은 안전하므로 바로 처리(design 4.6)
@@ -1516,14 +1566,16 @@ body[data-auth="loading"] #mineGuard { display: none; }
   }
 
   function moveMaterial(id, folderId) {
-    var mats = myMaterials();
-    var m = mats.filter(function (x) { return x.id === id; })[0];
+    var m = myMaterials().filter(function (x) { return x.id === id; })[0];
     if (!m) return;
-    m.folder_id = folderId === UNFILED ? null : folderId;
-    m.updated_at = today();
-    store.saveMaterials(mats);
-    renderMine();
-    toast(folderId === UNFILED ? '미분류로 옮겼습니다.' : '"' + folderName(folderId) + '"(으)로 옮겼습니다.');
+    var newFolderId = folderId === UNFILED ? null : folderId;
+    sbClient().from('resources').update({ folder_id: newFolderId }).eq('id', id).then(function (res) {
+      if (res.error) { toast('옮기지 못했습니다.'); return; }
+      m.folder_id = newFolderId;
+      m.updated_at = new Date().toISOString();
+      renderMine();
+      toast(folderId === UNFILED ? '미분류로 옮겼습니다.' : '"' + folderName(folderId) + '"(으)로 옮겼습니다.');
+    });
   }
 
   function deleteMaterial(id) {
@@ -1533,13 +1585,21 @@ body[data-auth="loading"] #mineGuard { display: none; }
       ok: '삭제',
       danger: true,
       onOk: function () {
-        store.saveMaterials(myMaterials().filter(function (m) { return m.id !== id; }));
-        store.saveBookmarks(store.bookmarks().filter(function (b) { return b !== id; }));
-        location.hash = '';
-        renderMine();
-        renderAll();
-        renderBmFilter();
-        toast('자료를 삭제했습니다.');
+        var m = myMaterials().filter(function (x) { return x.id === id; })[0];
+        sbClient().from('resources').delete().eq('id', id).then(function (res) {
+          if (res.error) { toast('삭제하지 못했습니다.'); return; }
+          if (m && m.type === 'file' && m.storage_path) {
+            sbClient().storage.from(BUCKET).remove([m.storage_path]);
+          }
+          cache.mineMaterials = cache.mineMaterials.filter(function (x) { return x.id !== id; });
+          cache.publicMaterials = cache.publicMaterials.filter(function (x) { return x.id !== id; });
+          cache.myBookmarkIds = cache.myBookmarkIds.filter(function (b) { return b !== id; });
+          location.hash = '';
+          renderMine();
+          renderAll();
+          renderBmFilter();
+          toast('자료를 삭제했습니다.');
+        });
       }
     });
   }
@@ -1547,13 +1607,26 @@ body[data-auth="loading"] #mineGuard { display: none; }
   function saveMemo(id) {
     var area = document.getElementById('memoArea');
     if (!area) return;
-    var mats = myMaterials();
-    var m = mats.filter(function (x) { return x.id === id; })[0];
+    var m = myMaterials().filter(function (x) { return x.id === id; })[0];
     if (!m) return;
-    m.memo = area.value;
-    m.updated_at = today();
-    store.saveMaterials(mats);
-    toast('메모를 저장했습니다.');
+    var memo = area.value;
+    sbClient().from('resources').update({ memo: memo }).eq('id', id).then(function (res) {
+      if (res.error) { toast('메모를 저장하지 못했습니다.'); return; }
+      m.memo = memo;
+      m.updated_at = new Date().toISOString();
+      toast('메모를 저장했습니다.');
+    });
+  }
+
+  function downloadMaterial(id) {
+    var m = findMaterial(id);
+    var client = sbClient();
+    if (!m || !client || m.type !== 'file' || !m.storage_path) return;
+    client.storage.from(BUCKET).createSignedUrl(m.storage_path, 60, { download: m.file_name || true })
+      .then(function (res) {
+        if (res.error || !res.data) { toast('파일을 불러오지 못했습니다.'); return; }
+        window.open(res.data.signedUrl, '_blank');
+      });
   }
 
   /* ---------------------------------------------------------
@@ -1601,9 +1674,6 @@ body[data-auth="loading"] #mineGuard { display: none; }
     if (bm) {
       if (!state.user) { toast('로그인하면 북마크할 수 있어요.'); return; }
       toggleBookmark(bm.getAttribute('data-bookmark'));
-      renderBmFilter();
-      renderAll();
-      renderDetail();
       return;
     }
     var vis = e.target.closest('[data-vis]');
@@ -1658,6 +1728,8 @@ body[data-auth="loading"] #mineGuard { display: none; }
   el.detailBody.addEventListener('click', function (e) {
     if (e.target.closest('[data-action="save-memo"]')) { saveMemo(state.selectedId); return; }
     if (e.target.closest('[data-action="delete"]')) { deleteMaterial(state.selectedId); return; }
+    var dl = e.target.closest('[data-action="download"]');
+    if (dl) { downloadMaterial(dl.getAttribute('data-id')); return; }
     listClick(e);
   });
   el.detailBody.addEventListener('change', function (e) {
@@ -1685,9 +1757,12 @@ body[data-auth="loading"] #mineGuard { display: none; }
   el.visSwitch.addEventListener('click', function () { setDraftPublic(!state.draftPublic); });
   el.filePick.addEventListener('click', function () { el.fileInput.click(); });
 
+  var MAX_FILE_SIZE = 20 * 1024 * 1024;
+
   function takeFile(file) {
     if (!file) return;
-    state.draftFile = { name: file.name, size: file.size, type: file.type || '' };
+    if (file.size > MAX_FILE_SIZE) { toast('파일은 최대 20MB까지 올릴 수 있어요.'); return; }
+    state.draftFile = file;
     el.dropTitle.textContent = file.name + ' (' + formatSize(file.size) + ')';
     if (!el.titleInput.value) el.titleInput.value = file.name.replace(/\.[^.]+$/, '');
   }
@@ -1702,6 +1777,10 @@ body[data-auth="loading"] #mineGuard { display: none; }
 
   el.uploadForm.addEventListener('submit', function (e) {
     e.preventDefault();
+    var client = sbClient();
+    var user = window.SW_AUTH && window.SW_AUTH.getUser();
+    if (!client || !user) { toast('로그인이 필요합니다.'); return; }
+
     var title = el.titleInput.value.trim();
     if (!title) { el.titleInput.focus(); return; }
     if (state.draftType === 'file' && !state.draftFile) { toast('파일을 선택해주세요.'); return; }
@@ -1711,36 +1790,61 @@ body[data-auth="loading"] #mineGuard { display: none; }
       .filter(function (t) { return t; });
 
     var folderId = el.folderSelect.value;
-    var m = {
-      id: uid('m'),
+    var file = state.draftFile;
+    var row = {
+      id: crypto.randomUUID(),
+      owner_id: user.id,
       folder_id: folderId === UNFILED ? null : folderId,
       type: state.draftType,
       title: title,
       tags: tags,
-      visibility: state.draftPublic ? 'public' : 'private',
-      bookmark_count: 0,
-      created_at: today(),
-      updated_at: today()
+      visibility: state.draftPublic ? 'public' : 'private'
     };
     if (state.draftType === 'file') {
-      m.file_name = state.draftFile.name;
-      m.file_size = state.draftFile.size;
-      m.file_type = state.draftFile.type;
-      m.memo = '';
+      row.file_name = file.name;
+      row.file_size = file.size;
+      row.file_type = file.type || '';
+      row.storage_path = row.id + '/' + file.name.replace(/[^\w.\-가-힣 ]/g, '_');
     } else {
-      m.text_content = el.textInput.value;
+      row.text_content = el.textInput.value;
     }
 
-    var mats = myMaterials();
-    mats.push(m);
-    store.saveMaterials(mats);
+    var submitBtn = document.getElementById('uploadSubmit');
+    submitBtn.disabled = true;
+    submitBtn.textContent = '저장 중…';
 
-    state.folderId = folderId;
-    closeModal(el.uploadModal);
-    renderMine();
-    renderTags();
-    renderAll();
-    toast(m.visibility === 'public' ? '저장했습니다. 전체 탐색에 공개됩니다.' : '저장했습니다. 비공개 상태입니다.');
+    client.from('resources').insert(row).select().single().then(function (res) {
+      if (res.error) return Promise.reject(res.error);
+      var saved = res.data;
+      if (state.draftType === 'file') {
+        return client.storage.from(BUCKET).upload(row.storage_path, file).then(function (upRes) {
+          if (upRes.error) {
+            // 파일 업로드에 실패하면 방금 만든 행도 남기지 않는다
+            client.from('resources').delete().eq('id', saved.id).then(function () {});
+            return Promise.reject(upRes.error);
+          }
+          return saved;
+        });
+      }
+      return saved;
+    }).then(function (saved) {
+      saved.bookmark_count = 0;
+      cache.mineMaterials.unshift(saved);
+      if (saved.visibility === 'public') cache.publicMaterials.unshift(saved);
+
+      state.folderId = folderId;
+      closeModal(el.uploadModal);
+      renderMine();
+      renderTags();
+      renderAll();
+      toast(saved.visibility === 'public' ? '저장했습니다. 전체 탐색에 공개됩니다.' : '저장했습니다. 비공개 상태입니다.');
+    }).catch(function (err) {
+      console.error('[resources] 업로드 실패:', err);
+      toast('저장하지 못했습니다. 잠시 후 다시 시도해주세요.');
+    }).then(function () {
+      submitBtn.disabled = false;
+      submitBtn.textContent = '저장';
+    });
   });
 
   /* 공용 확인 모달 */
@@ -1778,11 +1882,6 @@ body[data-auth="loading"] #mineGuard { display: none; }
     if (btn) btn.click();
   });
 
-  // 다른 탭에서 북마크·자료가 바뀌면 따라간다
-  window.addEventListener('storage', function (e) {
-    if (e.key === BOOKMARK_KEY || e.key === MATERIAL_KEY || e.key === FOLDER_KEY) render();
-  });
-
   /* ---------------------------------------------------------
      시작 — 주소로 초기 상태를 잡고, 로그인 상태를 구독한다
      --------------------------------------------------------- */
@@ -1792,16 +1891,32 @@ body[data-auth="loading"] #mineGuard { display: none; }
 
   setTab(state.bookmarksOnly ? 'all' : (wantMine ? 'mine' : 'all'), false);
   render();
-  syncFromHash();
+
+  loadPublicMaterials().then(function () {
+    render();
+    syncFromHash(); // 공개 자료 상세로 바로 들어온 링크 대응
+  });
 
   /* subscribe 는 구독 즉시 한 번 호출되는데 그 시점엔 세션 복원 전이라 항상 null 이다.
      ready 를 기다린 뒤 구독해서 "로그인하세요"가 한 번 스치는 것을 막는다. */
   if (window.SW_AUTH) {
     window.SW_AUTH.ready.then(function () {
       window.SW_AUTH.subscribe(function (user) {
+        var prevId = state.user && state.user.id;
         state.user = user;
         document.body.dataset.auth = user ? 'in' : 'out';
-        if (user) renderMine();
+        if (user && user.id !== prevId) {
+          loadMine().then(function () {
+            renderMine();
+            renderBmFilter();
+            renderAll();
+            renderDetail();
+          });
+        } else if (!user) {
+          cache.mineFolders = [];
+          cache.mineMaterials = [];
+          cache.myBookmarkIds = [];
+        }
       });
     });
   } else {

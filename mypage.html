@@ -1370,11 +1370,7 @@ body[data-auth="loading"] #content { display: none; }
       : '용어집에서 북마크 아이콘을 누르면 여기에 모입니다';
   }
 
-  /* 자료실 — 자료는 샘플(resource-data.js)과 내가 올린 것(localStorage)에 나뉘어 있다.
-     마이페이지에서는 개수만 필요하므로 두 출처를 합쳐 세기만 한다. */
   var TH_BOOKMARK_KEY = 'sw:theorists:bookmarks';
-  var RES_BOOKMARK_KEY = 'sw:resources:bookmarks';
-  var RES_MATERIAL_KEY = 'sw:resources:materials';
 
   function readList(key) {
     try {
@@ -1393,32 +1389,36 @@ body[data-auth="loading"] #content { display: none; }
       : '이론가 프로필에서 북마크하면 여기에 모입니다';
   }
 
-  function renderResourceCounts() {
-    var bm = readList(RES_BOOKMARK_KEY).length;
-    el.resBmCount.hidden = !bm;
-    el.resBmCount.textContent = bm ? bm + '개' : '';
-    el.resBmDesc.textContent = bm
-      ? '눌러서 북마크한 자료만 모아 봅니다'
-      : '자료실에서 북마크하면 여기에 모입니다';
-
-    var mine = readList(RES_MATERIAL_KEY).length;
-    el.myResCount.hidden = !mine;
-    el.myResCount.textContent = mine ? mine + '개' : '';
-    el.myResDesc.textContent = mine
-      ? '눌러서 폴더별로 관리합니다'
-      : '자료실 내 자료 탭에서 올릴 수 있습니다';
+  /* 자료실 — 샘플(resource-data.js)은 세지 않고 실제로 내가 올린/북마크한 것만 Supabase에서 센다 */
+  function renderResourceCounts(userId) {
+    var client = window.SW_AUTH && window.SW_AUTH.client;
+    if (!client) return;
+    client.from('resource_bookmarks').select('resource_id', { count: 'exact', head: true }).eq('user_id', userId).then(function (res) {
+      var bm = res.count || 0;
+      el.resBmCount.hidden = !bm;
+      el.resBmCount.textContent = bm ? bm + '개' : '';
+      el.resBmDesc.textContent = bm
+        ? '눌러서 북마크한 자료만 모아 봅니다'
+        : '자료실에서 북마크하면 여기에 모입니다';
+    }).catch(function () {});
+    client.from('resources').select('id', { count: 'exact', head: true }).eq('owner_id', userId).then(function (res) {
+      var mine = res.count || 0;
+      el.myResCount.hidden = !mine;
+      el.myResCount.textContent = mine ? mine + '개' : '';
+      el.myResDesc.textContent = mine
+        ? '눌러서 폴더별로 관리합니다'
+        : '자료실 내 자료 탭에서 올릴 수 있습니다';
+    }).catch(function () {});
   }
 
-  // 다른 탭의 용어집·자료실에서 북마크를 바꾸면 개수도 따라간다
+  // 다른 탭의 용어집에서 북마크를 바꾸면 개수도 따라간다
   window.addEventListener('storage', function (e) {
     if (e.key === BOOKMARK_KEY) renderBookmarkCount();
     if (e.key === TH_BOOKMARK_KEY) renderTheoristCount();
-    if (e.key === RES_BOOKMARK_KEY || e.key === RES_MATERIAL_KEY) renderResourceCounts();
   });
 
   renderBookmarkCount();
   renderTheoristCount();
-  renderResourceCounts();
 
   /* ---------------------------------------------------------
      공지사항 · 문의하기
@@ -1757,6 +1757,7 @@ body[data-auth="loading"] #content { display: none; }
       renderAskCard(user.email);
       renderCommunityBookmarkCount(user.id);
       renderIssueBookmarkCount(user.id);
+      renderResourceCounts(user.id);
       checkAdminAndRenderPanel(user);
     } else {
       document.body.dataset.auth = 'out';
@@ -1768,6 +1769,10 @@ body[data-auth="loading"] #content { display: none; }
       el.communityBmDesc.textContent = '로그인하면 스터디·세미나·취업 정보 글을 북마크할 수 있어요';
       el.issueBmCount.hidden = true;
       el.issueBmDesc.textContent = '로그인하면 시사연결 글을 북마크할 수 있어요';
+      el.resBmCount.hidden = true;
+      el.resBmDesc.textContent = '로그인하면 자료실에서 북마크할 수 있어요';
+      el.myResCount.hidden = true;
+      el.myResDesc.textContent = '로그인하면 자료를 올리고 관리할 수 있어요';
     }
   }
 
