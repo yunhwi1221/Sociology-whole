@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-LKPBVL47XT"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-LKPBVL47XT');
+</script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 질답 | Sociology-whole</title>
+<meta name="description" content="사회학 개념·이론가·시험 대비를 도와주는 AI 학습 도우미입니다. 로그인한 사용자만 이용할 수 있습니다.">
+<link rel="canonical" href="https://sociology-whole.vercel.app/ai-chat.html">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --primary: #0D3B2E;
+  --primary-mid: #145C47;
+  --primary-light: #1E7A5F;
+  --accent: #4ADE80;
+  --accent-soft: rgba(74, 222, 128, 0.15);
+  --white: #FFFFFF;
+  --gray-50: #F9FAFB;
+  --gray-100: #F3F4F6;
+  --gray-200: #E5E7EB;
+  --gray-300: #D1D5DB;
+  --gray-400: #9CA3AF;
+  --gray-500: #6B7280;
+  --gray-600: #4B5563;
+  --gray-700: #374151;
+  --gray-800: #1F2937;
+  --gray-900: #111827;
+  --danger: #B91C1C;
+  --radius: 16px;
+  --radius-sm: 12px;
+
+  --header-h: 60px;
+  --shell: 900px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: 'Noto Sans KR', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: var(--white);
+  color: var(--gray-900);
+  -webkit-font-smoothing: antialiased;
+}
+a { text-decoration: none; color: inherit; }
+button { font: inherit; cursor: pointer; border: none; background: none; }
+textarea { font: inherit; }
+
+/* ── 헤더 (다른 페이지와 동일) ─────────────────────────── */
+.header {
+  position: sticky; top: 0; z-index: 100;
+  height: var(--header-h);
+  padding: 0 24px;
+  background: rgba(13, 59, 46, 0.95);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+.header-inner {
+  max-width: 1200px; height: 100%; margin: 0 auto;
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+}
+.logo {
+  font-weight: 700; font-size: 18px; letter-spacing: -0.03em; white-space: nowrap;
+  background: linear-gradient(135deg, #4ADE80, #FFFFFF);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+}
+.nav-links { display: none; align-items: center; gap: 32px; }
+.nav-links a { font-size: 14px; font-weight: 500; color: rgba(255, 255, 255, 0.7); transition: color 0.2s; }
+.nav-links a:hover, .nav-links a.active { color: var(--white); }
+.nav-cta {
+  padding: 8px 20px; background: var(--accent); color: var(--primary);
+  border-radius: 8px; font-size: 13px; font-weight: 600; transition: opacity 0.2s; white-space: nowrap;
+}
+.nav-cta:hover { opacity: 0.9; }
+
+/* ── 셸 ────────────────────────────────────────────────── */
+.shell { max-width: var(--shell); margin: 0 auto; padding: 24px 20px 96px; }
+.page-head { margin-bottom: 16px; }
+.page-title { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; }
+.page-sub { margin-top: 4px; font-size: 13.5px; color: var(--gray-500); }
+
+/* ── 잠금 상태 (비로그인) ──────────────────────────────── */
+.locked-card {
+  border: 1px solid var(--gray-200); border-radius: var(--radius);
+  padding: 48px 24px; text-align: center; background: var(--gray-50);
+}
+.locked-card .icon {
+  width: 48px; height: 48px; margin: 0 auto 16px; color: var(--primary-light);
+}
+.locked-card h2 { font-size: 17px; font-weight: 700; margin-bottom: 6px; }
+.locked-card p { font-size: 13.5px; color: var(--gray-500); margin-bottom: 20px; }
+.locked-card .btn-login {
+  display: inline-block; padding: 10px 22px; border-radius: 8px;
+  background: var(--primary); color: var(--white); font-size: 13.5px; font-weight: 700;
+  transition: opacity 0.2s;
+}
+.locked-card .btn-login:hover { opacity: 0.9; }
+
+/* ── 채팅 카드 ─────────────────────────────────────────── */
+.chat-card {
+  border: 1px solid var(--gray-200); border-radius: var(--radius);
+  display: flex; flex-direction: column;
+  height: calc(100vh - var(--header-h) - 190px);
+  min-height: 420px;
+  overflow: hidden;
+}
+.messages {
+  flex: 1; overflow-y: auto; overscroll-behavior: contain;
+  padding: 20px; display: flex; flex-direction: column; gap: 14px;
+}
+.empty-state { margin: auto; text-align: center; max-width: 420px; }
+.empty-state h3 { font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+.empty-state p { font-size: 13px; color: var(--gray-500); margin-bottom: 16px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.chip {
+  padding: 8px 14px; border: 1px solid var(--gray-200); border-radius: 999px;
+  font-size: 12.5px; color: var(--gray-700); background: var(--white);
+  transition: border-color 0.2s, color 0.2s;
+}
+.chip:hover { border-color: var(--primary-light); color: var(--primary); }
+
+.msg { display: flex; }
+.msg--user { justify-content: flex-end; }
+.msg--assistant { justify-content: flex-start; }
+.bubble {
+  max-width: 78%; padding: 11px 14px; border-radius: 14px;
+  font-size: 14px; line-height: 1.55; white-space: pre-wrap; word-break: break-word;
+}
+.msg--user .bubble { background: var(--primary); color: var(--white); border-bottom-right-radius: 4px; }
+.msg--assistant .bubble { background: var(--gray-100); color: var(--gray-900); border-bottom-left-radius: 4px; }
+.bubble--pending { color: var(--gray-500); }
+
+.composer {
+  border-top: 1px solid var(--gray-200); padding: 12px 14px;
+  display: flex; align-items: flex-end; gap: 10px; background: var(--white);
+}
+.composer textarea {
+  flex: 1; resize: none; border: 1px solid var(--gray-200); border-radius: 10px;
+  padding: 10px 12px; font-size: 14px; line-height: 1.4; max-height: 120px;
+  color: var(--gray-900);
+}
+.composer textarea:focus { outline: none; border-color: var(--primary-light); }
+.composer button {
+  flex-shrink: 0; padding: 10px 18px; border-radius: 10px;
+  background: var(--primary); color: var(--white); font-size: 13.5px; font-weight: 700;
+  transition: opacity 0.2s;
+}
+.composer button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.disclaimer { margin-top: 10px; font-size: 11.5px; color: var(--gray-400); text-align: center; }
+
+/* ── 토스트 ────────────────────────────────────────────── */
+.toast {
+  position: fixed; left: 50%; bottom: 84px; z-index: 300;
+  transform: translate(-50%, 8px);
+  padding: 11px 18px; border-radius: 10px;
+  background: var(--gray-900); color: var(--white); font-size: 13px;
+  opacity: 0; pointer-events: none; transition: opacity 0.2s, transform 0.2s;
+}
+.toast.show { opacity: 0.95; transform: translate(-50%, 0); }
+
+/* ── 하단 탭바 (모바일) ────────────────────────────────── */
+.bottom-nav {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--gray-200);
+  padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
+}
+.bottom-nav-inner {
+  display: flex; justify-content: space-around; align-items: center;
+  max-width: 480px; margin: 0 auto;
+}
+.bottom-nav a {
+  display: flex; flex-direction: column; align-items: center; gap: 4px;
+  font-size: 10px; font-weight: 500; color: var(--gray-400);
+  transition: color 0.2s; padding: 4px 8px;
+}
+.bottom-nav a.active { color: var(--primary); }
+
+@media (min-width: 768px) {
+  .nav-links { display: flex; }
+  .bottom-nav { display: none; }
+  .header { padding: 0 32px; }
+  .shell { padding: 32px 32px 64px; }
+  .page-title { font-size: 24px; }
+  .chat-card { height: calc(100vh - var(--header-h) - 220px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
+  html { scroll-behavior: auto; }
+}
+</style>
+
+<!-- 로그인/회원가입 UI (auth-ui.js가 헤더 버튼과 모달을 주입한다) -->
+<link rel="stylesheet" href="auth.css">
+</head>
+
+<body>
+
+<header class="header">
+  <div class="header-inner">
+    <a href="index.html" class="logo">Sociology-whole</a>
+    <nav class="nav-links">
+      <a href="glossary.html">용어집</a>
+      <a href="theorists.html">이론가</a>
+      <a href="issue.html">시사연결</a>
+      <a href="community.html">커뮤니티</a>
+      <a href="resources.html">자료실</a>
+      <a href="ai-chat.html" class="active" aria-current="page">AI 질답</a>
+    </nav>
+    <a href="index.html" class="nav-cta">시작하기</a>
+  </div>
+</header>
+
+<main class="shell">
+  <div class="page-head">
+    <h1 class="page-title">AI 질답</h1>
+    <p class="page-sub">사회학 개념·이론가·시험 대비를 도와주는 학습 도우미예요. 로그인한 사용자만 이용할 수 있습니다.</p>
+  </div>
+
+  <!-- 비로그인 상태 -->
+  <section class="locked-card" id="lockedView">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+    </svg>
+    <h2>로그인이 필요합니다</h2>
+    <p>AI 질답은 로그인한 사용자만 이용할 수 있는 기능이에요.</p>
+    <button type="button" class="btn-login" id="unlockBtn">로그인하기</button>
+  </section>
+
+  <!-- 로그인 상태 -->
+  <section id="chatView" hidden>
+    <div class="chat-card">
+      <div class="messages" id="messages">
+        <div class="empty-state" id="emptyState">
+          <h3>무엇이 궁금한가요?</h3>
+          <p>개념 설명, 이론가 비교, 시험 대비 질문을 자유롭게 물어보세요.</p>
+          <div class="chips">
+            <button type="button" class="chip">아노미 개념을 예시와 함께 설명해줘</button>
+            <button type="button" class="chip">기능주의와 갈등론 차이를 정리해줘</button>
+            <button type="button" class="chip">뒤르켐과 베버 사상을 비교해줘</button>
+            <button type="button" class="chip">양적 연구와 질적 연구의 차이가 뭐야?</button>
+          </div>
+        </div>
+      </div>
+      <form class="composer" id="composerForm">
+        <textarea id="composerInput" rows="1" placeholder="사회학에 대해 무엇이든 물어보세요" maxlength="2000"></textarea>
+        <button type="submit" id="sendBtn">보내기</button>
+      </form>
+    </div>
+    <p class="disclaimer">AI 답변은 참고용이며 실제 강의·시험 자료와 다를 수 있습니다.</p>
+  </section>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- ── 하단 탭바 (모바일) ───────────────────────────────── -->
+<nav class="bottom-nav" aria-label="주요 메뉴">
+  <div class="bottom-nav-inner">
+    <a href="glossary.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true">
+        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+      </svg><span>용어집</span>
+    </a>
+    <a href="theorists.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg><span>이론가</span>
+    </a>
+    <a href="issue.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true">
+        <path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/>
+      </svg><span>시사연결</span>
+    </a>
+    <a href="community.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true">
+        <path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/>
+      </svg><span>커뮤니티</span>
+    </a>
+    <a href="resources.html">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true">
+        <path d="M4 20h16a2 2 0 0 0 2-2V8a2 2 0 0 0-2-2h-7.9a2 2 0 0 1-1.69-.9L9.6 3.9A2 2 0 0 0 7.93 3H4a2 2 0 0 0-2 2v13a2 2 0 0 0 2 2Z"/>
+      </svg><span>자료실</span>
+    </a>
+    <a href="ai-chat.html" class="active" aria-current="page">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20" aria-hidden="true">
+        <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/>
+      </svg><span>AI 질답</span>
+    </a>
+  </div>
+</nav>
+
+<script>
+(function () {
+  'use strict';
+
+  var el = {
+    lockedView: document.getElementById('lockedView'),
+    chatView: document.getElementById('chatView'),
+    messages: document.getElementById('messages'),
+    emptyState: document.getElementById('emptyState'),
+    form: document.getElementById('composerForm'),
+    input: document.getElementById('composerInput'),
+    sendBtn: document.getElementById('sendBtn'),
+    unlockBtn: document.getElementById('unlockBtn'),
+    toast: document.getElementById('toast'),
+  };
+
+  var state = { history: [], loading: false };
+  var toastTimer;
+
+  function toast(msg) {
+    el.toast.textContent = msg;
+    el.toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { el.toast.classList.remove('show'); }, 2600);
+  }
+
+  function requireLogin() {
+    if (window.SW_AUTH && window.SW_AUTH.isLoggedIn()) return true;
+    var btn = document.querySelector('.sw-auth-btn--login');
+    if (btn) btn.click();
+    else toast('로그인이 필요합니다.');
+    return false;
+  }
+
+  function scrollToBottom() {
+    el.messages.scrollTop = el.messages.scrollHeight;
+  }
+
+  function addBubble(role, text) {
+    if (el.emptyState) el.emptyState.hidden = true;
+    var wrap = document.createElement('div');
+    wrap.className = 'msg msg--' + role;
+    var bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    bubble.textContent = text;
+    wrap.appendChild(bubble);
+    el.messages.appendChild(wrap);
+    scrollToBottom();
+    return bubble;
+  }
+
+  function setLoading(loading) {
+    state.loading = loading;
+    el.sendBtn.disabled = loading;
+    el.input.disabled = loading;
+  }
+
+  var ERROR_MSG = {
+    login_required: '로그인이 필요합니다.',
+    ai_not_configured: 'AI 기능이 아직 설정되지 않았습니다. 잠시 후 다시 시도해주세요.',
+    message_too_long: '메시지가 너무 깁니다. 조금 짧게 물어봐주세요.',
+    empty_message: '메시지를 입력해주세요.',
+  };
+
+  function send(text) {
+    var msg = String(text || '').trim();
+    if (!msg || state.loading) return;
+    if (!requireLogin()) return;
+
+    var historyBefore = state.history.slice();
+    addBubble('user', msg);
+    state.history.push({ role: 'user', content: msg });
+    el.input.value = '';
+    el.input.style.height = 'auto';
+    setLoading(true);
+
+    var pending = addBubble('assistant', '생각하는 중…');
+    pending.classList.add('bubble--pending');
+
+    var client = window.SW_AUTH && window.SW_AUTH.client;
+    (client ? client.auth.getSession() : Promise.resolve({ data: { session: null } }))
+      .then(function (res) {
+        var token = res && res.data && res.data.session ? res.data.session.access_token : '';
+        if (!token) return { ok: false, data: { error: 'login_required' } };
+        return fetch('/api/ai-chat', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json', Authorization: 'Bearer ' + token },
+          body: JSON.stringify({ message: msg, history: historyBefore }),
+        }).then(function (r) {
+          return r.json().catch(function () { return {}; }).then(function (data) {
+            return { ok: r.ok, data: data };
+          });
+        });
+      })
+      .then(function (res) {
+        pending.classList.remove('bubble--pending');
+        if (!res.ok) {
+          var code = res.data && res.data.error;
+          pending.textContent = ERROR_MSG[code] || '답변을 가져오지 못했습니다. 잠시 후 다시 시도해주세요.';
+          return;
+        }
+        var reply = (res.data && res.data.reply) || '';
+        pending.textContent = reply;
+        state.history.push({ role: 'assistant', content: reply });
+      })
+      .catch(function () {
+        pending.classList.remove('bubble--pending');
+        pending.textContent = '답변을 가져오지 못했습니다. 잠시 후 다시 시도해주세요.';
+      })
+      .then(function () {
+        setLoading(false);
+        scrollToBottom();
+        el.input.focus();
+      });
+  }
+
+  el.form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    send(el.input.value);
+  });
+  el.input.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      send(el.input.value);
+    }
+  });
+  el.input.addEventListener('input', function () {
+    el.input.style.height = 'auto';
+    el.input.style.height = Math.min(el.input.scrollHeight, 120) + 'px';
+  });
+  document.querySelectorAll('.chip').forEach(function (chip) {
+    chip.addEventListener('click', function () { send(chip.textContent); });
+  });
+  el.unlockBtn.addEventListener('click', requireLogin);
+
+  function render(user) {
+    var loggedIn = !!user;
+    el.lockedView.hidden = loggedIn;
+    el.chatView.hidden = !loggedIn;
+  }
+
+  if (window.SW_AUTH) {
+    window.SW_AUTH.ready.then(function () {
+      window.SW_AUTH.subscribe(render);
+    });
+  }
+})();
+</script>
+
+<!-- 인증 (Supabase Auth) — 로드 순서 고정 -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.58.0/dist/umd/supabase.min.js"></script>
+<script src="supabase-config.js"></script>
+<script src="auth.js"></script>
+<script src="auth-ui.js"></script>
+</body>
+</html>
