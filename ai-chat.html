@@ -258,7 +258,7 @@ textarea { font: inherit; }
         <button type="submit" id="sendBtn">보내기</button>
       </form>
     </div>
-    <p class="disclaimer">AI 답변은 참고용이며 실제 강의·시험 자료와 다를 수 있습니다.</p>
+    <p class="disclaimer">질문 기록은 자동으로 저장되어 다음에 다시 열어도 이어볼 수 있어요. AI 답변은 참고용이며 실제 강의·시험 자료와 다를 수 있습니다.</p>
   </section>
 </main>
 
@@ -323,7 +323,7 @@ textarea { font: inherit; }
     toast: document.getElementById('toast'),
   };
 
-  var state = { history: [], loading: false };
+  var state = { history: [], loading: false, historyLoadedFor: null };
   var toastTimer;
 
   function toast(msg) {
@@ -411,6 +411,7 @@ textarea { font: inherit; }
         var reply = (res.data && res.data.reply) || '';
         pending.textContent = reply;
         state.history.push({ role: 'assistant', content: reply });
+        saveHistory(msg, reply);
       })
       .catch(function () {
         pending.classList.remove('bubble--pending');
@@ -442,10 +443,39 @@ textarea { font: inherit; }
   });
   el.unlockBtn.addEventListener('click', requireLogin);
 
+  function saveHistory(userMsg, assistantReply) {
+    var client = window.SW_AUTH && window.SW_AUTH.client;
+    var user = window.SW_AUTH && window.SW_AUTH.getUser();
+    if (!client || !user) return;
+    client.from('ai_chat_messages').insert([
+      { user_id: user.id, role: 'user', content: userMsg },
+      { user_id: user.id, role: 'assistant', content: assistantReply },
+    ]).then(function (res) {
+      if (res.error) console.error('[ai-chat] 기록 저장 실패:', res.error);
+    });
+  }
+
+  function loadHistory(user) {
+    var client = window.SW_AUTH && window.SW_AUTH.client;
+    if (!client || !user || state.historyLoadedFor === user.id) return;
+    state.historyLoadedFor = user.id;
+    client.from('ai_chat_messages').select('role,content')
+      .eq('user_id', user.id).order('created_at', { ascending: true }).limit(200)
+      .then(function (res) {
+        if (res.error || !res.data || !res.data.length) return;
+        res.data.forEach(function (m) { addBubble(m.role, m.content); });
+        state.history = res.data.slice(-8).map(function (m) {
+          return { role: m.role, content: m.content };
+        });
+      })
+      .catch(function () {});
+  }
+
   function render(user) {
     var loggedIn = !!user;
     el.lockedView.hidden = loggedIn;
     el.chatView.hidden = !loggedIn;
+    if (loggedIn) loadHistory(user);
   }
 
   if (window.SW_AUTH) {
