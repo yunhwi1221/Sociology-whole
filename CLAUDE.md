@@ -73,7 +73,7 @@ src/
 
 `.env.local.example` 참조:
 - `NEXT_PUBLIC_SUPABASE_URL` / `NEXT_PUBLIC_SUPABASE_ANON_KEY`
-- `ANTHROPIC_API_KEY` (AI 질답용)
+- `GEMINI_API_KEY` (AI 질답용, `/api/ai-chat.js`)
 
 ## GitHub
 

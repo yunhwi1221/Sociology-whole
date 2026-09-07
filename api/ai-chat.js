@@ -1,8 +1,10 @@
 /**
  * /api/ai-chat — AI 질답 기능의 서버 프록시 (Vercel Serverless Function)
  *
- * ANTHROPIC_API_KEY는 여기(서버)에서만 읽는다. 브라우저에는 절대 내려보내지 않는다.
- * Vercel 프로젝트 설정 > Environment Variables 에 ANTHROPIC_API_KEY를 등록해야 동작한다.
+ * Google Gemini API(무료 등급 제공)를 사용한다. GEMINI_API_KEY는 여기(서버)에서만
+ * 읽고 브라우저에는 절대 내려보내지 않는다. Vercel 프로젝트 설정 > Environment
+ * Variables 에 GEMINI_API_KEY를 등록해야 동작한다 (https://aistudio.google.com/apikey
+ * 에서 무료로 발급 가능).
  *
  * 로그인 여부는 브라우저가 보낸 Supabase access token을 Supabase Auth API에
  * 그대로 검증 요청해서 확인한다 (service_role 키를 서버에 두지 않기 위함 — supabase-config.js와
@@ -11,6 +13,7 @@
 
 var SUPABASE_URL = 'https://nmdymclyzceayufspkus.supabase.co';
 var SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_ewPNrSkIym4gIpIyUUsFJw_l1PySPTq';
+var GEMINI_MODEL = 'gemini-2.0-flash';
 
 var SYSTEM_PROMPT = [
   '너는 "Sociology-whole"이라는 한국 대학 사회학과 학생용 학습 플랫폼의 AI 학습 도우미다.',
@@ -54,9 +57,9 @@ module.exports = async function handler(req, res) {
     return;
   }
 
-  var apiKey = process.env.ANTHROPIC_API_KEY;
+  var apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) {
-    console.error('[ai-chat] ANTHROPIC_API_KEY가 설정되지 않았습니다.');
+    console.error('[ai-chat] GEMINI_API_KEY가 설정되지 않았습니다.');
     res.status(500).json({ error: 'ai_not_configured' });
     return;
   }
@@ -79,40 +82,38 @@ module.exports = async function handler(req, res) {
     })
     .slice(-8)
     .map(function (m) {
-      return { role: m.role, content: m.content.slice(0, 2000) };
+      return { role: m.role === 'assistant' ? 'model' : 'user', parts: [{ text: m.content.slice(0, 2000) }] };
     });
 
-  var messages = history.concat([{ role: 'user', content: message }]);
+  var contents = history.concat([{ role: 'user', parts: [{ text: message }] }]);
 
   try {
-    var aiRes = await fetch('https://api.anthropic.com/v1/messages', {
+    var url = 'https://generativelanguage.googleapis.com/v1beta/models/' + GEMINI_MODEL + ':generateContent';
+    var aiRes = await fetch(url, {
       method: 'POST',
       headers: {
         'content-type': 'application/json',
-        'x-api-key': apiKey,
-        'anthropic-version': '2023-06-01',
+        'x-goog-api-key': apiKey,
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-5',
-        max_tokens: 700,
-        system: SYSTEM_PROMPT,
-        messages: messages,
+        system_instruction: { parts: [{ text: SYSTEM_PROMPT }] },
+        contents: contents,
+        generationConfig: { maxOutputTokens: 700 },
       }),
     });
 
     var data = await aiRes.json();
 
     if (!aiRes.ok) {
-      console.error('[ai-chat] Anthropic API 오류:', data);
+      console.error('[ai-chat] Gemini API 오류:', data);
       res.status(502).json({ error: 'ai_upstream_error' });
       return;
     }
 
-    var text = Array.isArray(data.content)
-      ? data.content
-          .filter(function (b) { return b.type === 'text'; })
-          .map(function (b) { return b.text; })
-          .join('\n')
+    var candidate = data.candidates && data.candidates[0];
+    var parts = candidate && candidate.content && candidate.content.parts;
+    var text = Array.isArray(parts)
+      ? parts.filter(function (p) { return typeof p.text === 'string'; }).map(function (p) { return p.text; }).join('\n')
       : '';
 
     res.status(200).json({ reply: text || '답변을 생성하지 못했습니다. 다시 시도해주세요.' });
