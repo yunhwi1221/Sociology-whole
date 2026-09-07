@@ -13,7 +13,7 @@
 
 var SUPABASE_URL = 'https://nmdymclyzceayufspkus.supabase.co';
 var SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_ewPNrSkIym4gIpIyUUsFJw_l1PySPTq';
-var GEMINI_MODEL = 'gemini-2.0-flash';
+var GEMINI_MODEL = 'gemini-3.6-flash';
 
 var SYSTEM_PROMPT = [
   '너는 "Sociology-whole"이라는 한국 대학 사회학과 학생용 학습 플랫폼의 AI 학습 도우미다.',
