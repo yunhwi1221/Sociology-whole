@@ -946,7 +946,7 @@ body[data-auth="loading"] #content { display: none; }
       <div class="field">
         <label for="askEmail">회신받을 이메일</label>
         <input type="email" id="askEmail" disabled>
-        <p class="field-hint">지금은 문의 내용이 이 브라우저에만 저장됩니다. 접수 서버는 연동 예정입니다.</p>
+        <p class="field-hint">문의를 보내면 관리자가 확인 후 여기서 답변을 남깁니다.</p>
       </div>
 
       <div class="modal-foot">
@@ -1444,54 +1444,20 @@ body[data-auth="loading"] #content { display: none; }
   renderTheoristCount();
 
   /* ---------------------------------------------------------
-     공지사항 · 문의하기
-     공지는 아직 관리 화면이 없어 여기에 적어둔다. 서버가 붙으면 NOTICES 를
-     조회 결과로 바꾸고, 문의는 저장 부분만 서버 호출로 갈아끼우면 된다.
+     공지사항 · 문의하기 (Supabase notices / inquiries 테이블)
      --------------------------------------------------------- */
-  var NOTICE_READ_KEY = 'sw:notices:readAt';
-  var INQUIRY_KEY = 'sw:inquiries';
-  var ADMIN_NOTICE_KEY = 'sw:admin:notices';
+  var NOTICE_READ_KEY = 'sw:notices:readAt'; // "마지막으로 확인한 시각"은 순수 개인 UI 상태라 로컬에 남겨도 된다
+  var NOTICES = [];
 
-  function adminNotices() {
-    try {
-      var v = JSON.parse(localStorage.getItem(ADMIN_NOTICE_KEY) || '[]');
-      return Array.isArray(v) ? v : [];
-    } catch (e) { return []; }
+  function loadNotices() {
+    var client = sbClient();
+    if (!client) return Promise.resolve();
+    return client.from('notices').select('id,title,body,created_at').order('created_at', { ascending: false })
+      .then(function (res) {
+        NOTICES = res.error ? [] : (res.data || []);
+        renderNoticeCard();
+      });
   }
-
-  var DEFAULT_NOTICES = [
-    {
-      date: '2026-08-22',
-      id: 'n-archive',
-      title: '자료실을 열었습니다',
-      body: '공개된 자료를 찾아보는 전체 탐색과, 내 자료를 폴더로 정리하는 내 자료 탭이 생겼습니다.' +
-            '\n자료는 올릴 때 비공개가 기본이고, 공개로 바꾸면 그때부터 다른 학생에게 보입니다.' +
-            '\n파일 보관은 스토리지 연동 후 열릴 예정이라 지금은 파일 정보만 저장됩니다.'
-    },
-    {
-      date: '2026-08-22',
-      id: 'n-theorist',
-      title: '이론가 프로필을 생애와 사상으로 나눴습니다',
-      body: '글이 길고 어렵다는 의견을 반영했습니다. 생애는 연표로 훑고, 사상은 개념 카드로 하나씩 읽도록 바꿨습니다.' +
-            '\n각 개념 카드에서 용어집의 해당 용어로 바로 넘어갈 수 있습니다.'
-    },
-    {
-      date: '2026-08-20',
-      id: 'n-bookmark',
-      title: '북마크가 마이페이지로 모입니다',
-      body: '용어·이론가·자료를 북마크하면 마이페이지에서 개수를 확인하고, 눌러서 각 화면의 북마크 목록으로 갈 수 있습니다.' +
-            '\n북마크는 아직 이 브라우저에 저장되므로 다른 기기에서는 따로 담아야 합니다.'
-    }
-  ];
-
-  /* 관리자창에서 작성한 공지({id, title, body, date})를 기본 공지 뒤에 이어 붙이고
-     최신순으로 정렬한다. 필드 이름을 admin.html 과 맞춰 별도 변환 없이 합친다. */
-  function computeNotices() {
-    return adminNotices().concat(DEFAULT_NOTICES).sort(function (a, b) {
-      return (b.date || '').localeCompare(a.date || '');
-    });
-  }
-  var NOTICES = computeNotices();
 
   var toastTimer;
   function toast(msg) {
@@ -1512,12 +1478,12 @@ body[data-auth="loading"] #content { display: none; }
   }
 
   function markRead() {
-    try { localStorage.setItem(NOTICE_READ_KEY, NOTICES[0] ? NOTICES[0].date : ''); } catch (e) { /* 무시 */ }
+    try { localStorage.setItem(NOTICE_READ_KEY, NOTICES[0] ? NOTICES[0].created_at : ''); } catch (e) { /* 무시 */ }
   }
 
   function unreadCount() {
     var seen = readAt();
-    return NOTICES.filter(function (n) { return n.date > seen; }).length;
+    return NOTICES.filter(function (n) { return n.created_at > seen; }).length;
   }
 
   function renderNoticeCard() {
@@ -1530,12 +1496,12 @@ body[data-auth="loading"] #content { display: none; }
   function renderNotices() {
     var seen = readAt();
     el.noticeList.innerHTML = NOTICES.map(function (n, i) {
-      var isNew = n.date > seen;
+      var isNew = n.created_at > seen;
       return '<li class="notice-item">' +
         '<button type="button" class="notice-head" aria-expanded="' + (i === 0) + '" data-notice="' + esc(n.id) + '">' +
           '<span class="notice-main">' +
             '<span class="notice-title">' + esc(n.title) + '</span>' +
-            '<span class="notice-date">' + esc(n.date) + '</span>' +
+            '<span class="notice-date">' + esc(fmtDateShort(n.created_at)) + '</span>' +
           '</span>' +
           (isNew ? '<span class="notice-tag">NEW</span>' : '') +
           '<span class="notice-chevron" aria-hidden="true">' +
@@ -1583,17 +1549,19 @@ body[data-auth="loading"] #content { display: none; }
     if (e.target === el.noticeModal) { closeModal(el.noticeModal); renderNoticeCard(); }
   });
 
-  /* 내 문의 내역 — user_id 가 없어 이메일로 내 것을 가려낸다(로컬 프로토타입 한계) */
-  function myInquiries(email) {
-    return readList(INQUIRY_KEY)
-      .filter(function (q) { return q.email && q.email === email; })
-      .sort(function (a, b) { return (b.created_at || '').localeCompare(a.created_at || ''); });
+  var ASK_TYPE_LABEL = { content: '콘텐츠 오류·수정', bug: '기능 오류', account: '계정·로그인', etc: '기타' };
+  var myInquiriesCache = [];
+
+  function loadMyInquiries(userId) {
+    var client = sbClient();
+    if (!client || !userId) { myInquiriesCache = []; return Promise.resolve(); }
+    return client.from('inquiries').select('*').eq('user_id', userId).order('created_at', { ascending: false })
+      .then(function (res) { myInquiriesCache = res.error ? [] : (res.data || []); })
+      .catch(function () { myInquiriesCache = []; });
   }
 
-  var ASK_TYPE_LABEL = { content: '콘텐츠 오류·수정', bug: '기능 오류', account: '계정·로그인', etc: '기타' };
-
-  function renderMyInquiries(email) {
-    var mine = myInquiries(email);
+  function renderMyInquiries() {
+    var mine = myInquiriesCache;
     el.myInquiryList.hidden = mine.length === 0;
     el.myInquiryList.innerHTML = mine.map(function (q, i) {
       var answered = q.status === 'answered';
@@ -1601,7 +1569,7 @@ body[data-auth="loading"] #content { display: none; }
         '<button type="button" class="notice-head" aria-expanded="' + (i === 0) + '" data-inquiry="' + esc(q.id) + '">' +
           '<span class="notice-main">' +
             '<span class="notice-title">[' + esc(ASK_TYPE_LABEL[q.type] || '문의') + '] ' + esc(q.body.slice(0, 24)) + (q.body.length > 24 ? '…' : '') + '</span>' +
-            '<span class="notice-date">' + esc(q.created_at) + '</span>' +
+            '<span class="notice-date">' + esc(fmtDateShort(q.created_at)) + '</span>' +
           '</span>' +
           '<span class="notice-tag' + (answered ? '' : ' notice-tag--wait') + '">' + (answered ? '답변완료' : '대기중') + '</span>' +
           '<span class="notice-chevron" aria-hidden="true">' +
@@ -1611,7 +1579,7 @@ body[data-auth="loading"] #content { display: none; }
         '<div class="notice-body" id="iq-' + esc(q.id) + '"' + (i === 0 ? '' : ' hidden') + '>' +
           esc(q.body) +
           (answered
-            ? '<div class="inquiry-answer"><span class="inquiry-answer-label">운영자 답변 · ' + esc(q.answered_at || '') + '</span>' + esc(q.answer) + '</div>'
+            ? '<div class="inquiry-answer"><span class="inquiry-answer-label">운영자 답변 · ' + esc(fmtDateShort(q.answered_at)) + '</span>' + esc(q.answer) + '</div>'
             : '') +
         '</div>' +
       '</li>';
@@ -1626,8 +1594,8 @@ body[data-auth="loading"] #content { display: none; }
     document.getElementById('iq-' + head.getAttribute('data-inquiry')).hidden = open;
   });
 
-  function renderAskCard(email) {
-    var n = myInquiries(email).filter(function (q) { return q.status === 'answered'; }).length;
+  function renderAskCard() {
+    var n = myInquiriesCache.filter(function (q) { return q.status === 'answered'; }).length;
     el.askAnsweredCount.hidden = !n;
     el.askAnsweredCount.textContent = n ? '답변 ' + n + '건' : '';
   }
@@ -1636,7 +1604,7 @@ body[data-auth="loading"] #content { display: none; }
     el.askForm.reset();
     var user = window.SW_AUTH && window.SW_AUTH.getUser && window.SW_AUTH.getUser();
     el.askEmail.value = user ? user.email : '';
-    renderMyInquiries(user ? user.email : '');
+    loadMyInquiries(user ? user.id : null).then(renderMyInquiries);
     openModal(el.askModal);
   });
 
@@ -1649,24 +1617,19 @@ body[data-auth="loading"] #content { display: none; }
     var body = el.askBody.value.trim();
     if (!body) { el.askBody.focus(); return; }
 
-    var email = el.askEmail.value;
-    var list = readList(INQUIRY_KEY);
-    list.push({
-      id: 'q-' + Date.now().toString(36),
-      type: el.askType.value,
-      body: body,
-      email: email,
-      created_at: new Date().toISOString().slice(0, 10),
-      status: 'pending',
-      answer: null,
-      answered_at: null
-    });
-    try { localStorage.setItem(INQUIRY_KEY, JSON.stringify(list)); } catch (e2) { /* 저장 실패는 무시 */ }
+    var client = sbClient();
+    var user = window.SW_AUTH && window.SW_AUTH.getUser && window.SW_AUTH.getUser();
+    if (!client || !user) { toast('로그인이 필요합니다.'); return; }
 
-    el.askBody.value = '';
-    renderMyInquiries(email);
-    renderAskCard(email);
-    toast('문의를 남겼습니다. 아래 목록에서 답변을 확인할 수 있어요.');
+    client.from('inquiries').insert({ user_id: user.id, type: el.askType.value, body: body }).then(function (res) {
+      if (res.error) { toast('문의 등록에 실패했습니다.'); return; }
+      el.askBody.value = '';
+      loadMyInquiries(user.id).then(function () {
+        renderMyInquiries();
+        renderAskCard();
+      });
+      toast('문의를 남겼습니다. 아래 목록에서 답변을 확인할 수 있어요.');
+    });
   });
 
   document.addEventListener('keydown', function (e) {
@@ -1777,7 +1740,7 @@ body[data-auth="loading"] #content { display: none; }
       el.avatar.textContent = user.name.charAt(0);
       el.name.textContent = user.name + '님';
       el.email.textContent = user.email;
-      renderAskCard(user.email);
+      loadMyInquiries(user.id).then(renderAskCard);
       renderCommunityBookmarkCount(user.id);
       renderIssueBookmarkCount(user.id);
       renderResourceCounts(user.id);
@@ -1830,6 +1793,7 @@ body[data-auth="loading"] #content { display: none; }
      한 번 스친다. ready 를 기다린 뒤 구독해서 깜빡임을 없앤다. */
   window.SW_AUTH.ready.then(function () {
     window.SW_AUTH.subscribe(render);
+    loadNotices();
   });
 
   el.signout.addEventListener('click', function () {
@@ -1914,9 +1878,9 @@ body[data-auth="loading"] #content { display: none; }
 
   /* ===========================================================
      관리자 패널 (마이페이지 내장) — prd_11.md 기준
-     회원 관리는 Supabase profiles/RPC로 실제 DB를 다루고,
-     용어 승인·이론가 관리·자료실·공지사항·문의함은 기존 admin.html의
-     localStorage 기반 로직을 id만 바꿔 그대로 옮겨왔다.
+     회원 관리·공지사항·문의함은 Supabase 테이블/RPC로 실제 DB를 다룬다.
+     용어 승인·이론가 관리·자료실은 아직 기존 admin.html의
+     localStorage 기반 로직을 id만 바꿔 그대로 옮겨온 상태다.
      =========================================================== */
   function fmtDate() { return new Date().toISOString().slice(0, 10); }
   function fmtDateShort(iso) {
@@ -2687,25 +2651,31 @@ body[data-auth="loading"] #content { display: none; }
      --------------------------------------------------------- */
   var admNoticeListEl = document.getElementById('admNoticeList');
   var currentAdmNoticeId = null;
+  var adminNoticesCache = [];
 
   function renderAdmNotices() {
-    var notices = readList(ADMIN_NOTICE_KEY).sort(function (a, b) { return (b.date || '').localeCompare(a.date || ''); });
-    if (notices.length === 0) {
-      admNoticeListEl.innerHTML = '<li class="empty-state">작성한 공지가 없습니다. (출시 초기 고정 공지 3건은 별도로 항상 노출됩니다)</li>';
-      return;
-    }
-    admNoticeListEl.innerHTML = notices.map(function (n) {
-      return '<li class="admin-row">' +
-        '<span class="admin-row-main">' +
-          '<span class="admin-row-title">' + esc(n.title) + '</span>' +
-          '<span class="admin-row-sub">' + esc(n.date) + '</span>' +
-        '</span>' +
-        '<span class="admin-row-actions">' +
-          '<button type="button" class="mini-btn" data-edit-notice="' + esc(n.id) + '">수정</button>' +
-          '<button type="button" class="mini-btn mini-btn--danger" data-delete-notice="' + esc(n.id) + '">삭제</button>' +
-        '</span>' +
-      '</li>';
-    }).join('');
+    var client = sbClient();
+    if (!client) { admNoticeListEl.innerHTML = '<li class="empty-state">불러오지 못했습니다.</li>'; return; }
+    client.from('notices').select('*').order('created_at', { ascending: false }).then(function (res) {
+      if (res.error) { admNoticeListEl.innerHTML = '<li class="empty-state">불러오지 못했습니다.</li>'; return; }
+      adminNoticesCache = res.data || [];
+      if (adminNoticesCache.length === 0) {
+        admNoticeListEl.innerHTML = '<li class="empty-state">작성한 공지가 없습니다.</li>';
+        return;
+      }
+      admNoticeListEl.innerHTML = adminNoticesCache.map(function (n) {
+        return '<li class="admin-row">' +
+          '<span class="admin-row-main">' +
+            '<span class="admin-row-title">' + esc(n.title) + '</span>' +
+            '<span class="admin-row-sub">' + esc(fmtDateShort(n.created_at)) + '</span>' +
+          '</span>' +
+          '<span class="admin-row-actions">' +
+            '<button type="button" class="mini-btn" data-edit-notice="' + esc(n.id) + '">수정</button>' +
+            '<button type="button" class="mini-btn mini-btn--danger" data-delete-notice="' + esc(n.id) + '">삭제</button>' +
+          '</span>' +
+        '</li>';
+      }).join('');
+    });
   }
 
   document.getElementById('admNoticeNewBtn').addEventListener('click', function () {
@@ -2720,7 +2690,7 @@ body[data-auth="loading"] #content { display: none; }
   admNoticeListEl.addEventListener('click', function (e) {
     var editBtn = e.target.closest('[data-edit-notice]');
     if (editBtn) {
-      var n = readList(ADMIN_NOTICE_KEY).filter(function (x) { return x.id === editBtn.getAttribute('data-edit-notice'); })[0];
+      var n = adminNoticesCache.filter(function (x) { return x.id === editBtn.getAttribute('data-edit-notice'); })[0];
       if (!n) return;
       currentAdmNoticeId = n.id;
       document.getElementById('admNoticeModalTitle').textContent = '공지 수정';
@@ -2734,12 +2704,13 @@ body[data-auth="loading"] #content { display: none; }
     if (delBtn) {
       if (!window.confirm('이 공지를 삭제할까요?')) return;
       var id = delBtn.getAttribute('data-delete-notice');
-      writeList(ADMIN_NOTICE_KEY, readList(ADMIN_NOTICE_KEY).filter(function (x) { return x.id !== id; }));
-      logAdminEvent('notice_deleted', 'notice', id);
-      renderAdmNotices();
-      NOTICES = computeNotices();
-      renderNoticeCard();
-      toast('삭제했습니다.');
+      sbClient().from('notices').delete().eq('id', id).then(function (res) {
+        if (res.error) { toast('삭제에 실패했습니다.'); return; }
+        logAdminEvent('notice_deleted', 'notice', id);
+        renderAdmNotices();
+        loadNotices();
+        toast('삭제했습니다.');
+      });
     }
   });
 
@@ -2749,32 +2720,34 @@ body[data-auth="loading"] #content { display: none; }
     var body = document.getElementById('admNBody').value.trim();
     if (!title || !body) { toast('제목과 본문을 모두 입력해주세요.'); return; }
 
-    var list = readList(ADMIN_NOTICE_KEY);
+    var client = sbClient();
+    var user = window.SW_AUTH.getUser();
     var isNew = !currentAdmNoticeId;
-    if (!isNew) {
-      list = list.map(function (n) { return n.id === currentAdmNoticeId ? Object.assign({}, n, { title: title, body: body }) : n; });
-    } else {
-      currentAdmNoticeId = 'n-' + Date.now().toString(36);
-      list.push({ id: currentAdmNoticeId, title: title, body: body, date: fmtDate() });
-    }
-    writeList(ADMIN_NOTICE_KEY, list);
-    logAdminEvent(isNew ? 'notice_created' : 'notice_updated', 'notice', currentAdmNoticeId);
-    document.getElementById('admNoticeModal').hidden = true;
-    renderAdmNotices();
-    NOTICES = computeNotices();
-    renderNoticeCard();
-    toast('게시했습니다.');
+    var task = isNew
+      ? client.from('notices').insert({ title: title, body: body, created_by: user ? user.id : null }).select().single()
+      : client.from('notices').update({ title: title, body: body }).eq('id', currentAdmNoticeId).select().single();
+
+    task.then(function (res) {
+      if (res.error) { toast('저장에 실패했습니다.'); return; }
+      currentAdmNoticeId = res.data.id;
+      logAdminEvent(isNew ? 'notice_created' : 'notice_updated', 'notice', currentAdmNoticeId);
+      document.getElementById('admNoticeModal').hidden = true;
+      renderAdmNotices();
+      loadNotices();
+      toast('게시했습니다.');
+    });
   });
 
   document.getElementById('admNDelete').addEventListener('click', function () {
     if (!currentAdmNoticeId || !window.confirm('이 공지를 삭제할까요?')) return;
-    writeList(ADMIN_NOTICE_KEY, readList(ADMIN_NOTICE_KEY).filter(function (n) { return n.id !== currentAdmNoticeId; }));
-    logAdminEvent('notice_deleted', 'notice', currentAdmNoticeId);
-    document.getElementById('admNoticeModal').hidden = true;
-    renderAdmNotices();
-    NOTICES = computeNotices();
-    renderNoticeCard();
-    toast('삭제했습니다.');
+    sbClient().from('notices').delete().eq('id', currentAdmNoticeId).then(function (res) {
+      if (res.error) { toast('삭제에 실패했습니다.'); return; }
+      logAdminEvent('notice_deleted', 'notice', currentAdmNoticeId);
+      document.getElementById('admNoticeModal').hidden = true;
+      renderAdmNotices();
+      loadNotices();
+      toast('삭제했습니다.');
+    });
   });
 
   /* ---------------------------------------------------------
@@ -2784,6 +2757,7 @@ body[data-auth="loading"] #content { display: none; }
   var admBadgeInquiries = document.getElementById('admBadgeInquiries');
   var admInquiryFilter = 'all';
   var currentAdmInquiryId = null;
+  var adminInquiriesCache = [];
 
   document.getElementById('admInquiryFilters').addEventListener('click', function (e) {
     var btn = e.target.closest('[data-filter]');
@@ -2794,37 +2768,45 @@ body[data-auth="loading"] #content { display: none; }
   });
 
   function renderAdmInquiries() {
-    var all = readList(INQUIRY_KEY).sort(function (a, b) { return (b.created_at || '').localeCompare(a.created_at || ''); });
-    var pendingCount = all.filter(function (q) { return q.status !== 'answered'; }).length;
-    admBadgeInquiries.hidden = pendingCount === 0;
-    admBadgeInquiries.textContent = pendingCount;
+    var client = sbClient();
+    if (!client) { admInquiryList.innerHTML = '<li class="empty-state">불러오지 못했습니다.</li>'; return; }
+    client.from('inquiries').select('*, profiles(email)').order('created_at', { ascending: false }).then(function (res) {
+      if (res.error) { admInquiryList.innerHTML = '<li class="empty-state">불러오지 못했습니다.</li>'; return; }
+      adminInquiriesCache = res.data || [];
+      var all = adminInquiriesCache;
+      var pendingCount = all.filter(function (q) { return q.status !== 'answered'; }).length;
+      admBadgeInquiries.hidden = pendingCount === 0;
+      admBadgeInquiries.textContent = pendingCount;
 
-    var rows = admInquiryFilter === 'all' ? all : all.filter(function (q) {
-      return admInquiryFilter === 'answered' ? q.status === 'answered' : q.status !== 'answered';
+      var rows = admInquiryFilter === 'all' ? all : all.filter(function (q) {
+        return admInquiryFilter === 'answered' ? q.status === 'answered' : q.status !== 'answered';
+      });
+      if (rows.length === 0) {
+        admInquiryList.innerHTML = '<li class="empty-state">해당하는 문의가 없습니다.</li>';
+        return;
+      }
+      admInquiryList.innerHTML = rows.map(function (q) {
+        var answered = q.status === 'answered';
+        var email = q.profiles ? q.profiles.email : '';
+        return '<li><button type="button" class="admin-row" data-inquiry-id="' + esc(q.id) + '">' +
+          '<span class="admin-row-main">' +
+            '<span class="admin-row-title">[' + esc(ASK_TYPE_LABEL[q.type] || '문의') + '] ' + esc((q.body || '').slice(0, 30)) + '</span>' +
+            '<span class="admin-row-sub">' + esc(email) + ' · ' + esc(fmtDateShort(q.created_at)) + '</span>' +
+          '</span>' +
+          '<span class="admin-row-meta"><span class="badge ' + (answered ? 'badge--ok' : 'badge--wait') + '">' + (answered ? '답변완료' : '대기중') + '</span></span>' +
+        '</button></li>';
+      }).join('');
     });
-    if (rows.length === 0) {
-      admInquiryList.innerHTML = '<li class="empty-state">해당하는 문의가 없습니다.</li>';
-      return;
-    }
-    admInquiryList.innerHTML = rows.map(function (q) {
-      var answered = q.status === 'answered';
-      return '<li><button type="button" class="admin-row" data-inquiry-id="' + esc(q.id) + '">' +
-        '<span class="admin-row-main">' +
-          '<span class="admin-row-title">[' + esc(ASK_TYPE_LABEL[q.type] || '문의') + '] ' + esc((q.body || '').slice(0, 30)) + '</span>' +
-          '<span class="admin-row-sub">' + esc(q.email || '') + ' · ' + esc(q.created_at || '') + '</span>' +
-        '</span>' +
-        '<span class="admin-row-meta"><span class="badge ' + (answered ? 'badge--ok' : 'badge--wait') + '">' + (answered ? '답변완료' : '대기중') + '</span></span>' +
-      '</button></li>';
-    }).join('');
   }
 
   admInquiryList.addEventListener('click', function (e) {
     var row = e.target.closest('[data-inquiry-id]');
     if (!row) return;
-    var q = readList(INQUIRY_KEY).filter(function (x) { return x.id === row.getAttribute('data-inquiry-id'); })[0];
+    var q = adminInquiriesCache.filter(function (x) { return x.id === row.getAttribute('data-inquiry-id'); })[0];
     if (!q) return;
     currentAdmInquiryId = q.id;
-    document.getElementById('admInquiryModalSub').textContent = (ASK_TYPE_LABEL[q.type] || '문의') + ' · ' + (q.email || '') + ' · ' + (q.created_at || '');
+    var email = q.profiles ? q.profiles.email : '';
+    document.getElementById('admInquiryModalSub').textContent = (ASK_TYPE_LABEL[q.type] || '문의') + ' · ' + email + ' · ' + fmtDateShort(q.created_at);
     document.getElementById('admInquiryBody').textContent = q.body;
     document.getElementById('admIAnswer').value = q.answer || '';
     openModal(document.getElementById('admInquiryModal'));
@@ -2834,16 +2816,16 @@ body[data-auth="loading"] #content { display: none; }
     e.preventDefault();
     var answer = document.getElementById('admIAnswer').value.trim();
     if (!answer) { toast('답변 내용을 입력해주세요.'); return; }
-    writeList(INQUIRY_KEY, readList(INQUIRY_KEY).map(function (q) {
-      if (q.id !== currentAdmInquiryId) return q;
-      return Object.assign({}, q, { status: 'answered', answer: answer, answered_at: fmtDate() });
-    }));
-    logAdminEvent('inquiry_answered', 'inquiry', currentAdmInquiryId);
-    document.getElementById('admInquiryModal').hidden = true;
-    renderAdmInquiries();
-    var user = window.SW_AUTH.getUser();
-    if (user) renderAskCard(user.email);
-    toast('답변을 저장했습니다.');
+    sbClient().from('inquiries').update({ status: 'answered', answer: answer, answered_at: new Date().toISOString() })
+      .eq('id', currentAdmInquiryId).then(function (res) {
+        if (res.error) { toast('저장에 실패했습니다.'); return; }
+        logAdminEvent('inquiry_answered', 'inquiry', currentAdmInquiryId);
+        document.getElementById('admInquiryModal').hidden = true;
+        renderAdmInquiries();
+        var user = window.SW_AUTH.getUser();
+        if (user) loadMyInquiries(user.id).then(renderAskCard);
+        toast('답변을 저장했습니다.');
+      });
   });
 
   /* ---------------------------------------------------------
