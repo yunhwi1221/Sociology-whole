@@ -2037,12 +2037,13 @@ body[data-auth="loading"] #content { display: none; }
     var publishedDrafts = readList(ADMIN_THEORIST_KEY).filter(function (t) { return t.status === 'published'; });
     document.getElementById('kpiTheorists').textContent = THEORIST_KEYS.length + publishedDrafts.length;
 
-    document.getElementById('kpiMaterials').textContent = SAMPLES.length + readList(RES_MATERIAL_KEY).length;
-
-    var issueKpiClient = sbClient();
-    if (issueKpiClient) {
-      issueKpiClient.from('issue_articles').select('id', { count: 'exact', head: true }).then(function (res) {
+    var kpiClient = sbClient();
+    if (kpiClient) {
+      kpiClient.from('issue_articles').select('id', { count: 'exact', head: true }).then(function (res) {
         document.getElementById('kpiIssues').textContent = res.error ? '–' : (res.count || 0);
+      });
+      kpiClient.from('resources').select('id', { count: 'exact', head: true }).then(function (res) {
+        document.getElementById('kpiMaterials').textContent = res.error ? '–' : (SAMPLES.length + (res.count || 0));
       });
     }
 
@@ -2436,44 +2437,54 @@ body[data-auth="loading"] #content { display: none; }
   var admMaterialList = document.getElementById('admMaterialList');
   var admMaterialSearch = document.getElementById('admMaterialSearch');
 
+  var RESOURCE_BUCKET = 'resources';
+  var adminResourcesCache = [];
+
   function renderAdmMaterials() {
     var q = admMaterialSearch.value.trim().toLowerCase();
     var hidden = readList(HIDDEN_MATERIAL_KEY);
-    var mine = readList(RES_MATERIAL_KEY);
+    var sampleRows = SAMPLES.map(function (m) { return { m: m, source: 'sample', hidden: hidden.indexOf(m.id) >= 0 }; });
 
-    var rows = SAMPLES.map(function (m) { return { m: m, source: 'sample', hidden: hidden.indexOf(m.id) >= 0 }; })
-      .concat(mine.map(function (m) { return { m: m, source: 'mine', hidden: false }; }));
+    var client = sbClient();
+    var task = client
+      ? client.from('resources').select('*, profiles!resources_owner_id_fkey(email)').order('created_at', { ascending: false })
+      : Promise.resolve({ data: [] });
 
-    if (q) rows = rows.filter(function (r) { return (r.m.title || '').toLowerCase().indexOf(q) >= 0; });
-    rows.sort(function (a, b) { return (b.m.created_at || '').localeCompare(a.m.created_at || ''); });
+    task.then(function (res) {
+      adminResourcesCache = res.error ? [] : (res.data || []);
+      var rows = sampleRows.concat(adminResourcesCache.map(function (m) { return { m: m, source: 'real', hidden: false }; }));
 
-    if (rows.length === 0) {
-      admMaterialList.innerHTML = '<li class="empty-state">조건에 맞는 자료가 없습니다.</li>';
-      return;
-    }
-    admMaterialList.innerHTML = rows.map(function (r) {
-      var m = r.m;
-      var visLabel = r.source === 'sample' ? (r.hidden ? '숨김' : '공개') : (m.visibility === 'public' ? '공개' : '비공개');
-      var visBadge = r.hidden ? 'badge--danger' : (visLabel === '공개' ? 'badge--ok' : 'badge--wait');
-      var sourceLabel = r.source === 'sample' ? '샘플 데이터' : '내 자료 (이 브라우저)';
+      if (q) rows = rows.filter(function (r) { return (r.m.title || '').toLowerCase().indexOf(q) >= 0; });
+      rows.sort(function (a, b) { return (b.m.created_at || '').localeCompare(a.m.created_at || ''); });
 
-      var actions = r.source === 'sample'
-        ? '<button type="button" class="mini-btn" data-toggle-hide="' + esc(m.id) + '">' + (r.hidden ? '숨김 해제' : '숨기기') + '</button>'
-        : '<button type="button" class="mini-btn" data-toggle-vis="' + esc(m.id) + '">' + (m.visibility === 'public' ? '비공개 전환' : '공개 전환') + '</button>' +
-          '<button type="button" class="mini-btn mini-btn--danger" data-delete-mine="' + esc(m.id) + '">삭제</button>';
+      if (rows.length === 0) {
+        admMaterialList.innerHTML = '<li class="empty-state">조건에 맞는 자료가 없습니다.</li>';
+        return;
+      }
+      admMaterialList.innerHTML = rows.map(function (r) {
+        var m = r.m;
+        var visLabel = r.source === 'sample' ? (r.hidden ? '숨김' : '공개') : (m.visibility === 'public' ? '공개' : '비공개');
+        var visBadge = r.hidden ? 'badge--danger' : (visLabel === '공개' ? 'badge--ok' : 'badge--wait');
+        var sourceLabel = r.source === 'sample' ? '샘플 데이터' : maskEmail(m.profiles ? m.profiles.email : '');
 
-      return '<li class="admin-row">' +
-        '<span class="admin-row-main">' +
-          '<span class="admin-row-title">' + esc(m.title) + '</span>' +
-          '<span class="admin-row-sub">' + esc((m.tags || []).join(', ')) + ' · ' + esc(m.created_at || '') + '</span>' +
-        '</span>' +
-        '<span class="admin-row-meta">' +
-          '<span class="badge badge--source">' + esc(sourceLabel) + '</span>' +
-          '<span class="badge ' + visBadge + '">' + esc(r.hidden ? '숨김' : visLabel) + '</span>' +
-        '</span>' +
-        '<span class="admin-row-actions">' + actions + '</span>' +
-      '</li>';
-    }).join('');
+        var actions = r.source === 'sample'
+          ? '<button type="button" class="mini-btn" data-toggle-hide="' + esc(m.id) + '">' + (r.hidden ? '숨김 해제' : '숨기기') + '</button>'
+          : '<button type="button" class="mini-btn" data-toggle-vis="' + esc(m.id) + '">' + (m.visibility === 'public' ? '비공개 전환' : '공개 전환') + '</button>' +
+            '<button type="button" class="mini-btn mini-btn--danger" data-delete-mine="' + esc(m.id) + '">삭제</button>';
+
+        return '<li class="admin-row">' +
+          '<span class="admin-row-main">' +
+            '<span class="admin-row-title">' + esc(m.title) + '</span>' +
+            '<span class="admin-row-sub">' + esc((m.tags || []).join(', ')) + ' · ' + esc(fmtDateShort(m.created_at)) + '</span>' +
+          '</span>' +
+          '<span class="admin-row-meta">' +
+            '<span class="badge badge--source">' + esc(sourceLabel) + '</span>' +
+            '<span class="badge ' + visBadge + '">' + esc(r.hidden ? '숨김' : visLabel) + '</span>' +
+          '</span>' +
+          '<span class="admin-row-actions">' + actions + '</span>' +
+        '</li>';
+      }).join('');
+    });
   }
   admMaterialSearch.addEventListener('input', renderAdmMaterials);
 
@@ -2493,24 +2504,31 @@ body[data-auth="loading"] #content { display: none; }
     var visBtn = e.target.closest('[data-toggle-vis]');
     if (visBtn) {
       var id2 = visBtn.getAttribute('data-toggle-vis');
-      writeList(RES_MATERIAL_KEY, readList(RES_MATERIAL_KEY).map(function (m) {
-        if (m.id === id2) m.visibility = m.visibility === 'public' ? 'private' : 'public';
-        return m;
-      }));
-      logAdminEvent('material_visibility_changed', 'material', id2);
-      renderAdmMaterials();
-      toast('공개 설정을 바꿨습니다.');
+      var current = adminResourcesCache.filter(function (x) { return x.id === id2; })[0];
+      var nextVis = current && current.visibility === 'public' ? 'private' : 'public';
+      sbClient().from('resources').update({ visibility: nextVis }).eq('id', id2).then(function (res) {
+        if (res.error) { toast('변경에 실패했습니다.'); return; }
+        logAdminEvent('material_visibility_changed', 'material', id2);
+        renderAdmMaterials();
+        toast('공개 설정을 바꿨습니다.');
+      });
       return;
     }
     var delBtn = e.target.closest('[data-delete-mine]');
     if (delBtn) {
       if (!window.confirm('이 자료를 완전히 삭제할까요? 되돌릴 수 없습니다.')) return;
       var id3 = delBtn.getAttribute('data-delete-mine');
-      writeList(RES_MATERIAL_KEY, readList(RES_MATERIAL_KEY).filter(function (m) { return m.id !== id3; }));
-      logAdminEvent('material_deleted', 'material', id3);
-      renderAdmMaterials();
-      renderDashboard();
-      toast('삭제했습니다.');
+      var target = adminResourcesCache.filter(function (x) { return x.id === id3; })[0];
+      sbClient().from('resources').delete().eq('id', id3).then(function (res) {
+        if (res.error) { toast('삭제에 실패했습니다.'); return; }
+        if (target && target.type === 'file' && target.storage_path) {
+          sbClient().storage.from(RESOURCE_BUCKET).remove([target.storage_path]);
+        }
+        logAdminEvent('material_deleted', 'material', id3);
+        renderAdmMaterials();
+        renderDashboard();
+        toast('삭제했습니다.');
+      });
     }
   });
 
